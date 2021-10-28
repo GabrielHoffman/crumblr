@@ -1,3 +1,3 @@
-# crumbler 1.0
+# crumbler 1.0.0
  - Oct 28, 2021
  - Initial version

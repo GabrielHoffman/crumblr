@@ -1,0 +1,211 @@
+---
+title: "crumblr: compare emprical and asymptotic theory"
+subtitle: ''
+author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
+date: "Run on `r Sys.time()`"
+documentclass: article
+output: 
+  html_document:
+  toc: true
+  smart: false
+vignette: >
+  %\VignetteIndexEntry{CTC}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  %\usepackage[utf8]{inputenc}
+---
+
+
+
+<!---
+cd /Users/gabrielhoffman/workspace/repos/eval_methods/dreamlet
+R
+
+rmarkdown::render('crumblr_theory.Rmd')
+
+
+cd /hpc/users/hoffmg01/work/eval_methods/dreamlet
+R
+# rm -rf test_ctc_cache
+system("ml git; git pull")
+rmarkdown::render("crumblr_theory.Rmd");
+
+
+--->
+
+```{r setup, echo=FALSE, results="hide"}
+knitr::opts_chunk$set(	tidy=FALSE, 
+												cache=TRUE,
+												echo=FALSE,
+                      	# dev=c("png", "pdf"),
+                      	package.startup.message = FALSE,
+                      	message=FALSE, 
+                      	error=FALSE, 
+                      	warning=FALSE)
+
+knitr::opts_chunk$set()
+
+options(width=100)
+```	
+
+```{R load.packages, cache=FALSE}
+library(ggplot2)
+```
+
+Let the vector ${\bf p}$ being the true fractions across $D$ categories.  With $n$ total counts sampled from a multinomial distribution, the [centered log ratio](https://rdrr.io/cran/compositions/man/clr.html) (CLR) of the observed counts ${\bf c}$ with estimated fractions ${\bf \hat p}$ is   
+$$
+\text{clr}_i({\bf \hat p}) = \log(p_i) - \frac{1}{D}\sum_{j=1}^D \log(p_j)
+$$
+ with sampling variance
+$$
+\text{var}[\text{clr}_i({\bf \hat p})] =  \frac{1}{n} \left[ \frac{1}{p_i} - \frac{2}{ D p_i} + \frac{1}{D^2}\sum_{j=1}^D p_j  \right] 
+$$
+
+The sampling variance is derived from asymototic theory, so we examine its behavior for finite total counts, $n$.  Here we evalute the emprical variance from $100,000$ draws from a multinomial distribution while varying $n$ as well as the parameters of the distribution.  As pseudocount of 0.5 since the asymptotic theory is not defined for counts of zero.  The grey line indicates 2 counts, so for $n=30$ the line indicates $2/30=0.066$.  For the first case of $D=2$, the empirical and asymptotic variances are symmetric around $1/2$.  In the second case of $D=8$, the variances are no longer symmetric.
+
+The asymptotic standard deviation shows remarkable agreement with the emprical results even for small values of $n$, *when at least 2 counts are observed*.  In practice, it is often reasonable to assume a sufficient number of counts before a variable is included in an analysis.  Importantly, with less than 2 counts the asymptotic theory gives a *larger* standard deviation than the emprical results.  Therefore, this approach is conservative and will not underestimate the true amount of variation.  
+
+
+
+
+### Multinomial with 2 categories
+```{r compositions.clr, fig.width=10}
+
+pc = .5
+j = 1
+
+clr = function(counts, pseudocount = 0.5){
+
+	if( ! is.matrix(counts) ){
+		counts = matrix(counts, nrow=1)
+	}
+
+	log(counts + pseudocount) - rowMeans(log(counts + pseudocount))
+}
+
+# Some thoughts on counts in sequencing studies. NAR G&B
+# doi: 10.1093/nargab/lqaa094
+df_res = lapply( c(30, 100, 300), function(countTotal){
+
+	df_res = lapply( seq(0, countTotal/2, by=.3), function(alpha_1){
+
+		# other = c(4, 6, 2)
+		# alpha_n1 = max(countTotal - alpha_1 - sum(other), 0)
+		alpha_n1 = countTotal - alpha_1
+
+		# multinomial: counts are correlated
+		# p = c(alpha_1, alpha_n1, other)
+		p = c(alpha_1, alpha_n1)
+		phat = p/sum(p)
+		c_mat = t(rmultinom(100000, countTotal, prob=p))
+
+		# V = compositions::ilrBase(x = c_mat)
+		# y = log(c_mat+pc) %*% V
+		# x_clr = compositions::clr(c_mat+pc)
+		x_clr = clr(c_mat)
+
+		# sample mean
+		mu_sample = colMeans(x_clr)[j]
+
+		# expected mean
+		mu_expected = clr(p)[1]
+
+		# sample variance
+		v_empirical = apply(x_clr, 2, var)[j]
+
+		# expected variance
+		# phat = (p+pc)/sum(p + pc)
+		D = ncol(c_mat)
+		v_theoretical = (1/phat - 2/(phat*D) + sum(1/phat)/D^2) / countTotal
+	
+		data.frame(alpha_1, countTotal, mu_sample, mu_expected, v_empirical, v_theoretical = v_theoretical[j])
+	})
+	do.call(rbind, df_res)
+})
+df_res = do.call(rbind, df_res)
+
+df_mu = reshape2::melt(df_res[,1:4], id.vars=c("alpha_1", "countTotal"))
+df_v = reshape2::melt(df_res[,c(1:2, 5:6)], id.vars=c("alpha_1", "countTotal"))
+
+# ggplot(df_mu, aes(alpha_1 / countTotal, value, color=variable, linetype=variable)) + geom_line() + theme_classic() + theme(aspect.ratio=1) + facet_wrap(~countTotal, nrow=1) + xlab("fraction") + ylab("Expected value")
+
+ggplot(df_v, aes(alpha_1 / countTotal, sqrt(value), color=variable, linetype=variable)) + geom_line() + theme_classic() + theme(aspect.ratio=1,plot.title = element_text(hjust = 0.5)) + facet_wrap(~countTotal, nrow=1) + xlab("fraction") + ylab("Standard Deviation") + geom_vline(aes(xintercept=2/countTotal), color="grey", linetype="dashed") + scale_color_manual(name="Method", values=c("darkblue", "red"), labels=c( "Empirical", "Asymptotic theory")) + scale_linetype_discrete(name="Method", labels=c( "Empirical", "Asymptotic theory")) + ggtitle("Compare empirical and asymptotic standard deviations") + xlab("Fraction")
+
+# fig2 = ggplot(df_res[,c(1:2, 5:6)], aes(alpha_1/countTotal, (sqrt(v_empirical) - sqrt(v_theoretical))/sqrt(v_empirical)) ) + geom_line() + facet_wrap(~countTotal)  + theme_classic() + theme(aspect.ratio=1) + ylab("Relative error") + geom_vline(aes(xintercept=2/countTotal), color="grey", linetype="dashed") 
+
+# plot_grid(fig1, fig2, ncol=1, align="hv", axis="tblr")
+```
+
+
+
+### Multinomial with 8 categories
+```{r compositions.clr2, fig.width=10}
+
+j = 2
+
+other = c(4, 6, 2, 3, 1, 1, 3)
+
+# Some thoughts on counts in sequencing studies. NAR G&B
+# doi: 10.1093/nargab/lqaa094
+df_res = lapply( c(30, 100, 300), function(countTotal){
+
+	df_res = lapply( seq(0, countTotal - sum(other), by=.3), function(alpha_1){
+
+		alpha_n1 = max(countTotal - alpha_1 - sum(other), 0)
+		# alpha_n1 = countTotal - alpha_1
+
+		# multinomial: counts are correlated
+		p = c(alpha_1, alpha_n1, other)
+		p = c(alpha_1, alpha_n1)
+		phat = p/sum(p)
+		c_mat = t(rmultinom(100000, countTotal, prob=p))
+
+		x_clr = clr(c_mat)
+
+		# sample mean
+		mu_sample = colMeans(x_clr)[j]
+
+		# expected mean
+		mu_expected = clr(p)[1]
+
+		# sample variance
+		v_empirical = apply(x_clr, 2, var)[j]
+
+		# expected variance
+		D = ncol(c_mat)
+		v_theoretical = (1/phat - 2/(phat*D) + sum(1/phat)/D^2) / countTotal
+	
+		data.frame(alpha_1, countTotal, mu_sample, mu_expected, v_empirical, v_theoretical = v_theoretical[j])
+	})
+	do.call(rbind, df_res)
+})
+df_res = do.call(rbind, df_res)
+
+df_mu = reshape2::melt(df_res[,1:4], id.vars=c("alpha_1", "countTotal"))
+df_v = reshape2::melt(df_res[,c(1:2, 5:6)], id.vars=c("alpha_1", "countTotal"))
+
+ggplot(df_v, aes(alpha_1 / countTotal, sqrt(value), color=variable, linetype=variable)) + geom_line() + theme_classic() + theme(aspect.ratio=1,plot.title = element_text(hjust = 0.5)) + facet_wrap(~countTotal, nrow=1) + xlab("fraction") + ylab("Standard Deviation") + geom_vline(aes(xintercept=2/countTotal), color="grey", linetype="dashed") + geom_vline(aes(xintercept=(countTotal-2-sum(other))/countTotal), color="grey", linetype="dashed") + scale_color_manual(name="Method", values=c("darkblue", "red"), labels=c( "Empirical", "Asymptotic theory")) + scale_linetype_discrete(name="Method", labels=c( "Empirical", "Asymptotic theory")) + ggtitle("Compare empirical and asymptotic standard deviations") + xlab("Fraction")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
