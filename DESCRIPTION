@@ -1,0 +1,36 @@
+Package: crumblr
+Type: Package
+Title: Count ratio uncertainty modeling base linear regression
+Version: 1.0
+Date: 2021-10-28
+Authors@R: person("Gabriel", "Hoffman", role=c("aut", "cre"), email="gabriel.hoffman@mssm.edu")
+Description: More about what it does (maybe more than one line)
+VignetteBuilder: knitr
+License: GPL (>= 2)
+URL: https://github.com/GabrielHoffman/crumblr
+BugReports: https://github.com/GabrielHoffman/crumblr/issues
+Suggests:
+    BiocStyle,
+    knitr,
+    rmarkdown,
+    RUnit,
+    BiocGenerics
+biocViews: RNASeq,
+    GeneExpression,
+    DifferentialExpression,
+    BatchEffect,
+    QualityControl,
+    Regression,
+    Epigenetics,
+    FunctionalGenomics,
+    Transcriptomics,
+    Normalization,
+    Preprocessing,
+    Software
+Depends:
+    R (>= 4.1.0),
+    methods
+Imports:
+    stats
+RoxygenNote: 7.1.2
+RdMacros: Rdpack
