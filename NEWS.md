@@ -1,3 +1,7 @@
-# crumbler 1.0.0
+# crumbler 1.0.1
+ - Oct 29, 2021
+ - handle `data.frame`
+
+ # crumbler 1.0.0
  - Oct 28, 2021
  - Initial version

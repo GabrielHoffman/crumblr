@@ -21,7 +21,7 @@
 #' @seealso \code{compositions::clr}
 clr = function(counts, pseudocount = 0.5){
 
-	if( ! is.matrix(counts) ){
+	if( !is.data.frame(counts)  & !is.matrix(counts) ){
 		counts = matrix(counts, nrow=1)
 	}
 
