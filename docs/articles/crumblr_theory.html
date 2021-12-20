@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">crumblr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -64,7 +60,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/GabrielHoffman/crumblr/">
+  <a href="https://github.com/GabrielHoffman/crumblr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -79,16 +75,16 @@
 
       
 
-      </header><script src="crumblr_theory_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>crumblr: compare emprical and asymptotic theory</h1>
-                        <h4 class="author">Developed by <a href="http://gabrielhoffman.github.io/">Gabriel Hoffman</a>
+                        <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
-            <h4 class="date">Run on 2021-11-04 22:19:26</h4>
+            <h4 data-toc-skip class="date">Run on 2021-12-20 14:43:10</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/GabrielHoffman/crumblr/blob/master/vignettes/crumblr_theory.Rmd"><code>vignettes/crumblr_theory.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/GabrielHoffman/crumblr/blob/HEAD/vignettes/crumblr_theory.Rmd" class="external-link"><code>vignettes/crumblr_theory.Rmd</code></a></small>
       <div class="hidden name"><code>crumblr_theory.Rmd</code></div>
 
     </div>
@@ -110,21 +106,21 @@ rmarkdown::render("crumblr_theory.Rmd");
 
 
 --->
-<p>Let the vector <span class="math inline">\({\bf p}\)</span> being the true fractions across <span class="math inline">\(D\)</span> categories. With <span class="math inline">\(n\)</span> total counts sampled from a multinomial distribution, the <a href="https://rdrr.io/cran/compositions/man/clr.html">centered log ratio</a> (CLR) of the observed counts <span class="math inline">\({\bf c}\)</span> with estimated fractions <span class="math inline">\({\bf \hat p}\)</span> is<br><span class="math display">\[
+<p>Let the vector <span class="math inline">\({\bf p}\)</span> being the true fractions across <span class="math inline">\(D\)</span> categories. With <span class="math inline">\(n\)</span> total counts sampled from a multinomial distribution, the <a href="https://rdrr.io/cran/compositions/man/clr.html" class="external-link">centered log ratio</a> (CLR) of the observed counts <span class="math inline">\({\bf c}\)</span> with estimated fractions <span class="math inline">\({\bf \hat p}\)</span> is<br><span class="math display">\[
 \text{clr}_i({\bf \hat p}) = \log(p_i) - \frac{1}{D}\sum_{j=1}^D \log(p_j)
 \]</span> with sampling variance <span class="math display">\[
 \text{var}[\text{clr}_i({\bf \hat p})] =  \frac{1}{n} \left[ \frac{1}{p_i} - \frac{2}{ D p_i} + \frac{1}{D^2}\sum_{j=1}^D p_j  \right] 
 \]</span></p>
 <p>The sampling variance is derived from asymototic theory, so we examine its behavior for finite total counts, <span class="math inline">\(n\)</span>. Here we evalute the emprical variance from <span class="math inline">\(100,000\)</span> draws from a multinomial distribution while varying <span class="math inline">\(n\)</span> as well as the parameters of the distribution. As pseudocount of 0.5 since the asymptotic theory is not defined for counts of zero. The grey line indicates 2 counts, so for <span class="math inline">\(n=30\)</span> the line indicates <span class="math inline">\(2/30=0.066\)</span>. For the first case of <span class="math inline">\(D=2\)</span>, the empirical and asymptotic variances are symmetric around <span class="math inline">\(1/2\)</span>. In the second case of <span class="math inline">\(D=8\)</span>, the variances are no longer symmetric.</p>
 <p>The asymptotic standard deviation shows remarkable agreement with the emprical results even for small values of <span class="math inline">\(n\)</span>, <em>when at least 2 counts are observed</em>. In practice, it is often reasonable to assume a sufficient number of counts before a variable is included in an analysis. Importantly, with less than 2 counts the asymptotic theory gives a <em>larger</em> standard deviation than the emprical results. Therefore, this approach is conservative and will not underestimate the true amount of variation.</p>
-<div id="multinomial-with-2-categories" class="section level3">
-<h3 class="hasAnchor">
-<a href="#multinomial-with-2-categories" class="anchor"></a>Multinomial with 2 categories</h3>
+<div class="section level3">
+<h3 id="multinomial-with-2-categories">Multinomial with 2 categories<a class="anchor" aria-label="anchor" href="#multinomial-with-2-categories"></a>
+</h3>
 <p><img src="crumblr_theory_files/figure-html/compositions.clr-1.png" width="960"></p>
 </div>
-<div id="multinomial-with-8-categories" class="section level3">
-<h3 class="hasAnchor">
-<a href="#multinomial-with-8-categories" class="anchor"></a>Multinomial with 8 categories</h3>
+<div class="section level3">
+<h3 id="multinomial-with-8-categories">Multinomial with 8 categories<a class="anchor" aria-label="anchor" href="#multinomial-with-8-categories"></a>
+</h3>
 <p><img src="crumblr_theory_files/figure-html/compositions.clr2-1.png" width="960"></p>
 </div>
   </div>
@@ -138,11 +134,13 @@ rmarkdown::render("crumblr_theory.Rmd");
 
 
       <footer><div class="copyright">
-  <p>Developed by Gabriel Hoffman.</p>
+  <p></p>
+<p>Developed by Gabriel Hoffman.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -150,6 +148,8 @@ rmarkdown::render("crumblr_theory.Rmd");
 
   
 
+
+  
 
   </body>
 </html>
