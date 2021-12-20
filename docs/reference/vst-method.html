@@ -76,9 +76,49 @@
 </dl></div>
     <div id="details">
     <h2>Details</h2>
-    <p>A variance stabilizing transform is usually described in terms of a parametric model of the observed data.  Instead, here inverse variance of each observation are stored in <code>x$weight</code> and the VST divides the observed data by the variances's.</p>
+    <p>A variance stabilizing transform is usually described in terms of a parametric model of the observed data.  Instead, here inverse variance of each observation are stored in <code>x$weight</code> and the VST divides the observed data by the variances.</p>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
+<span class="r-in"><span class="co"># set probability of each category</span></span>
+<span class="r-in"><span class="va">prob</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># number of total counts</span></span>
+<span class="r-in"><span class="va">countsTotal</span> <span class="op">=</span> <span class="fl">300</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># number of samples</span></span>
+<span class="r-in"><span class="va">n_samples</span> <span class="op">=</span> <span class="fl">100</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># simulate info for each sample</span></span>
+<span class="r-in"><span class="va">info</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link">rgamma</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">50</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">info</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"sample_"</span>, <span class="fl">1</span><span class="op">:</span><span class="va">n_samples</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># simulate counts from multinomial</span></span>
+<span class="r-in"><span class="va">counts</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Multinom.html" class="external-link">rmultinom</a></span><span class="op">(</span><span class="va">n_samples</span>, size <span class="op">=</span> <span class="va">n_samples</span>, prob <span class="op">=</span> <span class="va">prob</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"cat_"</span>, <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">prob</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"sample_"</span>, <span class="fl">1</span><span class="op">:</span><span class="va">n_samples</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># run crumblr on counts</span></span>
+<span class="r-in"><span class="va">cobj</span> <span class="op">=</span> <span class="fu"><a href="crumblr.html">crumblr</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># run standard limma analysis on crumblr results</span></span>
+<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://bioinf.wehi.edu.au/limma" class="external-link">limma</a></span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">design</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></span><span class="op">(</span><span class="op">~</span><span class="va">Age</span>, <span class="va">info</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/lmFit.html" class="external-link">lmFit</a></span><span class="op">(</span><span class="fu">vst</span><span class="op">(</span><span class="va">cobj</span><span class="op">)</span>, <span class="va">design</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/ebayes.html" class="external-link">eBayes</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">fit</span>, coef<span class="op">=</span><span class="st">"Age"</span>, sort.by<span class="op">=</span><span class="st">"none"</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               logFC      AveExpr         t    P.Value adj.P.Val          B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat_1 -0.0013052575 -0.066341717 -1.981622 0.05029229 0.1005846  -9.702395</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat_2 -0.0001232976 -0.007928905 -0.789343 0.43179637 0.4317964 -11.333641</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat_3  0.0001930987  0.007728520  2.420311 0.01732872 0.0693149  -8.772973</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat_4  0.0001153169  0.019427796  1.706844 0.09098329 0.1213110 -10.197189</span>
+<span class="r-in"></span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
