@@ -55,7 +55,7 @@ setGeneric("vst", signature="x",
 #' @aliases vst,EList-method
 setMethod("vst", "EList",
 	function( x ){
- 		x$E / x$weights	
+ 		x$E * x$weights	
  	}
 )
 

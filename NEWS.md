@@ -1,3 +1,8 @@
+
+# crumbler 1.0.3
+ - Dec 20, 2021
+ - fix `vst` bug
+
 # crumbler 1.0.2
  - Dec 20, 2021
  - add `vst`
