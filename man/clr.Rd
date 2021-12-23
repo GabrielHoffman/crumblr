@@ -21,6 +21,30 @@ Compute the centered log ratio (CLR) transform of a count matrix.
 The CLR of a vector \code{x} of counts in \code{D} categories is defined as 
 \code{clr(x) = log(x) - mean(log(x))}. For details see van den Boogaart and  Tolosana-Delgado (2013).
 }
+\examples{
+
+# set probability of each category
+prob = c(0.1, 0.2, 0.3, 0.5)
+
+# number of total counts
+countsTotal = 300
+
+# number of samples
+n_samples = 100
+
+# simulate info for each sample
+info = data.frame(Age = rgamma(n_samples, 50, 1))
+rownames(info) = paste0("sample_", 1:n_samples)
+
+# simulate counts from multinomial
+counts = t(rmultinom(n_samples, size = n_samples, prob = prob))
+colnames(counts) = paste0("cat_", 1:length(prob))
+rownames(counts) = paste0("sample_", 1:n_samples)
+
+# centered log ratio
+clr(counts)
+
+}
 \references{
 {
   \insertRef{van2013analyzing}{crumblr}

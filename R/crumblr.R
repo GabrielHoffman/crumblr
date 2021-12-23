@@ -17,8 +17,32 @@
 #' 
 #' @return matrix of CLR transformed counts
 #' 
+#' @examples
+#' 
+#' # set probability of each category
+#' prob = c(0.1, 0.2, 0.3, 0.5)
+#' 
+#' # number of total counts
+#' countsTotal = 300
+#' 
+#' # number of samples
+#' n_samples = 100
+#' 
+#' # simulate info for each sample
+#' info = data.frame(Age = rgamma(n_samples, 50, 1))
+#' rownames(info) = paste0("sample_", 1:n_samples)
+#' 
+#' # simulate counts from multinomial
+#' counts = t(rmultinom(n_samples, size = n_samples, prob = prob))
+#' colnames(counts) = paste0("cat_", 1:length(prob))
+#' rownames(counts) = paste0("sample_", 1:n_samples)
+#' 
+#' # centered log ratio
+#' clr(counts)
+#'
 #' @import Rdpack
 #' @seealso \code{compositions::clr}
+#' @export
 clr = function(counts, pseudocount = 0.5){
 
 	if( !is.data.frame(counts)  & !is.matrix(counts) ){
@@ -89,8 +113,8 @@ crumblr = function(counts, pseudocount = 0.5){
 	# Compute asymptotic variance for each observation
 	# var_asymp = (1/p - 2/(p*D) + sum(1/p)/D^2) / n
 	var_asymp = apply(counts + pseudocount, 1, function(x){
-		p = x / sum(x) # fractions
 		n = sum(x) # total counts
+		p = x / n # fractions
 		(1/p - 2/(p*D) + sum(1/p)/D^2) / n
 		})
 	

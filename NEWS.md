@@ -1,3 +1,7 @@
+# crumbler 1.0.4
+ - Dec 23, 2021
+ - Update vignette
+ - export `clr()`
 
 # crumbler 1.0.3
  - Dec 20, 2021
