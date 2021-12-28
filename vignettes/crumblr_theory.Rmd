@@ -64,6 +64,8 @@ The asymptotic standard deviation shows remarkable agreement with the emprical r
 
 The asymptotic approximation is best for total counts > 30, and counts per cell > 7.  Need to add filter for cell types.  This is due to sum(1/p)
 
+spped, fit into existing workflows for limma/dream/varianePartition/PCA
+
 
 ```{r define.fxn, cache=FALSE}
 library(ggplot2)
@@ -71,11 +73,11 @@ library(crumblr)
 library(gtools)
 library(parallel)
 
-rmultinomdir = function(n, countTotal, alpha){
+rmultinomdir = function(n, size, alpha){
 
 	p = rdirichlet(n, alpha)
 	res = lapply( seq(1, n), function(i){
-		rmultinom(1, countTotal, prob=p[i,])
+		rmultinom(1, size, prob=p[i,])
 		})
 	res = do.call(cbind, res)
 
@@ -84,12 +86,12 @@ rmultinomdir = function(n, countTotal, alpha){
 
 run_sim = function(other, pseudocount = .5){
 
-	n_sims = 5000
+	n_sims = 500
 	j = 1
 
 	# Some thoughts on counts in sequencing studies. NAR G&B
 	# doi: 10.1093/nargab/lqaa094
-	df_res = mclapply( c(100, 1000), function(countTotal){
+	df_res = mclapply( c(100), function(countTotal){ # also 1000
 
 		df_res = lapply( seq(0, countTotal - sum(other), by=.3), function(alpha_1){
 
