@@ -57,7 +57,7 @@
 # n *(alpha/a0)
 #
 # cov(counts)
-# n * (diag(p) - tcrossprod(p)) * (1 + rhoSq*(n-1))
+# n * (diag(p) - tcrossprod(p)) *                                    
 #'
 #' @details Maximize Dirichlet Multinomial (DMN) log-likelihood with \code{optim()} using log likelihood function and its gradient.  This method sses a second round of optimization to estimate the scale of \eqn{\alpha} parameters, which is necessary for accurate estimation of overdispersion metric.
 #' 

@@ -48,30 +48,34 @@ knitr::opts_chunk$set()
 options(width=100)
 ```	
 
-Let the vector ${\bf p}$ being the true fractions across $D$ categories.  With $n$ total counts sampled from a multinomial distribution, the [centered log ratio](https://rdrr.io/cran/compositions/man/clr.html) (CLR) of the observed counts ${\bf c}$ with estimated fractions ${\bf \hat p}$ is   
+Let the vector ${\bf p}$ being the true fractions across $D$ categories.  With $C$ total counts sampled from a Dirichlet multinomial distribution with overdispersion $\tau$, the [centered log ratio](https://rdrr.io/cran/compositions/man/clr.html) (CLR) of the observed counts ${\bf c}$ with estimated fractions ${\bf \hat p}$ is   
 $$
 \text{clr}_i({\bf \hat p}) = \log(\hat p_i) - \frac{1}{D}\sum_{j=1}^D \log(\hat p_j)
 $$
  with sampling variance
 $$
-\text{var}[\text{clr}_i({\bf \hat p})] =  \frac{1}{n} \left[ \frac{1}{\hat p_i} - \frac{2}{ D \hat p_i} + \frac{1}{D^2}\sum_{j=1}^D \frac{1}{\hat p_j}  \right] 
+\text{var}[\text{clr}_i({\bf \hat p})] =  \frac{\tau}{C} \left[ \frac{1}{\hat p_i} - \frac{2}{ D \hat p_i} + \frac{1}{D^2}\sum_{j=1}^D \frac{1}{\hat p_j}  \right] 
 $$
 
-The sampling variance is derived from asymototic theory, so we examine its behavior for finite total counts, $n$.  Here we evalute the emprical variance from $100,000$ draws from a multinomial distribution while varying $n$ as well as the parameters of the distribution.  As pseudocount of 0.5 since the asymptotic theory is not defined for counts of zero.  The grey line indicates 2 counts, so for $n=30$ the line indicates $2/30=0.066$.  For the first case of $D=2$, the empirical and asymptotic variances are symmetric around $1/2$.  In the second case of $D=8$, the variances are no longer symmetric.
+The sampling variance is derived from asymototic theory, so we examine its behavior for finite total counts, $n$.  Here we evalute the emprical variance from $100,000$ draws from a Dirichlet multinomial distribution while varying $\tau$, $C$ as well as the parameters of the distribution.  A pseudocount of 0.5 is added to the observed counts since the asymptotic theory is not defined for counts of zero.  The grey line indicates 3 counts, so for $nC30$ the line indicates $3/30=0.1$.  For the first case of $D=2$, the empirical and asymptotic variances are symmetric around $1/2$.  In the second case of $D=8$, the variances are no longer symmetric.
 
 The asymptotic standard deviation shows remarkable agreement with the emprical results even for small values of $n$, *when at least 2 counts are observed*.  In practice, it is often reasonable to assume a sufficient number of counts before a variable is included in an analysis.  Importantly, with less than 2 counts the asymptotic theory gives a *larger* standard deviation than the emprical results.  Therefore, this approach is conservative and will not underestimate the true amount of variation.  
+
+The normal approximation is accurate for small overdispersion $\tau$, large total counts $C$, and large proportions $p$.
 
 
 The asymptotic approximation is best for total counts > 30, and counts per cell > 7.  Need to add filter for cell types.  This is due to sum(1/p)
 
-spped, fit into existing workflows for limma/dream/varianePartition/PCA
+speed
+fit into existing workflows for limma/dream/variancePartition/PCA
 
 
 ```{r define.fxn, cache=FALSE}
 library(ggplot2)
 library(crumblr)
-library(gtools)
+library(HMP)
 library(parallel)
+library(glue)
 
 rmultinomdir = function(n, size, alpha){
 
@@ -86,56 +90,74 @@ rmultinomdir = function(n, size, alpha){
 
 run_sim = function(other, pseudocount = .5){
 
-	n_sims = 500
+	n_sims = 10000
 	j = 1
 
 	# Some thoughts on counts in sequencing studies. NAR G&B
 	# doi: 10.1093/nargab/lqaa094
-	df_res = mclapply( c(100), function(countTotal){ # also 1000
+	df_res = mclapply( c(300, 1000), function(countTotal){
 
-		df_res = lapply( seq(0, countTotal - sum(other), by=.3), function(alpha_1){
+		df_res = lapply( seq(1, countTotal - sum(other) - 1 , by=1), function(targetCount){
 
-			alpha_n1 = max(countTotal - alpha_1 - sum(other), 0)
-			# alpha_n1 = countTotal - alpha_1
+			df_res = lapply( c(1, 5, 20), function(tau){
+				targetCount2 = max(countTotal - targetCount - sum(other), 0)
 
-			# multinomial: counts are correlated
-			alpha = c(alpha_1, alpha_n1, other)
-			p = alpha / sum(alpha)
-			c_mat = t(rmultinom(n_sims, countTotal, prob=p))
+				# create vector of alpha values
+				expectedCounts = c(targetCount, targetCount2, other)
+				p = expectedCounts / sum(expectedCounts)
+				
+				if( tau == 1){
+					# large a0 corresponds to multinomial
+					alpha = p * 1e9
+				}else{
+					# convert tau overdispersion value to alpha from p
+					rhoSq = (tau - 1) / (countTotal-1)
+					a0 = (1-rhoSq) / rhoSq
+					alpha = p*a0
+				}
 
-			x_clr = clr(c_mat + pseudocount)
+				# Multinomial-Dirichlet
+				counts = Dirichlet.multinomial(rep(countTotal, n_sims), alpha) 
+				# counts = t(rmultinom(n_sims, countTotal, prob=p))
 
-			# sample mean
-			mu_sample = colMeans(x_clr)
+				# estimate overdispersion empirically from counts
+				fit_dmn = dmn.mle(counts)
+				tau_hat = fit_dmn$overdispersion
 
-			# expected mean
-			mu_expected = clr(p)
+				# transform
+				x_clr = clr(counts, pseudocount)
 
-			# sample variance
-			v_empirical = apply(x_clr, 2, var)
+				# sample mean
+				mu_sample = colMeans(x_clr)
 
-			# Multinomial-Dirichlet
-			c_mat = rmultinomdir(n_sims, countTotal, alpha) 
+				# expected mean
+				mu_expected = clr(p)
 
-			x_clr = clr(c_mat + pseudocount)
-			mu_sample_md = colMeans(x_clr)
-			v_empirical_md = apply(x_clr, 2, var)
+				mu_sample_md = colMeans(x_clr)
+				v_empirical = apply(x_clr, 2, var)
 
-			# expected variance
-			D = ncol(c_mat)
-			phat = (alpha + pseudocount) / sum(alpha + pseudocount)
-			v_theoretical = (1/phat - 2/(phat*D) + sum(1/phat)/D^2) / countTotal
-		
-			data.frame(alpha_1, countTotal, 
-								mu_sample = mu_sample[j],
-								mu_expected = mu_expected[j],
-								v_empirical = v_empirical[j],
-								# mu_sample_md = mu_sample_md[j],
-								v_empirical_md = v_empirical_md[j],
-								v_theoretical = v_theoretical[j])
+				# expected variance based on true values 
+				# D = ncol(counts)
+				# v_theoretical = tau * (1/p - 2/(p*D) + sum(1/p)/D^2) / countTotal
+
+				# expected variance based on observed counts
+				D = ncol(counts)
+				phat = fit_dmn$alpha / sum(fit_dmn$alpha)
+				v_theoretical_est = tau_hat * (1/phat - 2/(phat*D) + sum(1/phat)/D^2) / countTotal
+
+				data.frame(targetCount 	= targetCount, 
+									countTotal 		= countTotal, 
+									tau 					= tau,
+									mu_sample 		= mu_sample[j],
+									mu_expected 	= mu_expected[j],
+									v_empirical 	= v_empirical[j],
+									# v_theoretical = v_theoretical[j],
+									v_theoretical_est = v_theoretical_est[j] )
+			})
+			do.call(rbind, df_res)
 		})
 		do.call(rbind, df_res)
-	}, mc.cores=1)
+	}, mc.cores=6)
 	df_res = do.call(rbind, df_res)
 
 	df_res
@@ -143,33 +165,51 @@ run_sim = function(other, pseudocount = .5){
 ```
 
 
-### 2 categories
-```{r sim1, fig.width=10, fig.height=4}
+### D=2 categories
+```{r sim1, fig.width=10, fig.height=6, cache=TRUE}
 df_res = run_sim(other=NULL)  
 
-df_mu = reshape2::melt(df_res[,1:4], id.vars=c("alpha_1", "countTotal"))
-df_v = reshape2::melt(df_res[,c(1:2, c(5:7))], id.vars=c("alpha_1", "countTotal"))
+# "v_theoretical",
+cols = c("tau", "targetCount", "countTotal", "v_empirical",  "v_theoretical_est")
+df_v = reshape2::melt(df_res[,cols], id.vars=cols[1:3])
 
-ymax = with(df_v, sqrt(max(value[variable =='v_empirical_md'])))
+# set facets
+df_v$facet_x = with(df_v, glue('tau*" = {tau}"'))
+df_v$facet_x = factor(df_v$facet_x, unique(df_v$facet_x))
+df_v$facet_y = with(df_v, glue('C*" = {countTotal}"'))
+df_v$facet_y = factor(df_v$facet_y, unique(df_v$facet_y))
 
-ggplot(df_v, aes(alpha_1 / countTotal, sqrt(value), color=variable, linetype=variable)) + geom_line() + theme_classic() + theme(aspect.ratio=1,plot.title = element_text(hjust = 0.5)) + facet_wrap(~countTotal, nrow=1) + xlab("fraction") + ylab("Standard Deviation") + geom_vline(aes(xintercept=2/countTotal), color="grey", linetype="dashed") + scale_color_manual(name="Method", values=c("blue4", "green4", "red"), labels=c( "Empirical (MN)", "Empirical (DMN)", "Asymptotic theory")) + scale_linetype_manual(name="Method", labels=c("Empirical (MN)", "Empirical (DMN)", "Asymptotic theory"), values=c(1, 1, 2)) + ggtitle("Compare empirical and asymptotic standard deviations") + xlab("Fraction") + coord_fixed(ylim=c(0, ymax*1.05)) 
+ymax = with(df_v, sqrt(max(value[variable =='v_empirical'])))
+
+ggplot(df_v, aes(targetCount / countTotal, sqrt(value), color=variable, linetype=variable)) + geom_line() + theme_classic() + theme(aspect.ratio=1,plot.title = element_text(hjust = 0.5)) + facet_grid(facet_y ~ facet_x, labeller = label_parsed) + xlab("fraction") + ylab("Standard Deviation") + ggtitle("Standard deviations from empirical DMN and normal approximation") + xlab("Fraction") + coord_fixed(ylim=c(0, ymax*1.05)) + scale_color_manual(name="Method", values=c("blue4",  "red"), labels=c("Empirical (DMN)", "Normal approximation")) + scale_linetype_manual(name="Method", values=c(1, 2), labels=c("Empirical (DMN)", "Normal approximation")) 
+# geom_vline(aes(xintercept=5/countTotal), color="grey", linetype="dashed")
 ```
 
 ```{r exit, cache=FALSE, eval=FALSE}
 knitr::knit_exit()
 ```
 
-### 8 categories
-```{r sim2, fig.width=10, fig.height=4}
+### D=8 categories
+```{r sim2, fig.width=10, fig.height=6, cache=TRUE}
 other = rep(8:12)
-df_res = run_sim(other=other)
+df_res = run_sim(other=other) 
 
-df_mu = reshape2::melt(df_res[,1:4], id.vars=c("alpha_1", "countTotal"))
-df_v = reshape2::melt(df_res[,c(1:2, c(5:7))], id.vars=c("alpha_1", "countTotal"))
+# "v_theoretical",
+cols = c("tau", "targetCount", "countTotal", "v_empirical",  "v_theoretical_est")
+df_v = reshape2::melt(df_res[,cols], id.vars=cols[1:3])
 
-ymax = with(df_v, sqrt(max(value[variable =='v_empirical_md'])))
+ymax = with(df_v, sqrt(max(value[variable =='v_empirical'])))
 
-ggplot(df_v, aes(alpha_1 / countTotal, sqrt(value), color=variable, linetype=variable)) + geom_line() + theme_classic() + theme(aspect.ratio=1,plot.title = element_text(hjust = 0.5)) + facet_wrap(~countTotal, nrow=1) + xlab("fraction") + ylab("Standard Deviation") + geom_vline(aes(xintercept=2/countTotal), color="grey", linetype="dashed") + scale_color_manual(name="Method", values=c("blue4", "green4", "red"), labels=c( "Empirical (MN)", "Empirical (DMN)", "Asymptotic theory")) + scale_linetype_manual(name="Method", labels=c("Empirical (MN)", "Empirical (DMN)", "Asymptotic theory"), values=c(1, 1, 2)) + ggtitle("Compare empirical and asymptotic standard deviations") + xlab("Fraction") + coord_fixed(ylim=c(0, ymax*1.05)) 
+# set facets
+df_v$facet_x = with(df_v, glue('tau*" = {tau}"'))
+df_v$facet_x = factor(df_v$facet_x, unique(df_v$facet_x))
+df_v$facet_y = with(df_v, glue('C*" = {countTotal}"'))
+df_v$facet_y = factor(df_v$facet_y, unique(df_v$facet_y)) 
+
+ymax = with(df_v, sqrt(max(value[variable =='v_empirical'])))
+
+ggplot(df_v, aes(targetCount / countTotal, sqrt(value), color=variable, linetype=variable)) + geom_line() + theme_classic() + theme(aspect.ratio=1,plot.title = element_text(hjust = 0.5)) + facet_grid(facet_y ~ facet_x, labeller = label_parsed) + xlab("fraction") + ylab("Standard Deviation") + ggtitle("Standard deviations from empirical DMN and normal approximation") + xlab("Fraction") + coord_fixed(ylim=c(0, ymax*1.05)) + scale_color_manual(name="Method", values=c("blue4",  "red"), labels=c("Empirical (DMN)", "Normal approximation")) + scale_linetype_manual(name="Method", values=c(1, 2), labels=c("Empirical (DMN)", "Normal approximation"))
+#  + geom_vline(aes(xintercept=5/countTotal), color="grey", linetype="dashed")
 ```
 
 

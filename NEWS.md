@@ -1,4 +1,8 @@
-# crumbler 1.0.4
+# crumbler 1.0.5
+ - Dec 27, 2021
+ - add `dmn.mle()`
+
+ # crumbler 1.0.4
  - Dec 23, 2021
  - Update vignette
  - export `clr()`
