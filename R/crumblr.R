@@ -58,6 +58,7 @@ clr = function(counts, pseudocount = 0.5){
 #' 
 #' @param counts count data with samples as rows and variables are columns
 #' @param pseudocount added to counts to avoid issues with zeros
+#' @param tau overdispersion parameter for Dirichlet multinomial.  If \code{NULL}, estimate from observed counts.
 #' 
 #' @return  An \code{EList} object with the following components:
 #' \itemize{
@@ -66,9 +67,7 @@ clr = function(counts, pseudocount = 0.5){
 #' }
 #' 
 #' @details 
-#' Evalute the centered log ratio (CLR) transform of the count matrix, and the asymptotic theoretical variances of each transformed observation.  The asymptotic theoretical variances show remarkable agreement with the emprical results even for small total (i.e. row) counts, for observations of at least 2 counts.  In practice, it is often reasonable to assume a sufficient number of counts before a variable is included in an analysis anyway.  But the feasability of this assumption is up to the user to determine.     
-#' 
-#' Importantly, with less than 2 counts the asymptotic theory gives a *larger* variance  than the emprical results.  Therefore, this approach is conservative and will not underestimate the true amount of variation.  
+#' Evalute the centered log ratio (CLR) transform of the count matrix, and the asymptotic theoretical variances of each transformed observation.  The asymptotic normal approximation is increasingly accurate for small overdispersion \eqn{\tau}, large total counts \eqn{C}, and large proportions \eqn{p}, but shows good agreement with the empirical results most situtations. In practice, it is often reasonable to assume a sufficient number of counts before a variable is included in an analysis anyway.  But the feasability of this assumption is up to the user to determine.     
 #'
 #' @examples
 #' 
@@ -103,19 +102,51 @@ clr = function(counts, pseudocount = 0.5){
 #' topTable(fit, coef="Age", sort.by="none")
 #' 
 #' @seealso \code{limma::voom}, \code{limma::lmFit}
-#' @importFrom methods new
 #' @import limma
 #' @export
-crumblr = function(counts, pseudocount = 0.5){
+
+setGeneric("crumblr", 
+	function( counts, pseudocount = 0.5, tau=NULL){
+
+	standardGeneric("crumblr")
+})
+
+
+
+#' @rdname crumblr
+#' @aliases crumblr,matrix-method
+#' @importFrom methods new
+setMethod("crumblr", "matrix",
+	function(counts, pseudocount = 0.5, tau=NULL){
+
+		.crumblr(counts, pseudocount, tau)
+})
+
+#' @rdname crumblr
+#' @aliases crumblr,data.frame-method
+#' @importFrom methods new
+setMethod("crumblr", "data.frame",
+	function(counts, pseudocount = 0.5, tau=NULL){
+
+		.crumblr( as.matrix(counts), pseudocount, tau)
+})
+
+
+.crumblr = function(counts, pseudocount = 0.5, tau=NULL){
 
 	D = ncol(counts)
 	
+	# estimate overdispersion from observed counts
+	if( is.null(tau) ){
+		tau = dmn.mle( counts )$overdispersion
+	}
+
 	# Compute asymptotic variance for each observation
-	# var_asymp = (1/p - 2/(p*D) + sum(1/p)/D^2) / n
+	# var_asymp = tau * (1/p - 2/(p*D) + sum(1/p)/D^2) / C
 	var_asymp = apply(counts + pseudocount, 1, function(x){
-		n = sum(x) # total counts
-		p = x / n # fractions
-		(1/p - 2/(p*D) + sum(1/p)/D^2) / n
+		C = sum(x) # total counts
+		p = x / C # fractions
+		tau * (1/p - 2/(p*D) + sum(1/p)/D^2) / C
 		})
 	
 	Y_clr = t(clr(counts, pseudocount))
@@ -124,13 +155,6 @@ crumblr = function(counts, pseudocount = 0.5){
 	# (i.e. inverse variances)
 	new("EList", list(E = Y_clr, weights = 1/var_asymp))
 }
-
-
-
-
-
-
-
 
 
 

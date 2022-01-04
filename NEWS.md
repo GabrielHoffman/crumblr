@@ -1,6 +1,7 @@
 # crumbler 1.0.5
  - Dec 27, 2021
  - add `dmn.mle()`
+ - use generic `crumblr()` function
 
  # crumbler 1.0.4
  - Dec 23, 2021

@@ -67,7 +67,7 @@
 #' 
 #' @seealso Other functions also estimate DMN parameters.  \code{MGLM::MGLMfit()} and \code{dirmult::dirmult()} give good parameter estimates but are slower.  \code{Rfast::dirimultinom.mle()} often fails to converge
 #' @importFrom Rfast Lgamma Digamma colmeans rowsums
-#' @importFrom stats optim 
+#' @importFrom stats optim optimize 
 #' @export
 dmn.mle = function(counts,...){
 

@@ -18,9 +18,14 @@ vignette: >
 
 
 <!---
-cd /Users/gabrielhoffman/workspace/repos/eval_methods/dreamlet
+Cache long-running vignettes
+https://www.kloppenborg.ca/2021/06/long-running-vignettes/
+
+
+cd /Users/gabrielhoffman/workspace/repos/crumblr/vignettes
 R
 
+rm -f sim*.pdf sim*.png
 rmarkdown::render('crumblr_theory.Rmd')
 
 
@@ -41,7 +46,11 @@ knitr::opts_chunk$set(	tidy=FALSE,
                       	package.startup.message = FALSE,
                       	message=FALSE, 
                       	error=FALSE, 
-                      	warning=FALSE)
+                      	warning=FALSE
+											  # collapse = TRUE,
+											  # comment = "#>",
+											  # fig.path = ""  # Added this line to the standard setup chunk)
+											  )
 
 knitr::opts_chunk$set()
 
@@ -90,14 +99,18 @@ rmultinomdir = function(n, size, alpha){
 
 run_sim = function(other, pseudocount = .5){
 
-	n_sims = 10000
+	n_sims = 1000
 	j = 1
 
 	# Some thoughts on counts in sequencing studies. NAR G&B
 	# doi: 10.1093/nargab/lqaa094
-	df_res = mclapply( c(300, 1000), function(countTotal){
+	df_res = mclapply( c(300, 5000), function(countTotal){
 
-		df_res = lapply( seq(1, countTotal - sum(other) - 1 , by=1), function(targetCount){
+		# evaluate at set of equally spaced integers
+		targetValues = seq(1, max(countTotal - sum(other) - 1, 1), length.out=100)
+		targetValues = unique(targetValues)
+
+		df_res = lapply( targetValues, function(targetCount){
 
 			df_res = lapply( c(1, 5, 20), function(tau){
 				targetCount2 = max(countTotal - targetCount - sum(other), 0)
@@ -120,10 +133,6 @@ run_sim = function(other, pseudocount = .5){
 				counts = Dirichlet.multinomial(rep(countTotal, n_sims), alpha) 
 				# counts = t(rmultinom(n_sims, countTotal, prob=p))
 
-				# estimate overdispersion empirically from counts
-				fit_dmn = dmn.mle(counts)
-				tau_hat = fit_dmn$overdispersion
-
 				# transform
 				x_clr = clr(counts, pseudocount)
 
@@ -136,14 +145,20 @@ run_sim = function(other, pseudocount = .5){
 				mu_sample_md = colMeans(x_clr)
 				v_empirical = apply(x_clr, 2, var)
 
-				# expected variance based on true values 
-				# D = ncol(counts)
-				# v_theoretical = tau * (1/p - 2/(p*D) + sum(1/p)/D^2) / countTotal
+				# expected variance based on *true* values 
+				D = ncol(counts)
+				p = (expectedCounts+0.5) / sum(expectedCounts+0.5)
+				v_theoretical_est = tau * (1/p - 2/(p*D) + sum(1/p)/D^2) / countTotal
+
+				# estimate variance from observed counts
+				# estimate overdispersion empirically from counts
+				# fit_dmn = dmn.mle(counts + pseudocount)
+				# tau_hat = fit_dmn$overdispersion
 
 				# expected variance based on observed counts
-				D = ncol(counts)
-				phat = fit_dmn$alpha / sum(fit_dmn$alpha)
-				v_theoretical_est = tau_hat * (1/phat - 2/(phat*D) + sum(1/phat)/D^2) / countTotal
+				# D = ncol(counts)
+				# phat = fit_dmn$alpha / sum(fit_dmn$alpha)
+				# v_theoretical_est = tau_hat * (1/phat - 2/(phat*D) + sum(1/phat)/D^2) / countTotal
 
 				data.frame(targetCount 	= targetCount, 
 									countTotal 		= countTotal, 
@@ -151,13 +166,12 @@ run_sim = function(other, pseudocount = .5){
 									mu_sample 		= mu_sample[j],
 									mu_expected 	= mu_expected[j],
 									v_empirical 	= v_empirical[j],
-									# v_theoretical = v_theoretical[j],
 									v_theoretical_est = v_theoretical_est[j] )
 			})
 			do.call(rbind, df_res)
 		})
 		do.call(rbind, df_res)
-	}, mc.cores=6)
+	}, mc.cores=1)
 	df_res = do.call(rbind, df_res)
 
 	df_res
@@ -169,47 +183,53 @@ run_sim = function(other, pseudocount = .5){
 ```{r sim1, fig.width=10, fig.height=6, cache=TRUE}
 df_res = run_sim(other=NULL)  
 
-# "v_theoretical",
+# "v_theoretical",  
 cols = c("tau", "targetCount", "countTotal", "v_empirical",  "v_theoretical_est")
 df_v = reshape2::melt(df_res[,cols], id.vars=cols[1:3])
 
 # set facets
 df_v$facet_x = with(df_v, glue('tau*" = {tau}"'))
-df_v$facet_x = factor(df_v$facet_x, unique(df_v$facet_x))
+df_v$facet_x = factor(df_v$facet_x, unique(df_v$facet_x)) 
 df_v$facet_y = with(df_v, glue('C*" = {countTotal}"'))
 df_v$facet_y = factor(df_v$facet_y, unique(df_v$facet_y))
 
 ymax = with(df_v, sqrt(max(value[variable =='v_empirical'])))
-
+ymax = .8
+ 
 ggplot(df_v, aes(targetCount / countTotal, sqrt(value), color=variable, linetype=variable)) + geom_line() + theme_classic() + theme(aspect.ratio=1,plot.title = element_text(hjust = 0.5)) + facet_grid(facet_y ~ facet_x, labeller = label_parsed) + xlab("fraction") + ylab("Standard Deviation") + ggtitle("Standard deviations from empirical DMN and normal approximation") + xlab("Fraction") + coord_fixed(ylim=c(0, ymax*1.05)) + scale_color_manual(name="Method", values=c("blue4",  "red"), labels=c("Empirical (DMN)", "Normal approximation")) + scale_linetype_manual(name="Method", values=c(1, 2), labels=c("Empirical (DMN)", "Normal approximation")) 
 # geom_vline(aes(xintercept=5/countTotal), color="grey", linetype="dashed")
 ```
 
-```{r exit, cache=FALSE, eval=FALSE}
-knitr::knit_exit()
-```
 
-### D=8 categories
+### D=25 categories
 ```{r sim2, fig.width=10, fig.height=6, cache=TRUE}
-other = rep(8:12)
-df_res = run_sim(other=other) 
-
+other = rep(10, 23)
+df_res = run_sim(other=other)  
+ 
 # "v_theoretical",
 cols = c("tau", "targetCount", "countTotal", "v_empirical",  "v_theoretical_est")
 df_v = reshape2::melt(df_res[,cols], id.vars=cols[1:3])
 
 ymax = with(df_v, sqrt(max(value[variable =='v_empirical'])))
 
-# set facets
-df_v$facet_x = with(df_v, glue('tau*" = {tau}"'))
+# set facets 
+df_v$facet_x = with(df_v, glue('tau*" = {tau}"')) 
 df_v$facet_x = factor(df_v$facet_x, unique(df_v$facet_x))
-df_v$facet_y = with(df_v, glue('C*" = {countTotal}"'))
-df_v$facet_y = factor(df_v$facet_y, unique(df_v$facet_y)) 
-
-ymax = with(df_v, sqrt(max(value[variable =='v_empirical'])))
-
-ggplot(df_v, aes(targetCount / countTotal, sqrt(value), color=variable, linetype=variable)) + geom_line() + theme_classic() + theme(aspect.ratio=1,plot.title = element_text(hjust = 0.5)) + facet_grid(facet_y ~ facet_x, labeller = label_parsed) + xlab("fraction") + ylab("Standard Deviation") + ggtitle("Standard deviations from empirical DMN and normal approximation") + xlab("Fraction") + coord_fixed(ylim=c(0, ymax*1.05)) + scale_color_manual(name="Method", values=c("blue4",  "red"), labels=c("Empirical (DMN)", "Normal approximation")) + scale_linetype_manual(name="Method", values=c(1, 2), labels=c("Empirical (DMN)", "Normal approximation"))
+df_v$facet_y = with(df_v, glue('C*" = {countTotal}"')) 
+df_v$facet_y = factor(df_v$facet_y, unique(df_v$facet_y))   
+   
+ymax = with(df_v, sqrt(max(value[variable =='v_empirical'])))   
+ 
+ggplot(df_v, aes(targetCount / countTotal, sqrt(value), color=variable, linetype=variable)) + geom_line() + theme_classic() + theme(aspect.ratio=1,plot.title = element_text(hjust = 0.5)) + facet_grid(facet_y ~ facet_x, labeller = label_parsed) + xlab("fraction") + ylab("Standard Deviation") + ggtitle("Standard deviations from empirical DMN and normal approximation") + xlab("Fraction") + coord_fixed(ylim=c(0, ymax*1.05)) + scale_color_manual(name="Method", values=c("blue4",  "red"), labels=c("Empirical (DMN)", "Normal approximation")) + scale_linetype_manual(name="Method", values=c(1, 2), labels=c("Empirical (DMN)", "Normal approximation")) 
 #  + geom_vline(aes(xintercept=5/countTotal), color="grey", linetype="dashed")
+```
+
+
+```{r for.manuscript, eval=FALSE}
+df_sub = df_v[(df_v$tau==1)&(df_v$countTotal==300),]
+
+fig = ggplot(df_sub, aes(targetCount / countTotal, sqrt(value), color=variable, linetype=variable)) + geom_line(size=.75) + theme_classic() + theme(aspect.ratio=1,plot.title = element_text(hjust = 0.5)) + xlab("fraction") + ylab("Standard Deviation") + xlab("Fraction") + scale_color_manual(name="Method", values=c("blue4",  "red"), labels=c("Empirical (DMN)", "Normal approximation")) + scale_linetype_manual(name="Method", values=c(1, 2), labels=c("Empirical (DMN)", "Normal approximation")) + ggtitle(expression(tau==5~C==300~D==25))
+ggsave("sim_figure.pdf")
 ```
 
 
@@ -223,9 +243,9 @@ ggplot(df_v, aes(targetCount / countTotal, sqrt(value), color=variable, linetype
 
 
 
-
-
-
+```{r exit, cache=FALSE, eval=FALSE}
+knitr::knit_exit()
+```
 
 ```{r test, eval=FALSE}
 library(compositions)

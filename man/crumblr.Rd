@@ -2,14 +2,22 @@
 % Please edit documentation in R/crumblr.R
 \name{crumblr}
 \alias{crumblr}
+\alias{crumblr,matrix-method}
+\alias{crumblr,data.frame-method}
 \title{Count ratio uncertainty modeling based linear regression}
 \usage{
-crumblr(counts, pseudocount = 0.5)
+crumblr(counts, pseudocount = 0.5, tau = NULL)
+
+\S4method{crumblr}{matrix}(counts, pseudocount = 0.5, tau = NULL)
+
+\S4method{crumblr}{data.frame}(counts, pseudocount = 0.5, tau = NULL)
 }
 \arguments{
 \item{counts}{count data with samples as rows and variables are columns}
 
 \item{pseudocount}{added to counts to avoid issues with zeros}
+
+\item{tau}{overdispersion parameter for Dirichlet multinomial.  If \code{NULL}, estimate from observed counts.}
 }
 \value{
 An \code{EList} object with the following components:
@@ -22,9 +30,7 @@ An \code{EList} object with the following components:
 Count ratio uncertainty modeling based linear regression (crumblr) returns CLR-transformed counts and observation-level inverse-variance weights for use in weighted linear models.
 }
 \details{
-Evalute the centered log ratio (CLR) transform of the count matrix, and the asymptotic theoretical variances of each transformed observation.  The asymptotic theoretical variances show remarkable agreement with the emprical results even for small total (i.e. row) counts, for observations of at least 2 counts.  In practice, it is often reasonable to assume a sufficient number of counts before a variable is included in an analysis anyway.  But the feasability of this assumption is up to the user to determine.     
-
-Importantly, with less than 2 counts the asymptotic theory gives a *larger* variance  than the emprical results.  Therefore, this approach is conservative and will not underestimate the true amount of variation.
+Evalute the centered log ratio (CLR) transform of the count matrix, and the asymptotic theoretical variances of each transformed observation.  The asymptotic normal approximation is increasingly accurate for small overdispersion \eqn{\tau}, large total counts \eqn{C}, and large proportions \eqn{p}, but shows good agreement with the empirical results most situtations. In practice, it is often reasonable to assume a sufficient number of counts before a variable is included in an analysis anyway.  But the feasability of this assumption is up to the user to determine.
 }
 \examples{
 
