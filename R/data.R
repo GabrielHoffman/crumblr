@@ -9,8 +9,8 @@
 #'
 #' @format 
 #' \itemize{    
-#'	\item \code{cellCounts} data.frame of cell counts.
 #'	\item \code{info} is metadata for each sample
+#'	\item \code{cellCounts} data.frame of counts for each sample
 #' }
 #'
 #' @keywords datasets
@@ -22,5 +22,9 @@
 #' @examples
 #' data(IFNCellCounts)
 "info"
-"cellCounts"
 
+
+#' @docType data
+#' @name IFNCellCounts
+#' @keywords datasets
+"cellCounts"

@@ -4,15 +4,20 @@
 \name{IFNCellCounts}
 \alias{IFNCellCounts}
 \alias{info}
+\alias{cellCounts}
 \title{Cell counts following interferon treatment}
 \format{
 \itemize{    
-\item \code{cellCounts} data.frame of cell counts.
 \item \code{info} is metadata for each sample
+\item \code{cellCounts} data.frame of counts for each sample
 }
+
+An object of class \code{matrix} (inherits from \code{array}) with 16 rows and 8 columns.
 }
 \usage{
 data(IFNCellCounts)
+
+cellCounts
 }
 \description{
 Counts are from single cell RNA-seq data from treated and untreated samples from \insertCite{kang2018multiplexed}{crumblr}.

@@ -6,11 +6,11 @@
 \alias{crumblr,data.frame-method}
 \title{Count ratio uncertainty modeling based linear regression}
 \usage{
-crumblr(counts, pseudocount = 0.5, tau = NULL)
+crumblr(counts, pseudocount = 0.5, tau = 1)
 
-\S4method{crumblr}{matrix}(counts, pseudocount = 0.5, tau = NULL)
+\S4method{crumblr}{matrix}(counts, pseudocount = 0.5, tau = 1)
 
-\S4method{crumblr}{data.frame}(counts, pseudocount = 0.5, tau = NULL)
+\S4method{crumblr}{data.frame}(counts, pseudocount = 0.5, tau = 1)
 }
 \arguments{
 \item{counts}{count data with samples as rows and variables are columns}
@@ -48,7 +48,7 @@ info = data.frame(Age = rgamma(n_samples, 50, 1))
 rownames(info) = paste0("sample_", 1:n_samples)
 
 # simulate counts from multinomial
-counts = t(rmultinom(n_samples, size = n_samples, prob = prob))
+counts = t(rmultinom(n_samples, size = countsTotal, prob = prob))
 colnames(counts) = paste0("cat_", 1:length(prob))
 rownames(counts) = paste0("sample_", 1:n_samples)
 

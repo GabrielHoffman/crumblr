@@ -9,7 +9,7 @@ output:
   toc: true
   smart: false
 vignette: >
-  %\VignetteIndexEntry{CTC}
+  %\VignetteIndexEntry{crumblr_theory}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
   %\usepackage[utf8]{inputenc}

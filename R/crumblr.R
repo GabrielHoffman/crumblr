@@ -85,7 +85,7 @@ clr = function(counts, pseudocount = 0.5){
 #' rownames(info) = paste0("sample_", 1:n_samples)
 #' 
 #' # simulate counts from multinomial
-#' counts = t(rmultinom(n_samples, size = n_samples, prob = prob))
+#' counts = t(rmultinom(n_samples, size = countsTotal, prob = prob))
 #' colnames(counts) = paste0("cat_", 1:length(prob))
 #' rownames(counts) = paste0("sample_", 1:n_samples)
 #' 
@@ -104,9 +104,8 @@ clr = function(counts, pseudocount = 0.5){
 #' @seealso \code{limma::voom}, \code{limma::lmFit}
 #' @import limma
 #' @export
-
 setGeneric("crumblr", 
-	function( counts, pseudocount = 0.5, tau=NULL){
+	function( counts, pseudocount = 0.5, tau=1){
 
 	standardGeneric("crumblr")
 })
@@ -117,7 +116,7 @@ setGeneric("crumblr",
 #' @aliases crumblr,matrix-method
 #' @importFrom methods new
 setMethod("crumblr", "matrix",
-	function(counts, pseudocount = 0.5, tau=NULL){
+	function(counts, pseudocount = 0.5, tau=1){
 
 		.crumblr(counts, pseudocount, tau)
 })
@@ -126,13 +125,13 @@ setMethod("crumblr", "matrix",
 #' @aliases crumblr,data.frame-method
 #' @importFrom methods new
 setMethod("crumblr", "data.frame",
-	function(counts, pseudocount = 0.5, tau=NULL){
+	function(counts, pseudocount = 0.5, tau=1){
 
 		.crumblr( as.matrix(counts), pseudocount, tau)
 })
 
 
-.crumblr = function(counts, pseudocount = 0.5, tau=NULL){
+.crumblr = function(counts, pseudocount = 0.5, tau=1){
 
 	D = ncol(counts)
 	

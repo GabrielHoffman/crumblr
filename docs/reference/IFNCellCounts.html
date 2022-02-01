@@ -18,7 +18,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">crumblr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.7</span>
       </span>
     </div>
 
@@ -34,6 +34,9 @@
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/crumblr_theory.html">crumblr: compare emprical and asymptotic theory</a>
+    </li>
+    <li>
+      <a href="../articles/vst.html">Variance stabilizing transform</a>
     </li>
   </ul></li>
 <li>
@@ -70,15 +73,18 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">IFNCellCounts</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">IFNCellCounts</span><span class="op">)</span>
+
+<span class="va">cellCounts</span></code></pre></div>
     </div>
 
     <div id="format">
     <h2>Format</h2>
     
-<ul><li><p><code>cellCounts</code> data.frame of cell counts.</p></li>
-<li><p><code>info</code> is metadata for each sample</p></li>
-</ul></div>
+<ul><li><p><code>info</code> is metadata for each sample</p></li>
+<li><p><code>cellCounts</code> data.frame of counts for each sample</p></li>
+</ul><p>An object of class <code>matrix</code> (inherits from <code>array</code>) with 16 rows and 8 columns.</p>
+    </div>
     <div id="references">
     <h2>References</h2>
     <p>Kang HM, Subramaniam M, Targ S, Nguyen M, Maliskova L, McCarthy E, Wan E, Wong S, Byrnes L, Lanata CM, others (2018).

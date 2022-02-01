@@ -1,29 +1,35 @@
-# crumbler 1.0.6
- - Jan 21, 2022
+# crumblr 1.0.7
+ - Feb 1, 2022
+ - fix `vst()`
+ - add plots `plotScatterDensity()` and `meanSdPlot()` for VST
+ - add vignette vst.Rmd
+
+# crumblr 1.0.6
+ - Jan 31, 2022
  - add logo, example data
 
-# crumbler 1.0.5
+# crumblr 1.0.5
  - Dec 27, 2021
  - add `dmn.mle()`
  - use generic `crumblr()` function
 
- # crumbler 1.0.4
+# crumblr 1.0.4
  - Dec 23, 2021
  - Update vignette
  - export `clr()`
 
-# crumbler 1.0.3
+# crumblr 1.0.3
  - Dec 20, 2021
  - fix `vst` bug
 
-# crumbler 1.0.2
+# crumblr 1.0.2
  - Dec 20, 2021
  - add `vst`
 
- # crumbler 1.0.1
+# crumblr 1.0.1
  - Oct 29, 2021
  - handle `data.frame`
 
-# crumbler 1.0.0
+# crumblr 1.0.0
  - Oct 28, 2021
  - Initial version

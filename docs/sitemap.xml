@@ -10,6 +10,9 @@
     <loc>http://gabrielhoffman.github.io/dreamlet/articles/index.html</loc>
   </url>
   <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/articles/vst.html</loc>
+  </url>
+  <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/authors.html</loc>
   </url>
   <url>
@@ -22,6 +25,9 @@
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/IFNCellCounts.html</loc>
   </url>
   <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/cellCounts.html</loc>
+  </url>
+  <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/clr.html</loc>
   </url>
   <url>
@@ -32,6 +38,12 @@
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/meanSdPlot.html</loc>
+  </url>
+  <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/plotScatterDensity.html</loc>
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/dreamlet/reference/vst-method.html</loc>
