@@ -1,36 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/404.html</loc>
+    <loc>http://gabrielhoffman.github.io/dreamlet/404.html</loc>
   </url>
   <url>
-    <loc>/articles/crumblr_theory.html</loc>
+    <loc>http://gabrielhoffman.github.io/dreamlet/articles/crumblr_theory.html</loc>
   </url>
   <url>
-    <loc>/articles/index.html</loc>
+    <loc>http://gabrielhoffman.github.io/dreamlet/articles/index.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>http://gabrielhoffman.github.io/dreamlet/authors.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>http://gabrielhoffman.github.io/dreamlet/index.html</loc>
   </url>
   <url>
-    <loc>/news/index.html</loc>
+    <loc>http://gabrielhoffman.github.io/dreamlet/news/index.html</loc>
   </url>
   <url>
-    <loc>/reference/clr.html</loc>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/IFNCellCounts.html</loc>
   </url>
   <url>
-    <loc>/reference/crumblr.html</loc>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/clr.html</loc>
   </url>
   <url>
-    <loc>/reference/dmn.mle.html</loc>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/crumblr.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/dmn.mle.html</loc>
   </url>
   <url>
-    <loc>/reference/vst-method.html</loc>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>http://gabrielhoffman.github.io/dreamlet/reference/vst-method.html</loc>
   </url>
 </urlset>
