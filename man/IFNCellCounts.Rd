@@ -4,20 +4,31 @@
 \name{IFNCellCounts}
 \alias{IFNCellCounts}
 \alias{info}
+\alias{cellCounts}
 \title{Cell counts following interferon treatment}
 \format{
 \itemize{    
-\item cellCounts data.frame of cell counts.
+\item `cellCounts` data.frame of cell counts.
+\item `info` is metadata for each sample
+}
+
+\itemize{    
+\item `cellCounts` data.frame of cell counts.
 \item `info` is metadata for each sample
 }
 }
 \usage{
 data(IFNCellCounts)
+
+data(IFNCellCounts)
 }
 \description{
 Counts are from single cell RNA-seq data from treated and untreated samples from \insertCite{kang2018multiplexed}{crumblr}.
+
+Counts are from single cell RNA-seq data from treated and untreated samples from \insertCite{kang2018multiplexed}{crumblr}.
 }
 \examples{
+data(IFNCellCounts)
 data(IFNCellCounts)
 }
 \keyword{datasets}

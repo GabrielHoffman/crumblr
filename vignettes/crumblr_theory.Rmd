@@ -228,13 +228,9 @@ ggplot(df_v, aes(targetCount / countTotal, sqrt(value), color=variable, linetype
 ```{r for.manuscript, eval=FALSE}
 df_sub = df_v[(df_v$tau==1)&(df_v$countTotal==300),]
 
-fig = ggplot(df_sub, aes(targetCount / countTotal, sqrt(value), color=variable, linetype=variable)) + geom_line(size=.75) + theme_classic() + theme(aspect.ratio=1,plot.title = element_text(hjust = 0.5)) + xlab("fraction") + ylab("Standard Deviation") + xlab("Fraction") + scale_color_manual(name="Method", values=c("blue4",  "red"), labels=c("Empirical (DMN)", "Normal approximation")) + scale_linetype_manual(name="Method", values=c(1, 2), labels=c("Empirical (DMN)", "Normal approximation")) + ggtitle(expression(tau==5~C==300~D==25))
+fig = ggplot(df_sub, aes(targetCount / countTotal, log2(value), color=variable, linetype=variable)) + geom_line(size=.75) + theme_classic() + theme(aspect.ratio=1,plot.title = element_text(hjust = 0.5)) + xlab("fraction") + ylab("Standard Deviation") + xlab("Fraction") + scale_color_manual(name="Method", values=c("blue4",  "red"), labels=c("Empirical (DMN)", "Normal approximation")) + scale_linetype_manual(name="Method", values=c(1, 2), labels=c("Empirical (DMN)", "Normal approximation")) + ggtitle(expression(tau==5~C==300~D==25))
 ggsave("sim_figure.pdf")
 ```
-
-
-
-
 
 
 

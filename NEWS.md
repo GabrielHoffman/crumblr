@@ -1,3 +1,7 @@
+# crumbler 1.0.6
+ - Jan 21, 2022
+ - add logo, example data
+
 # crumbler 1.0.5
  - Dec 27, 2021
  - add `dmn.mle()`

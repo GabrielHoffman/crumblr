@@ -1,8 +1,8 @@
 Package: crumblr
 Type: Package
 Title: Count ratio uncertainty modeling base linear regression
-Version: 1.0.5
-Date: 2021-01-03
+Version: 1.0.6
+Date: 2022-01-31
 Authors@R: person("Gabriel", "Hoffman", role=c("aut", "cre"), email="gabriel.hoffman@mssm.edu")
 Description: Crumblr enables analysis of count ratio data using weighted linear models.  This is useful for fast approximation to GLMs and GLMM's.
 VignetteBuilder: knitr
@@ -37,3 +37,4 @@ Imports:
     Rdpack
 RoxygenNote: 7.1.2
 RdMacros: Rdpack
+LazyData: true
