@@ -77,19 +77,18 @@ counts = t(rmultinom(n_samples, size = nCounts, prob = prob))
 colnames(counts) = paste0("cat_", 1:length(prob))
 rownames(counts) = paste0("sample_", 1:n_samples)
 
+# keep categories with at least 5 counts in at least 10 samples
+keep = colSums(counts > 5) > 20
+
 # compute fractions from counts
 # using pseudocount of 0.5
-fractions = apply(counts, 1, function(x){
+fractions = apply(counts[,keep], 1, function(x){
   x = x + 0.5
   x / sum(x)
 })
 
 # run crumblr on counts
-cobj = crumblr(counts, tau=1)
-
-vst = function(x){
- 		with(x, E * (sqrt(weights)/rowMeans(sqrt(weights))))	
-}
+cobj = crumblr(counts[,keep], tau=1)
 ```
 
 ### Apply `vst`
