@@ -1,0 +1,133 @@
+---
+title: "Using `crumblr` in practice"
+subtitle: ''
+author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
+date: "Run on `r Sys.time()`"
+documentclass: article
+output: 
+  html_document:
+  toc: true
+  smart: false
+vignette: >
+  %\VignetteIndexEntry{crumblr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  %\usepackage[utf8]{inputenc}
+---
+
+
+
+<!---
+cd /Users/gabrielhoffman/workspace/repos/crumblr/vignettes
+R
+
+rmarkdown::render('crumblr.Rmd')
+--->
+
+```{r setup, echo=FALSE, results="hide"}
+knitr::opts_chunk$set(	tidy=FALSE, 
+												cache=TRUE,
+												echo=TRUE,
+                      	dev=c("png", "pdf"),
+                      	package.startup.message = FALSE,
+                      	message=FALSE, 
+                      	error=FALSE, 
+                      	warning=FALSE
+											  )
+
+knitr::opts_chunk$set()
+
+options(width=100)
+```	
+
+Here we consider counts for 8 cell types from quantified using single cell RNA-seq data from unstimulated and interferon β stimulated PBMCs from 8 subjects [(Kang, et al., 2018)](https://www.nature.com/articles/nbt.4042).    
+
+The functions used below incorporate the precision weights:
+
+- `limma::lmFit`
+- `crumblr::vst`
+- `variancePartition::fitExtractVarPartModel` 
+- `variancePartition::dream`
+
+## Differential testing
+Here we evaluate whether the observed cell proportions change in response to interferon β.  Given the results here, we cannot reject the null hypothesis that interferon β does not affect the cell type proportions.
+ 
+```{r crumblr}
+library(crumblr)
+
+# Load cell counts from Kang, et al. (2018)
+#  https://doi.org/10.1038/nbt.4042
+data(IFNCellCounts)
+
+# Apply crumblr transformation 
+# cobj is an EList object compatable with limma workflow
+# cobj$E stores transformed values 
+# cobj$weights stores precision weights
+cobj = crumblr(cellCounts)
+
+# Use limma workflow to analyze each cell
+# Perform regression on each cell type separately
+#  then use eBayes to shrink residual variance
+# Also compatible with variancePartition::dream() for linear mixed models
+library(limma)
+design = model.matrix( ~ StimStatus + ind, info)
+fit = lmFit(cobj, design)
+fit = eBayes(fit)
+
+# Extract results for each cell type
+topTable(fit, coef="StimStatusstim", number=Inf, sort.by="none")
+```
+
+## PCA
+Performing PCA on the transformed cell counts indicates that the samples cluster based on subject rather than stimulation status.
+
+```{r pca, fig.height=5, fig.width=5}
+library(ggplot2)
+
+# Apply variance stabilizing transform
+M_vst = vst(cobj)
+
+# Perform PCA
+pca = prcomp(t(M_vst))
+
+# merge with metadata 
+df_pca = merge(pca$x, info, by="row.names")
+
+# Plot PCA 
+#   color by Subject
+# 	shape by Stimulated vs unstimulated
+ggplot(df_pca, aes(PC1, PC2, color=as.character(ind),  shape=StimStatus)) + 
+		geom_point(size=3) + 
+		theme_classic() + 
+		theme(aspect.ratio=1) + 
+		scale_color_discrete(name="Subject") +
+		xlab("PC1") + ylab("PC2")
+```
+
+## Hierachical clustering
+The samples from the same donor also cluster together.
+```{r hclust}
+heatmap(M_vst)
+```
+
+## Variance partitioning
+Decomposing the variance illustrates that more variation is explained by subject than stimulation status.
+```{r vp, fig.height=4, fig.width=6}
+library(variancePartition)
+
+# Partition variance into components for Subject (i.e. ind)
+#   and stimulation status, and residual variation
+vp = fitExtractVarPartModel( cobj, ~ ind + StimStatus, info)
+
+# Plot variance fractions
+plotPercentBars(vp)
+```
+
+
+
+
+
+
+
+
+

@@ -47,6 +47,9 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
+  <a href="articles/crumblr.html">Get started</a>
+</li>
+<li>
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -90,51 +93,23 @@
 
 <div class="section level3">
 <h3 id="count-ratio-uncertainty-modeling-based-linear-regression-">
-<u>C</u>ount <u>r</u>atio <u>u</u>ncertainty <u>m</u>odeling <u>b</u>ased <u>l</u>inear <u>r</u>egression <img src="reference/figures/logo.png" align="right" alt="" width="120"><a class="anchor" aria-label="anchor" href="#count-ratio-uncertainty-modeling-based-linear-regression-"></a>
+<u>C</u>ount <u>r</u>atio <u>u</u>ncertainty <u>m</u>odeling <u>b</u>ased <u>l</u>inear <u>r</u>egression <img src="reference/figures/logo.png" align="right" alt="" width="120" style="padding-left:20px;"><a class="anchor" aria-label="anchor" href="#count-ratio-uncertainty-modeling-based-linear-regression-"></a>
 </h3>
-<p>The <code>crumblr</code> package enables analysis of count ratio data using weighted linear models. <code>crumblr</code>’s fast approximation to generalized linear models (GLM’s) and generalized linear mixed models (GLMM’s) allows used standard workflows to analyize count ratio data. This can be easier, faster, and more flexible than other models of count data.</p>
-</div>
+<div style="text-align: justify;">
+<p>The <code>crumblr</code> package enables analysis of count ratio data using precision-weighted linear (mixed) models. <code>crumblr</code>’s fast, normal approximation of transformed count data from a Dirichlet-multinomial model allows use of standard workflows to analyize count ratio data while modeling heteroskedasticity.</p>
 <div class="section level2">
-<h2 id="example-usage">Example usage:<a class="anchor" aria-label="anchor" href="#example-usage"></a>
+<h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a>
 </h2>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/GabrielHoffman/crumblr" class="external-link">crumblr</a></span><span class="op">)</span>
-
-<span class="co"># Load cell counts from Kang, et al. (2018)</span>
-<span class="co">#  https://doi.org/10.1038/nbt.4042</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">IFNCellCounts</span><span class="op">)</span>
-
-<span class="co"># Apply crumblr transformation </span>
-<span class="co"># cobj is an EList object compatable with limma workflow</span>
-<span class="co"># cobj$E stores transformed values </span>
-<span class="co"># cobj$weights stores precision weights</span>
-<span class="va">cobj</span> <span class="op">=</span> <span class="fu"><a href="reference/crumblr.html">crumblr</a></span><span class="op">(</span><span class="va">cellCounts</span><span class="op">)</span>
-
-<span class="co"># Use limma work flow to analyze each cell</span>
-<span class="co"># Perform regression on each cell type separately</span>
-<span class="co">#  then use eBayes to shrink residual variance</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://bioinf.wehi.edu.au/limma" class="external-link">limma</a></span><span class="op">)</span>
-
-<span class="va">design</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></span><span class="op">(</span><span class="op">~</span><span class="va">StimStatus</span>, <span class="va">info</span><span class="op">)</span>
-<span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/lmFit.html" class="external-link">lmFit</a></span><span class="op">(</span><span class="va">cobj</span>, <span class="va">design</span><span class="op">)</span>
-<span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/ebayes.html" class="external-link">eBayes</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>
-
-<span class="co"># extract results for each cell type</span>
-<span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">fit</span>, coef<span class="op">=</span><span class="st">"StimStatusstim"</span>, number<span class="op">=</span><span class="cn">Inf</span>, sort.by<span class="op">=</span><span class="st">"none"</span><span class="op">)</span>
-<span class="co">#&gt;                         logFC    AveExpr          t   P.Value adj.P.Val</span>
-<span class="co">#&gt; B cells           -0.09882673  0.5516882 -0.6989167 0.4943409 0.7706781</span>
-<span class="co">#&gt; CD14+ Monocytes   -0.12323960  1.2698117 -0.9641347 0.3489000 0.7706781</span>
-<span class="co">#&gt; CD4 T cells       -0.08092309  2.0201947 -0.3882013 0.7028311 0.7706781</span>
-<span class="co">#&gt; CD8 T cells       -0.14896362  0.0857175 -0.3589998 0.7241489 0.7706781</span>
-<span class="co">#&gt; Dendritic cells    0.32314289 -2.1849234  1.1280014 0.2754583 0.7706781</span>
-<span class="co">#&gt; FCGR3A+ Monocytes  0.07153536 -0.2567492  0.3637101 0.7206938 0.7706781</span>
-<span class="co">#&gt; Megakaryocytes     0.06001827 -1.8655172  0.2963275 0.7706781 0.7706781</span>
-<span class="co">#&gt; NK cells           0.08379008  0.3797777  0.5846539 0.5666914 0.7706781</span></code></pre></div>
+<p>Analysis of count ratio data (i.e. fractions) requires special consideration since data is non-normal, heteroskedastic, and spans a low rank space. While counts can be considered directly using Poisson, negative binomial, or Dirichlet-multinomial models for simple regression applications, these can be problematic since they 1) can be very computationally expensive, 2) can produce poorly calibrated hypothesis tests, and 3) are challenging to extend to other applications. Applying the centered log-ratio (CLR) transform from <a href="https://link.springer.com/book/10.1007/978-3-642-36809-7" class="external-link">compositional data analysis</a> makes count ratio data more normal and enables use the linear models, and other standard methods.</p>
+<p>Yet CLR-transformed data is still highly heteroskedastic: the precision of measurements still varies widely. This important factor is not considered by existing methods.</p>
+<p><code>crumblr</code> uses a fast asymptotic normal approximation of CLR-transformed counts from a Dirichlet-multinomial distribution to model the sampling variance of the transformed counts. <code>crumblr</code> enables incorporating the sampling variance as precision weights to linear (mixed) models in order to increase power and control the false positives rate. <code>crumblr</code>also uses a variance stabilizing transform (vst) based on the precision weights to improve performance of PCA and clustering.</p>
+</div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="install">Install<a class="anchor" aria-label="anchor" href="#install"></a>
 </h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># repo is currently private, so need to include your userid and password</span>
 <span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"GabrielHoffman/crumblr"</span>, auth_token<span class="op">=</span><span class="va">XXXXX</span><span class="op">)</span></code></pre></div>
 </div>
