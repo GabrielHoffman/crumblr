@@ -95,7 +95,7 @@
                         <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
-            <h4 data-toc-skip class="date">Run on 2022-02-03 20:00:25</h4>
+            <h4 data-toc-skip class="date">Run on 2022-02-04 15:21:33</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/GabrielHoffman/crumblr/blob/HEAD/vignettes/crumblr_theory.Rmd" class="external-link"><code>vignettes/crumblr_theory.Rmd</code></a></small>
       <div class="hidden name"><code>crumblr_theory.Rmd</code></div>
@@ -125,7 +125,7 @@ rmarkdown::render("crumblr_theory.Rmd");
 
 --->
 <div style="text-align: justify;">
-<p>Let the vector <span class="math inline">\({\bf p}\)</span> be the true fractions across <span class="math inline">\(D\)</span> categories. Consider <span class="math inline">\(C\)</span> total counts sampled from a Dirichlet-multinomial (DMN) distribution with overdispersion <span class="math inline">\(\tau\)</span>, <span class="math inline">\(\tau=1\)</span> reduces to the multinomial distribution. The <a href="https://rdrr.io/cran/compositions/man/clr.html" class="external-link">centered log ratio</a> (CLR) of the estimated fractions <span class="math inline">\({\bf \hat p}\)</span> is</p>
+<p>Let the vector <span class="math inline">\({\bf p}\)</span> be the true fractions across <span class="math inline">\(D\)</span> categories. Consider <span class="math inline">\(C\)</span> total counts sampled from a Dirichlet-multinomial (DMN) distribution with overdispersion <span class="math inline">\(\tau\)</span>, where <span class="math inline">\(\tau=1\)</span> reduces to the multinomial distribution. The <a href="https://rdrr.io/cran/compositions/man/clr.html" class="external-link">centered log ratio</a> (CLR) of the <span class="math inline">\(i^{th}\)</span> estimated fraction in <span class="math inline">\({\bf \hat p}\)</span> is</p>
 <p><span class="math display">\[\begin{equation}
 \tag{1}
 \text{clr}_i({\bf \hat p}) = \log(\hat p_i) - \frac{1}{D}\sum_{j=1}^D \log(\hat p_j)
@@ -134,7 +134,7 @@ rmarkdown::render("crumblr_theory.Rmd");
 \tag{2}
 \text{var}[\text{clr}_i({\bf \hat p})] =  \frac{\tau}{C} \left[ \frac{1}{\hat p_i} - \frac{2}{ D \hat p_i} + \frac{1}{D^2}\sum_{j=1}^D \frac{1}{\hat p_j}  \right]. \label{eqn2} 
 \end{equation}\]</span></p>
-<p>The sampling variance is derived from asymototic theory, so we examine its behavior for finite total counts, <span class="math inline">\(n\)</span>. Here we evalute the emprical variance from <span class="math inline">\(100,000\)</span> draws from a Dirichlet-multinomial distribution while varying <span class="math inline">\(\tau\)</span>, <span class="math inline">\(C\)</span>, and the parameters of the distribution. A pseudocount of 0.5 is added to the observed counts since the asymptotic theory is not defined for counts of zero. See plots below.</p>
+<p>The sampling variance is derived from asymototic theory, so we examine its behavior for finite total counts. Here we evalute the emprical variance from <span class="math inline">\(5,000\)</span> draws from a Dirichlet-multinomial distribution while varying <span class="math inline">\(D\)</span>, <span class="math inline">\(\tau\)</span>, <span class="math inline">\(C\)</span>. A pseudocount of 0.5 is added to the observed counts since the asymptotic theory is not defined for counts of zero. See plots below.</p>
 <!---
 The grey line indicates 3 counts, so for $nC30$ the line indicates $3/30=0.1$.  For the first case of $D=2$, the empirical and asymptotic variances are symmetric around $1/2$.  In the second case of $D=8$, the variances are no longer symmetric.
 --->
@@ -150,12 +150,14 @@ The grey line indicates 3 counts, so for $nC30$ the line indicates $3/30=0.1$.  
 <div class="section level3">
 <h3 id="d2-categories">D=2 categories<a class="anchor" aria-label="anchor" href="#d2-categories"></a>
 </h3>
-<p><img src="crumblr_theory_files/figure-html/sim1-1.png" width="960"></p>
+<p>True vector of fractions <span class="math inline">\(\bf p\)</span> is (0.0033, 0.996).</p>
+<p><img src="crumblr_theory_files/figure-html/plot1-1.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="d25-categories">D=25 categories<a class="anchor" aria-label="anchor" href="#d25-categories"></a>
 </h3>
-<p><img src="crumblr_theory_files/figure-html/sim2-1.png" width="960"></p>
+<p>True vector of fractions <span class="math inline">\(\bf p\)</span> is (0.0033, 0.2300, 0.0333,…) with all remaining elements also being 0.0333.</p>
+<p><img src="crumblr_theory_files/figure-html/plot2-1.png" width="700"></p>
 </div>
   </div>
 

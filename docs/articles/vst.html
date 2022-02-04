@@ -95,7 +95,7 @@
                         <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
-            <h4 data-toc-skip class="date">Run on 2022-02-03 20:00:28</h4>
+            <h4 data-toc-skip class="date">Run on 2022-02-04 15:14:43</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/GabrielHoffman/crumblr/blob/HEAD/vignettes/vst.Rmd" class="external-link"><code>vignettes/vst.Rmd</code></a></small>
       <div class="hidden name"><code>vst.Rmd</code></div>
@@ -117,7 +117,8 @@ rmarkdown::render('vst.Rmd')
 
 
 --->
-<p>The goal of the variance stabilizing transform (VST) is to down-weight imprecise measurements so that downstream analyses focus on signal, rather than being dominated by imprecise observations. The <a href="https://bioconductor.org/packages/vsn/" class="external-link">vsn</a> package provides a VST for microarray data, and <a href="https://bioconductor.org/packages/DESeq2/" class="external-link">DESeq2</a> package provides a VST for RNA-seq using a negative bionomial model. Here we introduce a VST based on <code>crumblr</code> using precision weighted approximation to the centered log-ration (CLR) transform of multinomial dirichlet counts. This VST is very fast even for large datasets and effectively stabilizes the variance of count ratio data compared to using fractions or the CLR transform directly. This improves performance of downstream analaysis such as PCA and clustering.</p>
+<div style="text-align: justify;">
+<p>The goal of a variance stabilizing transform (VST) is to down-weight imprecise measurements so that downstream analyses focus on signal, rather than being dominated by imprecise observations. VST’s have been widely used in transcriptomics: the <a href="https://bioconductor.org/packages/vsn/" class="external-link">vsn</a> package provides a VST for microarray data, and <a href="https://bioconductor.org/packages/DESeq2/" class="external-link">DESeq2</a> package provides a VST for RNA-seq using a negative bionomial model. Here we introduce a VST based on <code>crumblr</code> using precision weighted approximation to the centered log-ration (CLR) transform of multinomial Dirichlet counts. This VST is very fast even for large datasets and effectively stabilizes the variance of count ratio data compared to using fractions or the CLR transform alone. This improves performance of downstream analaysis such as PCA and clustering.</p>
 <div class="section level3">
 <h3 id="examine-variance-stabilizing-transform">Examine variance stabilizing transform<a class="anchor" aria-label="anchor" href="#examine-variance-stabilizing-transform"></a>
 </h3>
@@ -173,7 +174,7 @@ rmarkdown::render('vst.Rmd')
 <div class="section level3">
 <h3 id="concordance-between-samples-for-each-transform">Concordance between samples for each transform<a class="anchor" aria-label="anchor" href="#concordance-between-samples-for-each-transform"></a>
 </h3>
-<p>Concordance between two identically distributed sample is show using (A) fractions, (B) CLR and (C) the VST proposed here. For low counts, the CLR in (B) discordant between the two samples due to imprecise measurement. In (C) the VST down-weights these measurements so they are more concordant.</p>
+<p>Concordance between two identically distributed samples is show using (A) fractions, (B) CLR and (C) the VST proposed here. For low counts, the CLR in (B) is highly discordant between the two samples due to imprecise measurement. In (C) the VST down-weights these measurements to improve concordance.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fig1</span> <span class="op">=</span> <span class="fu"><a href="../reference/plotScatterDensity.html">plotScatterDensity</a></span><span class="op">(</span><span class="va">fractions</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span>, <span class="va">fractions</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span> 
             <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_abline</a></span><span class="op">(</span>color<span class="op">=</span><span class="st">"red"</span>, size<span class="op">=</span><span class="fl">.3</span><span class="op">)</span> <span class="op">+</span> 
@@ -199,7 +200,7 @@ rmarkdown::render('vst.Rmd')
 <div class="section level3">
 <h3 id="measuring-variance-stabilization">Measuring variance stabilization<a class="anchor" aria-label="anchor" href="#measuring-variance-stabilization"></a>
 </h3>
-<p>The variance stabilizing property can be observed empirically. For each feature (i.e. gene, cell type, etc), the standard deviation of the transformed value is compared to the rank of the mean. The variance is stabilized when the coefficient is variation is smaller. While the CLR-transform does provide some variance stabilization compared to using fractions, the VST performs best.</p>
+<p>The variance stabilizing property can be observed empirically. For each feature (i.e. gene, cell type, etc), the standard deviation of the transformed value is compared to the rank of the mean. The variance is stabilized when the coefficient of variation (i.e. sd/mean) is smaller. While the CLR-transform does provide some variance stabilization compared to using fractions, the VST produces a much stronger stabilization.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Mean vs SD plot </span>
 <span class="va">fig1</span> <span class="op">=</span> <span class="fu"><a href="../reference/meanSdPlot.html">meanSdPlot</a></span><span class="op">(</span><span class="va">fractions</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Fractions"</span><span class="op">)</span> 
@@ -208,6 +209,7 @@ rmarkdown::render('vst.Rmd')
 
 <span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span><span class="va">fig1</span>, <span class="va">fig2</span>, <span class="va">fig3</span>, labels<span class="op">=</span><span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span>, nrow<span class="op">=</span><span class="fl">1</span><span class="op">)</span></code></pre></div>
 <p><img src="vst_files/figure-html/meanSdPlot-1.png" width="672"></p>
+</div>
 </div>
   </div>
 

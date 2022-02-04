@@ -44,7 +44,7 @@ plotScatterDensity = function(x, y, size=1){
 	df$density <- get_density(df$x, df$y, n = 100)
 
 	# Scatter plot colored by density
-	ggplot(df, aes(x, y, color=density)) + geom_point(size=size) + theme_classic() + theme(aspect.ratio=1, legend.position="bottom", plot.title = element_text(hjust = 0.5)) + scale_color_viridis() + guides(fill = guide_colourbar(barwidth = 0.5))
+	ggplot(df, aes(x, y, color=density)) + geom_point(size=size) + theme_classic() + theme(aspect.ratio=1, legend.position="bottom", plot.title = element_text(hjust = 0.5)) + scale_color_viridis(n.breaks=3) + guides(fill = guide_colourbar(barwidth = 0.5))
 }
 
 

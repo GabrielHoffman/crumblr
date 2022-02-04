@@ -58,7 +58,7 @@ options(width=100)
 ```	
 
 <div style="text-align: justify;">
-Let the vector ${\bf p}$ be the true fractions across $D$ categories.  Consider $C$ total counts sampled from a Dirichlet-multinomial (DMN) distribution with overdispersion $\tau$, $\tau=1$ reduces to the multinomial distribution.  The [centered log ratio](https://rdrr.io/cran/compositions/man/clr.html) (CLR) of the estimated fractions ${\bf \hat p}$ is   
+Let the vector ${\bf p}$ be the true fractions across $D$ categories.  Consider $C$ total counts sampled from a Dirichlet-multinomial (DMN) distribution with overdispersion $\tau$, where $\tau=1$ reduces to the multinomial distribution.  The [centered log ratio](https://rdrr.io/cran/compositions/man/clr.html) (CLR) of the $i^{th}$ estimated fraction in ${\bf \hat p}$ is   
 
 \begin{equation}
 \tag{1}
@@ -71,7 +71,7 @@ Let the vector ${\bf p}$ be the true fractions across $D$ categories.  Consider 
 \text{var}[\text{clr}_i({\bf \hat p})] =  \frac{\tau}{C} \left[ \frac{1}{\hat p_i} - \frac{2}{ D \hat p_i} + \frac{1}{D^2}\sum_{j=1}^D \frac{1}{\hat p_j}  \right]. \label{eqn2} 
 \end{equation}
 
-The sampling variance is derived from asymototic theory, so we examine its behavior for finite total counts, $n$.  Here we evalute the emprical variance from $100,000$ draws from a Dirichlet-multinomial distribution while varying $\tau$, $C$, and the parameters of the distribution.  A pseudocount of 0.5 is added to the observed counts since the asymptotic theory is not defined for counts of zero.  See plots below.  
+The sampling variance is derived from asymototic theory, so we examine its behavior for finite total counts.  Here we evalute the emprical variance from $5,000$ draws from a Dirichlet-multinomial distribution while varying $D$, $\tau$, $C$.  A pseudocount of 0.5 is added to the observed counts since the asymptotic theory is not defined for counts of zero.  See plots below.  
 
 <!---
 The grey line indicates 3 counts, so for $nC30$ the line indicates $3/30=0.1$.  For the first case of $D=2$, the empirical and asymptotic variances are symmetric around $1/2$.  In the second case of $D=8$, the variances are no longer symmetric.
@@ -108,7 +108,7 @@ rmultinomdir = function(n, size, alpha){
 
 run_sim = function(other, pseudocount = .5){
 
-	n_sims = 1000
+	n_sims = 5000
 	j = 1
 
 	# Some thoughts on counts in sequencing studies. NAR G&B
@@ -189,7 +189,9 @@ run_sim = function(other, pseudocount = .5){
 
 
 ### D=2 categories
-```{r sim1, fig.width=10, fig.height=6, cache=TRUE}
+True vector of fractions $\bf p$ is (0.0033, 0.996). 
+
+```{r sim1, cache=TRUE}
 df_res = run_sim(other=NULL)  
 
 # "v_theoretical",  
@@ -204,14 +206,18 @@ df_v$facet_y = factor(df_v$facet_y, unique(df_v$facet_y))
 
 ymax = with(df_v, sqrt(max(value[variable =='v_empirical'])))
 ymax = .8
- 
-ggplot(df_v, aes(targetCount / countTotal, sqrt(value), color=variable, linetype=variable)) + geom_line() + theme_classic() + theme(aspect.ratio=1,plot.title = element_text(hjust = 0.5)) + facet_grid(facet_y ~ facet_x, labeller = label_parsed) + xlab("fraction") + ylab("Standard Deviation") + ggtitle("Standard deviations from empirical DMN and asymptotic normal approximation") + xlab("Fraction") + coord_fixed(ylim=c(0, ymax*1.05)) + scale_color_manual(name="Method", values=c("blue4",  "red"), labels=c("Empirical (DMN)", "Asymptotic normal approx.")) + scale_linetype_manual(name="Method", values=c(1, 2), labels=c("Empirical (DMN)", "Asymptotic normal approx.")) 
+```
+
+```{r plot1, fig.height=6} 
+ggplot(df_v, aes(targetCount / countTotal, sqrt(value), color=variable, linetype=variable)) + geom_line() + theme_classic() + theme(aspect.ratio=1,plot.title = element_text(hjust = 0.5), legend.position="bottom") + facet_grid(facet_y ~ facet_x, labeller = label_parsed) + xlab("fraction") + ylab("Standard Deviation") + ggtitle("Standard deviations from empirical DMN and asymptotic normal approximation") + xlab("Fraction") + coord_fixed(ylim=c(0, ymax*1.05)) + scale_color_manual(name="Method", values=c("blue4",  "red"), labels=c("Empirical (DMN)", "Asymptotic normal approx.")) + scale_linetype_manual(name="Method", values=c(1, 2), labels=c("Empirical (DMN)", "Asymptotic normal approx.")) 
 # geom_vline(aes(xintercept=5/countTotal), color="grey", linetype="dashed")
 ```
 
 
 ### D=25 categories
-```{r sim2, fig.width=10, fig.height=6, cache=TRUE}
+True vector of fractions $\bf p$ is (0.0033, 0.2300, 0.0333,...) with all remaining elements also being 0.0333.
+
+```{r sim2, cache=TRUE}
 other = rep(10, 23)
 df_res = run_sim(other=other)  
  
@@ -228,16 +234,18 @@ df_v$facet_y = with(df_v, glue('C*" = {countTotal}"'))
 df_v$facet_y = factor(df_v$facet_y, unique(df_v$facet_y))   
    
 ymax = with(df_v, sqrt(max(value[variable =='v_empirical'])))   
- 
-ggplot(df_v, aes(targetCount / countTotal, sqrt(value), color=variable, linetype=variable)) + geom_line() + theme_classic() + theme(aspect.ratio=1,plot.title = element_text(hjust = 0.5)) + facet_grid(facet_y ~ facet_x, labeller = label_parsed) + xlab("fraction") + ylab("Standard Deviation") + ggtitle("Standard deviations from empirical DMN and asymptotic normal approximation") + xlab("Fraction") + coord_fixed(ylim=c(0, ymax*1.05)) + scale_color_manual(name="Method", values=c("blue4",  "red"), labels=c("Empirical (DMN)", "Asymptotic normal approx.")) + scale_linetype_manual(name="Method", values=c(1, 2), labels=c("Empirical (DMN)", "Asymptotic normal approx.")) 
+```
+
+```{r plot2, fig.height=6}  
+ggplot(df_v, aes(targetCount / countTotal, sqrt(value), color=variable, linetype=variable)) + geom_line() + theme_classic() + theme(aspect.ratio=1,plot.title = element_text(hjust = 0.5), legend.position="bottom") + facet_grid(facet_y ~ facet_x, labeller = label_parsed) + xlab("fraction") + ylab("Standard Deviation") + ggtitle("Standard deviations from empirical DMN and asymptotic normal approximation") + xlab("Fraction") + coord_fixed(ylim=c(0, ymax*1.05)) + scale_color_manual(name="Method", values=c("blue4",  "red"), labels=c("Empirical (DMN)", "Asymptotic normal approx.")) + scale_linetype_manual(name="Method", values=c(1, 2), labels=c("Empirical (DMN)", "Asymptotic normal approx.")) 
 #  + geom_vline(aes(xintercept=5/countTotal), color="grey", linetype="dashed")
 ```
 
 
 ```{r for.manuscript, eval=FALSE}
-df_sub = df_v[(df_v$tau==1)&(df_v$countTotal==300),]
+df_sub = df_v[(df_v$tau==5)&(df_v$countTotal==300),]
 
-fig = ggplot(df_sub, aes(targetCount / countTotal, log2(value), color=variable, linetype=variable)) + geom_line(size=.75) + theme_classic() + theme(aspect.ratio=1,plot.title = element_text(hjust = 0.5)) + xlab("fraction") + ylab("Standard Deviation") + xlab("Fraction") + scale_color_manual(name="Method", values=c("blue4",  "red"), labels=c("Empirical (DMN)", "Asymptotic normal approx.")) + scale_linetype_manual(name="Method", values=c(1, 2), labels=c("Empirical (DMN)", "Asymptotic normal approx.")) + ggtitle(expression(tau==5~C==300~D==25))
+fig = ggplot(df_sub, aes(targetCount / countTotal, log2(value), color=variable, linetype=variable)) + geom_line(size=.75) + theme_classic() + theme(aspect.ratio=1,plot.title = element_text(hjust = 0.5)) + xlab("fraction") + ylab("Standard Deviation") + xlab("Fraction") + scale_color_manual(name="Method", values=c("blue4",  "red"), labels=c("Empirical (DMN)", "Asymptotic normal approx.")) + scale_linetype_manual(name="Method", values=c(1, 2), labels=c("Empirical (DMN)", "Asymptotic normal approx.")) + ggtitle(expression(tau==5~C==300~D==25))  + geom_vline(aes(xintercept=5/countTotal), color="grey", linetype="dashed")
 ggsave("sim_figure.pdf")
 ```
 
