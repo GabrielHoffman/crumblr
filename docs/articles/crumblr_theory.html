@@ -95,7 +95,7 @@
                         <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
-            <h4 data-toc-skip class="date">Run on 2022-02-03 15:33:44</h4>
+            <h4 data-toc-skip class="date">Run on 2022-02-03 20:00:25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/GabrielHoffman/crumblr/blob/HEAD/vignettes/crumblr_theory.Rmd" class="external-link"><code>vignettes/crumblr_theory.Rmd</code></a></small>
       <div class="hidden name"><code>crumblr_theory.Rmd</code></div>
@@ -124,16 +124,29 @@ rmarkdown::render("crumblr_theory.Rmd");
 
 
 --->
-<p>Let the vector <span class="math inline">\({\bf p}\)</span> being the true fractions across <span class="math inline">\(D\)</span> categories. With <span class="math inline">\(C\)</span> total counts sampled from a Dirichlet multinomial distribution with overdispersion <span class="math inline">\(\tau\)</span>, the <a href="https://rdrr.io/cran/compositions/man/clr.html" class="external-link">centered log ratio</a> (CLR) of the observed counts <span class="math inline">\({\bf c}\)</span> with estimated fractions <span class="math inline">\({\bf \hat p}\)</span> is<br><span class="math display">\[
+<div style="text-align: justify;">
+<p>Let the vector <span class="math inline">\({\bf p}\)</span> be the true fractions across <span class="math inline">\(D\)</span> categories. Consider <span class="math inline">\(C\)</span> total counts sampled from a Dirichlet-multinomial (DMN) distribution with overdispersion <span class="math inline">\(\tau\)</span>, <span class="math inline">\(\tau=1\)</span> reduces to the multinomial distribution. The <a href="https://rdrr.io/cran/compositions/man/clr.html" class="external-link">centered log ratio</a> (CLR) of the estimated fractions <span class="math inline">\({\bf \hat p}\)</span> is</p>
+<p><span class="math display">\[\begin{equation}
+\tag{1}
 \text{clr}_i({\bf \hat p}) = \log(\hat p_i) - \frac{1}{D}\sum_{j=1}^D \log(\hat p_j)
-\]</span> with sampling variance <span class="math display">\[
-\text{var}[\text{clr}_i({\bf \hat p})] =  \frac{\tau}{C} \left[ \frac{1}{\hat p_i} - \frac{2}{ D \hat p_i} + \frac{1}{D^2}\sum_{j=1}^D \frac{1}{\hat p_j}  \right] 
-\]</span></p>
-<p>The sampling variance is derived from asymototic theory, so we examine its behavior for finite total counts, <span class="math inline">\(n\)</span>. Here we evalute the emprical variance from <span class="math inline">\(100,000\)</span> draws from a Dirichlet multinomial distribution while varying <span class="math inline">\(\tau\)</span>, <span class="math inline">\(C\)</span> as well as the parameters of the distribution. A pseudocount of 0.5 is added to the observed counts since the asymptotic theory is not defined for counts of zero. The grey line indicates 3 counts, so for <span class="math inline">\(nC30\)</span> the line indicates <span class="math inline">\(3/30=0.1\)</span>. For the first case of <span class="math inline">\(D=2\)</span>, the empirical and asymptotic variances are symmetric around <span class="math inline">\(1/2\)</span>. In the second case of <span class="math inline">\(D=8\)</span>, the variances are no longer symmetric.</p>
-<p>The asymptotic standard deviation shows remarkable agreement with the emprical results even for small values of <span class="math inline">\(n\)</span>, <em>when at least 2 counts are observed</em>. In practice, it is often reasonable to assume a sufficient number of counts before a variable is included in an analysis. Importantly, with less than 2 counts the asymptotic theory gives a <em>larger</em> standard deviation than the emprical results. Therefore, this approach is conservative and will not underestimate the true amount of variation.</p>
-<p>The normal approximation is accurate for small overdispersion <span class="math inline">\(\tau\)</span>, large total counts <span class="math inline">\(C\)</span>, and large proportions <span class="math inline">\(p\)</span>.</p>
-<p>The asymptotic approximation is best for total counts &gt; 30, and counts per cell &gt; 7. Need to add filter for cell types. This is due to sum(1/p)</p>
-<p>speed fit into existing workflows for limma/dream/variancePartition/PCA</p>
+\end{equation}\]</span> and we show that the sampling variance is</p>
+<p><span class="math display">\[\begin{equation}
+\tag{2}
+\text{var}[\text{clr}_i({\bf \hat p})] =  \frac{\tau}{C} \left[ \frac{1}{\hat p_i} - \frac{2}{ D \hat p_i} + \frac{1}{D^2}\sum_{j=1}^D \frac{1}{\hat p_j}  \right]. \label{eqn2} 
+\end{equation}\]</span></p>
+<p>The sampling variance is derived from asymototic theory, so we examine its behavior for finite total counts, <span class="math inline">\(n\)</span>. Here we evalute the emprical variance from <span class="math inline">\(100,000\)</span> draws from a Dirichlet-multinomial distribution while varying <span class="math inline">\(\tau\)</span>, <span class="math inline">\(C\)</span>, and the parameters of the distribution. A pseudocount of 0.5 is added to the observed counts since the asymptotic theory is not defined for counts of zero. See plots below.</p>
+<!---
+The grey line indicates 3 counts, so for $nC30$ the line indicates $3/30=0.1$.  For the first case of $D=2$, the empirical and asymptotic variances are symmetric around $1/2$.  In the second case of $D=8$, the variances are no longer symmetric.
+--->
+<p>The asymptotic standard deviation shows remarkable agreement with the emprical results even for small values of <span class="math inline">\(C\)</span>, <em>when at least 2 counts are observed</em>. In practice, it is often reasonable to assume a sufficient number of counts before a variable is included in an analysis. Importantly, with less than 2 counts the asymptotic theory gives a <em>larger</em> standard deviation than the emprical results. Therefore, this approach is conservative and should not underestimate the true amount of variation. The asymptotic normal approximation is most accurate for large total counts <span class="math inline">\(C\)</span>, large proportions <span class="math inline">\(p\)</span>, and small overdispersion <span class="math inline">\(\tau\)</span>.</p>
+</div>
+<div class="section level4">
+<h4 id="crumblr-is-an-important-special-case">
+<code>crumblr</code> is an important special case<a class="anchor" aria-label="anchor" href="#crumblr-is-an-important-special-case"></a>
+</h4>
+<p>Based on Equation (2), the variance of the CLR-transformed proportions is a <em>linear</em> function of <span class="math inline">\(\tau\)</span>. Importantly, downstream analysis of the CLR-transformed proportions with a precision-weighted linear (mixed) model or a variance stabilizing transform depends only on the <em>relative</em> variances. Since relative variances are invariant to the scale of <span class="math inline">\(\tau\)</span>, for these applications the value of <span class="math inline">\(\tau\)</span> can be set to 1 instead of being estimated from the data.</p>
+<p>For other applications, <code>crumblr</code> can estimate <span class="math inline">\(\tau\)</span> from the data by using <code>crumblr(counts, tau=NULL)</code>. This calls <code><a href="../reference/dmn.mle.html">dmn.mle()</a></code> to estimate the parameters of the DMN distribution and is substantially faster than alternatives.</p>
+</div>
 <div class="section level3">
 <h3 id="d2-categories">D=2 categories<a class="anchor" aria-label="anchor" href="#d2-categories"></a>
 </h3>

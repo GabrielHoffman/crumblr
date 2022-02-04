@@ -21,7 +21,7 @@ get_density <- function(x, y, n = 250) {
 #'
 #' @examples
 #' # simulate data
-#' M = rmvnorm(1000, mu=c(0,0), sigma=diag(1,2))
+#' M = Rfast::rmvnorm(1000, mu=c(0,0), sigma=diag(1,2))
 #' 
 #' # create 2D density plot
 #' plotScatterDensity(M[,1], M[,2])

@@ -30,13 +30,13 @@ biocViews: RNASeq,
 Depends:
     R (>= 4.1.0),
     limma,
-    Rfast,
     ggplot2,
-    viridis,
-    MASS,
     methods
 Imports:
-    Rdpack
+    Rdpack,
+    viridis,
+    MASS,
+    Rfast
 RoxygenNote: 7.1.2
 RdMacros: Rdpack
 LazyData: true
