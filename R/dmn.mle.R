@@ -77,7 +77,6 @@ dmn.mle = function(counts,...){
   # negative log-likelihood
   # adapted from https://github.com/RfastOfficial/Rfast/blob/1f14fbb7a0729b6c4122fc3ce12701ad4801f1a3/R/discrete_mle.R#L157
   f = function(a1, x, rs){
-    # a1 = exp(a1)
     y <- x + a1
     sa <- sum(a1)
     value = n * Lgamma( sa ) - sum( Lgamma( rs + sa ) ) - n * sum( Lgamma( a1 ) ) + sum( Lgamma( y ) )
@@ -87,7 +86,6 @@ dmn.mle = function(counts,...){
   # gradient
   # Note that including the gradient in optim() substantially increases speed
   gr = function(a1, x, rs){
-    # a1 = exp(a1)
     y <- x + a1
     sa <- sum(a1)
     value = n * Digamma(sa) - sum( Digamma(rs + sa) ) - n * Digamma(a1) + rowsums( Digamma(y) )
@@ -97,11 +95,9 @@ dmn.mle = function(counts,...){
   # pre-compute values
   n <- nrow(counts)  ## sample size
   rs <- rowsums(counts)
-  # init <- log(colmeans(counts) )
   init <- colmeans(counts) 
   
   # Maximize likelihood
-  # # use parameters in log-space to avoid constraint at zero
   fit = optim(init, f, gr=gr, x=t(counts), rs=rs,..., method="L-BFGS-B", lower = 1e-04)
 
   # convergence check
@@ -112,7 +108,7 @@ dmn.mle = function(counts,...){
   # Second round
   ##############
 
-  # the first round does a goode job at estimating relative values of alpha
+  # First round does a good job at estimating relative values of alpha
   # but has issues estimating the scale of alpha for large values
   # Here, keep relative values constant and do 1D optimization of scale
 
@@ -136,7 +132,6 @@ dmn.mle = function(counts,...){
   s = df[which.min(df$objective),'minimum']
 
   # set parameter names and apply scale
-  # alpha = exp(fit$par)
   alpha = fit$par * s
   names(alpha) = colnames(counts)
 
