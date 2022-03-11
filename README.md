@@ -4,6 +4,7 @@
 ### <u>C</u>ount <u>r</u>atio <u>u</u>ncertainty <u>m</u>odeling <u>b</u>ased <u>l</u>inear <u>r</u>egression <img src="man/figures/logo.png" align="right" alt="" width="130" style="padding-left:20px; padding-top:0px;"/>
 
 <div style="text-align: justify;">
+	
 The `crumblr` package enables analysis of count ratio data using precision-weighted linear (mixed) models, PCA and clustering.  `crumblr`'s fast, normal approximation of transformed count data from a Dirichlet-multinomial model allows use of standard workflows to analyize count ratio data while modeling heteroskedasticity.
 
 
