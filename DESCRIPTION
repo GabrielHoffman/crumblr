@@ -7,7 +7,7 @@ Authors@R: person("Gabriel", "Hoffman", role=c("aut", "cre"), email="gabriel.hof
 Description: Crumblr enables analysis of count ratio data using weighted linear models.  This is useful for fast approximation to GLMs and GLMM's.
 VignetteBuilder: knitr
 License: GPL (>= 2)
-URL: https://github.com/GabrielHoffman/crumblr
+URL: https://gabrielhoffman.github.io/crumblr
 BugReports: https://github.com/GabrielHoffman/crumblr/issues
 Suggests:
     BiocStyle,
