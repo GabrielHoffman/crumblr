@@ -7,7 +7,7 @@ documentclass: article
 output: 
   html_document:
   toc: true
-  smart: false
+  toc_float: true
 vignette: >
   %\VignetteIndexEntry{crumblr}
   %\VignetteEngine{knitr::rmarkdown}
@@ -39,6 +39,13 @@ knitr::opts_chunk$set()
 
 options(width=100)
 ```	
+
+
+
+<style>
+body {
+text-align: justify}
+</style>
 
 Here we consider counts for 8 cell types from quantified using single cell RNA-seq data from unstimulated and interferon β stimulated PBMCs from 8 subjects [(Kang, et al., 2018)](https://www.nature.com/articles/nbt.4042).    
 

@@ -4,15 +4,15 @@ subtitle: ''
 author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
 date: "Run on `r Sys.time()`"
 documentclass: article
-output: 
-  html_document:
-  toc: true
-  smart: false
 vignette: >
   %\VignetteIndexEntry{vst}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
   %\usepackage[utf8]{inputenc}
+output: 
+  html_document:
+    toc: true
+    toc_float: true
 ---
 
 
@@ -52,11 +52,16 @@ options(width=100)
 
 
 
-<div style="text-align: justify;">
+<style>
+body {
+text-align: justify}
+</style>
+
+
 The goal of a variance stabilizing transform (VST) is to down-weight imprecise measurements so that downstream analyses focus on signal, rather than being dominated by imprecise observations.  VST's have been widely used in transcriptomics: the [vsn](https://bioconductor.org/packages/vsn/) package provides a VST for microarray data, and [DESeq2](https://bioconductor.org/packages/DESeq2/) package provides a VST for RNA-seq using a negative bionomial model.  Here we introduce a VST based on `crumblr` using precision weighted approximation to the centered log-ration (CLR) transform of multinomial Dirichlet counts.  This VST is very fast even for large datasets and effectively stabilizes the variance of count ratio data compared to using fractions or the CLR transform alone.  This improves performance of downstream analaysis such as PCA and clustering.
 
 
-### Examine variance stabilizing transform
+### Examine VST
 First, simulate count data:
 ```{r simData}
 library(crumblr)
@@ -143,9 +148,6 @@ fig3 = meanSdPlot(df_vst) + ggtitle("crumblr vst")
 
 plot_grid(fig1, fig2, fig3, labels=LETTERS[1:3], nrow=1)
 ```
-
-
-</div>
 
 
 

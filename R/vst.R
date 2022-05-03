@@ -10,6 +10,8 @@
 #'
 #' @details A variance stabilizing transform is usually described in terms of a parametric model of the observed data.  Instead, here inverse variance of each observation are stored in \code{x$weight} and the VST divides the observed data by the scaled standard deviations
 #'
+#' @return matrix of variance stabilized values
+#'
 #' @examples
 #' # set probability of each category
 #' prob = c(0.1, 0.2, 0.3, 0.5)

@@ -19,8 +19,12 @@
 #'   \insertRef{kang2018multiplexed}{crumblr}
 #' }
 #' @name IFNCellCounts
-#' @examples
-#' data(IFNCellCounts)
+NULL
+
+
+#' @docType data
+#' @name IFNCellCounts
+#' @keywords datasets
 "info"
 
 

@@ -13,6 +13,9 @@ vst(x)
 \arguments{
 \item{x}{object storing data to be transformed}
 }
+\value{
+matrix of variance stabilized values
+}
 \description{
 Compute variance stabilizing transform (VST) from precision weights by scaling each observation by their respective weights
 }

@@ -80,16 +80,40 @@
   <main id="main" class="col-md-9"><p><br></p>
 <div class="section level3">
 <h3 id="count-ratio-uncertainty-modeling-based-linear-regression-">
-<u>C</u>ount <u>r</u>atio <u>u</u>ncertainty <u>m</u>odeling <u>b</u>ased <u>l</u>inear <u>r</u>egression <img src="reference/figures/logo.png" align="right" alt="" width="130" style="padding-left:20px; padding-top:0px;"><a class="anchor" aria-label="anchor" href="#count-ratio-uncertainty-modeling-based-linear-regression-"></a>
+<u>C</u>ount <u>r</u>atio <u>u</u>ncertainty <u>m</u>odeling
+<u>b</u>ased <u>l</u>inear <u>r</u>egression
+<img src="reference/figures/logo.png" align="right" alt="" width="130" style="padding-left:20px; padding-top:0px;"><a class="anchor" aria-label="anchor" href="#count-ratio-uncertainty-modeling-based-linear-regression-"></a>
 </h3>
 <div style="text-align: justify;">
-<p>The <code>crumblr</code> package enables analysis of count ratio data using precision-weighted linear (mixed) models, PCA and clustering. <code>crumblr</code>’s fast, normal approximation of transformed count data from a Dirichlet-multinomial model allows use of standard workflows to analyize count ratio data while modeling heteroskedasticity.</p>
+<p>The <code>crumblr</code> package enables analysis of count ratio data
+using precision-weighted linear (mixed) models, PCA and clustering.
+<code>crumblr</code>’s fast, normal approximation of transformed count
+data from a Dirichlet-multinomial model allows use of standard workflows
+to analyize count ratio data while modeling heteroskedasticity.</p>
 <div class="section level2">
 <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a>
 </h2>
-<p>Analysis of count ratio data (i.e. fractions) requires special consideration since data is non-normal, heteroskedastic, and spans a low rank space. While counts can be considered directly using Poisson, negative binomial, or Dirichlet-multinomial models for simple regression applications, these can be problematic since they 1) can be very computationally expensive, 2) can produce poorly calibrated hypothesis tests, and 3) are challenging to extend to other applications. The widely used centered log-ratio (CLR) transform from <a href="https://link.springer.com/book/10.1007/978-3-642-36809-7" class="external-link">compositional data analysis</a> makes count ratio data more normal and enables use the linear models, and other standard methods.</p>
-<p>Yet CLR-transformed data is still highly heteroskedastic: the precision of measurements varies widely. This important factor is not considered by existing methods.</p>
-<p><code>crumblr</code> uses a fast asymptotic normal approximation of CLR-transformed counts from a Dirichlet-multinomial distribution to model the sampling variance of the transformed counts. <code>crumblr</code> enables incorporating the sampling variance as precision weights to linear (mixed) models in order to increase power and control the false positive rate. <code>crumblr</code> also uses a variance stabilizing transform (vst) based on the precision weights to improve performance of PCA and clustering.</p>
+<p>Analysis of count ratio data (i.e. fractions) requires special
+consideration since data is non-normal, heteroskedastic, and spans a low
+rank space. While counts can be considered directly using Poisson,
+negative binomial, or Dirichlet-multinomial models for simple regression
+applications, these can be problematic since they 1) can be very
+computationally expensive, 2) can produce poorly calibrated hypothesis
+tests, and 3) are challenging to extend to other applications. The
+widely used centered log-ratio (CLR) transform from <a href="https://link.springer.com/book/10.1007/978-3-642-36809-7" class="external-link">compositional
+data analysis</a> makes count ratio data more normal and enables use the
+linear models, and other standard methods.</p>
+<p>Yet CLR-transformed data is still highly heteroskedastic: the
+precision of measurements varies widely. This important factor is not
+considered by existing methods.</p>
+<p><code>crumblr</code> uses a fast asymptotic normal approximation of
+CLR-transformed counts from a Dirichlet-multinomial distribution to
+model the sampling variance of the transformed counts.
+<code>crumblr</code> enables incorporating the sampling variance as
+precision weights to linear (mixed) models in order to increase power
+and control the false positive rate. <code>crumblr</code> also uses a
+variance stabilizing transform (vst) based on the precision weights to
+improve performance of PCA and clustering.</p>
 </div>
 </div>
 </div>
@@ -104,9 +128,11 @@
 <h2 id="introduction-to-compositional-data-analysis">Introduction to compositional data analysis<a class="anchor" aria-label="anchor" href="#introduction-to-compositional-data-analysis"></a>
 </h2>
 <ul>
-<li>Brief intro for bioinformatics <a href="https://doi.org/10.1093/bioinformatics/bty175" class="external-link">Quinn, et al. 2018</a>
+<li>Brief intro for bioinformatics <a href="https://doi.org/10.1093/bioinformatics/bty175" class="external-link">Quinn, et
+al. 2018</a>
 </li>
-<li>Book for analysis in R <a href="https://link.springer.com/book/10.1007/978-3-642-36809-7" class="external-link">van den Boogaart and Tolosana-Delgado, 2013</a>
+<li>Book for analysis in R <a href="https://link.springer.com/book/10.1007/978-3-642-36809-7" class="external-link">van den
+Boogaart and Tolosana-Delgado, 2013</a>
 </li>
 </ul>
 </div>
@@ -150,12 +176,14 @@
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by <a href="http://gabrielhoffman.github.io" class="external-link">Gabriel Hoffman</a>.</p>
+<p>Developed by <a href="http://gabrielhoffman.github.io" class="external-link">Gabriel
+Hoffman</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
     </footer>
