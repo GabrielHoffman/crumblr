@@ -18,7 +18,6 @@
 #' @return matrix of CLR transformed counts
 #' 
 #' @examples
-#' 
 #' # set probability of each category
 #' prob = c(0.1, 0.2, 0.3, 0.5)
 #' 
@@ -38,7 +37,7 @@
 #' rownames(counts) = paste0("sample_", 1:n_samples)
 #' 
 #' # centered log ratio
-#' clr(counts)
+#' clr(counts)[1:4,]
 #'
 #' @import Rdpack
 #' @seealso \code{compositions::clr}
@@ -67,7 +66,7 @@ clr = function(counts, pseudocount = 0.5){
 #' }
 #' 
 #' @details 
-#' Evalute the centered log ratio (CLR) transform of the count matrix, and the asymptotic theoretical variances of each transformed observation.  The asymptotic normal approximation is increasingly accurate for small overdispersion \eqn{\tau}, large total counts \eqn{C}, and large proportions \eqn{p}, but shows good agreement with the empirical results most situtations. In practice, it is often reasonable to assume a sufficient number of counts before a variable is included in an analysis anyway.  But the feasability of this assumption is up to the user to determine.     
+#' Evalute the centered log ratio (CLR) transform of the count matrix, and the asymptotic theoretical variances of each transformed observation.  The asymptotic normal approximation is increasingly accurate for small overdispersion \eqn{\tau}, large total counts \eqn{C}, and large proportions \eqn{p}, but shows good agreement with the empirical results in most situtations. In practice, it is often reasonable to assume a sufficient number of counts before a variable is included in an analysis anyway.  But the feasability of this assumption is up to the user to determine.     
 #'
 #' @examples
 #' 

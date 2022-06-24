@@ -26,14 +26,13 @@ list storing \code{alpha} parameter estimates, logLik, and details about converg
 MLE for Dirichlet Multinomial
 }
 \details{
-Maximize Dirichlet Multinomial (DMN) log-likelihood with \code{optim()} using log likelihood function and its gradient.  This method sses a second round of optimization to estimate the scale of \eqn{\alpha} parameters, which is necessary for accurate estimation of overdispersion metric.
+Maximize Dirichlet Multinomial (DMN) log-likelihood with \code{optim()} using log likelihood function and its gradient.  This method uses a second round of optimization to estimate the scale of \eqn{\alpha} parameters, which is necessary for accurate estimation of overdispersion metric.
 
 The covariance between counts in each category from DMN distributed data is \eqn{n(diag(p) - pp^T) (1 + \rho^2(n-1))} for \eqn{n} total counts, and vector of proportions  \eqn{p}, where \eqn{\rho^2 = 1 / (a_0 + 1)} and \eqn{a_0 = \sum_i \alpha_i}.  The count data is overdispersed by a factor of \eqn{1 + \rho^2(n-1)} compared to a multinomial (MN) distribution.  As \eqn{a_0} increases, the DMN converges to the MN.
 
 See \url{https://en.wikipedia.org/wiki/Dirichlet-multinomial_distribution#Matrix_notation}
 }
 \examples{
-
 library(HMP)
 
 set.seed(1)
@@ -54,7 +53,7 @@ a0 = sum(alpha)
 rhoSq = 1 / (a0 + 1)
 1 + rhoSq*(n_counts-1) 
 
-# multinomial
+# multinomial, so overdispersion is 1
 counts = t(rmultinom(n_samples, n_counts, prob=alpha / sum(alpha)))
 
 dmn.mle(counts)

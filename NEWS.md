@@ -1,3 +1,7 @@
+# crumblr 0.99.0
+ - Jun 24, 2022
+ - Fix version number for compatibility with Bioconductor
+
 # crumblr 1.0.7
  - Feb 1, 2022
  - fix `vst()`

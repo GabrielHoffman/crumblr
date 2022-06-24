@@ -1,12 +1,12 @@
 Package: crumblr
 Type: Package
 Title: Count ratio uncertainty modeling base linear regression
-Version: 1.0.7
-Date: 2022-02-01
+Version: 0.99.0
+Date: 2022-06-24
 Authors@R: person("Gabriel", "Hoffman", role=c("aut", "cre"), email="gabriel.hoffman@mssm.edu")
-Description: Crumblr enables analysis of count ratio data using weighted linear models.  This is useful for fast approximation to GLMs and GLMM's.
+Description: Crumblr enables analysis of count ratio data using weighted linear (mixed) models.  This is useful for fast approximation to GLMs and GLMM's.  A variance stabilizing transform (vst) based on this model enables improved clustering and PCA.
 VignetteBuilder: knitr
-License: GPL (>= 2)
+License: Artistic-2.0
 URL: https://gabrielhoffman.github.io/crumblr
 BugReports: https://github.com/GabrielHoffman/crumblr/issues
 Suggests:

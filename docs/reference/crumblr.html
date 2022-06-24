@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">crumblr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,7 +86,7 @@
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Evalute the centered log ratio (CLR) transform of the count matrix, and the asymptotic theoretical variances of each transformed observation.  The asymptotic normal approximation is increasingly accurate for small overdispersion \(\tau\), large total counts \(C\), and large proportions \(p\), but shows good agreement with the empirical results most situtations. In practice, it is often reasonable to assume a sufficient number of counts before a variable is included in an analysis anyway.  But the feasability of this assumption is up to the user to determine.</p>
+    <p>Evalute the centered log ratio (CLR) transform of the count matrix, and the asymptotic theoretical variances of each transformed observation.  The asymptotic normal approximation is increasingly accurate for small overdispersion \(\tau\), large total counts \(C\), and large proportions \(p\), but shows good agreement with the empirical results in most situtations. In practice, it is often reasonable to assume a sufficient number of counts before a variable is included in an analysis anyway.  But the feasability of this assumption is up to the user to determine.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -125,11 +125,11 @@
 <span class="r-in"><span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/ebayes.html" class="external-link">eBayes</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">fit</span>, coef<span class="op">=</span><span class="st">"Age"</span>, sort.by<span class="op">=</span><span class="st">"none"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               logFC    AveExpr           t   P.Value adj.P.Val         B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat_1 -5.388791e-04 -0.8550333 -0.22199545 0.8244330 0.9767197 -8.289124</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat_2 -7.901080e-04 -0.1556286 -0.41437667 0.6788249 0.9767197 -8.469255</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat_3  1.465140e-03  0.2403442  0.87195812 0.3837650 0.9767197 -8.301418</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat_4 -4.305361e-05  0.7703177 -0.02920028 0.9767197 0.9767197 -8.811705</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               logFC    AveExpr           t    P.Value  adj.P.Val         B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat_1  2.349493e-03 -0.8651907  1.12911139 0.25954133 0.51908267 -7.830568</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat_2 -7.483942e-05 -0.1500064 -0.04595256 0.96337147 0.98750860 -8.711632</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat_3  2.276333e-05  0.2436798  0.01566627 0.98750860 0.98750860 -8.826632</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat_4 -2.941867e-03  0.7715174 -2.32469370 0.02059841 0.08239364 -6.263246</span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>

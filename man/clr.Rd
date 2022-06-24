@@ -22,7 +22,6 @@ The CLR of a vector \code{x} of counts in \code{D} categories is defined as
 \code{clr(x) = log(x) - mean(log(x))}. For details see van den Boogaart and  Tolosana-Delgado (2013).
 }
 \examples{
-
 # set probability of each category
 prob = c(0.1, 0.2, 0.3, 0.5)
 
@@ -42,7 +41,7 @@ colnames(counts) = paste0("cat_", 1:length(prob))
 rownames(counts) = paste0("sample_", 1:n_samples)
 
 # centered log ratio
-clr(counts)
+clr(counts)[1:4,]
 
 }
 \references{

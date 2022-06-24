@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">crumblr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,7 +82,7 @@
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Maximize Dirichlet Multinomial (DMN) log-likelihood with <code><a href="https://rdrr.io/r/stats/optim.html" class="external-link">optim()</a></code> using log likelihood function and its gradient.  This method sses a second round of optimization to estimate the scale of \(\alpha\) parameters, which is necessary for accurate estimation of overdispersion metric.</p>
+    <p>Maximize Dirichlet Multinomial (DMN) log-likelihood with <code><a href="https://rdrr.io/r/stats/optim.html" class="external-link">optim()</a></code> using log likelihood function and its gradient.  This method uses a second round of optimization to estimate the scale of \(\alpha\) parameters, which is necessary for accurate estimation of overdispersion metric.</p>
 <p>The covariance between counts in each category from DMN distributed data is \(n(diag(p) - pp^T) (1 + \rho^2(n-1))\) for \(n\) total counts, and vector of proportions  \(p\), where \(\rho^2 = 1 / (a_0 + 1)\) and \(a_0 = \sum_i \alpha_i\).  The count data is overdispersed by a factor of \(1 + \rho^2(n-1)\) compared to a multinomial (MN) distribution.  As \(a_0\) increases, the DMN converges to the MN.</p>
 <p>See <a href="https://en.wikipedia.org/wiki/Dirichlet-multinomial_distribution#Matrix_notation" class="external-link">https://en.wikipedia.org/wiki/Dirichlet-multinomial_distribution#Matrix_notation</a></p>
     </div>
@@ -93,8 +93,7 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">HMP</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">HMP</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: dirmult</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘HMP’</span>
@@ -141,7 +140,7 @@
 <span class="r-in"><span class="fl">1</span> <span class="op">+</span> <span class="va">rhoSq</span><span class="op">*</span><span class="op">(</span><span class="va">n_counts</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.427878</span>
 <span class="r-in"></span>
-<span class="r-in"><span class="co"># multinomial</span></span>
+<span class="r-in"><span class="co"># multinomial, so overdispersion is 1</span></span>
 <span class="r-in"><span class="va">counts</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Multinom.html" class="external-link">rmultinom</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="va">n_counts</span>, prob<span class="op">=</span><span class="va">alpha</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">alpha</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">dmn.mle</span><span class="op">(</span><span class="va">counts</span><span class="op">)</span></span>
