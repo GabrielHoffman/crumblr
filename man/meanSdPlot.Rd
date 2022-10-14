@@ -13,7 +13,7 @@ meanSdPlot(x)
 plot from ggplot2
 }
 \description{
-Diagnositic plot for variance stabilizing transform
+Diagnositic plot for Student transform
 }
 \details{
 Plot the sd versus rank mean of each row like \code{vsn::meanSdPlot}.  Also show the coefficient of variation of the variances.  A a lower value indicates stronger variance stabilization
@@ -39,11 +39,11 @@ keep = colSums(counts > 5) > 10
 # run crumblr on counts
 cobj = crumblr(counts[,keep])
 
-# run variance stabilizing transform
-df_vst = vst(cobj)
+# run student transform
+df_student = studentize(cobj)
 
 # For each sample, plot rank of mean vs sd
-meanSdPlot(df_vst) + ggtitle("crumblr vst")
+meanSdPlot(df_student) + ggtitle("crumblr student")
 
 }
 \seealso{

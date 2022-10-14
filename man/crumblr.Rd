@@ -55,16 +55,15 @@ rownames(counts) = paste0("sample_", 1:n_samples)
 # run crumblr on counts
 cobj = crumblr(counts)
 
-# run standard limma analysis on crumblr results
-library(limma)
+# run standard variancePartition analysis on crumblr results
+library(variancePartition)
 
-design = model.matrix(~Age, info)
-fit = lmFit(cobj, design)
+fit = dream(cobj, ~ Age, info)
 fit = eBayes(fit)
 
 topTable(fit, coef="Age", sort.by="none")
 
 }
 \seealso{
-\code{limma::voom}, \code{limma::lmFit}
+\code{limma::voom}, \code{variancePartition::dream}
 }
