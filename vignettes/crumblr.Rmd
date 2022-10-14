@@ -49,12 +49,12 @@ text-align: justify}
 
 Here we consider counts for 8 cell types from quantified using single cell RNA-seq data from unstimulated and interferon β stimulated PBMCs from 8 subjects [(Kang, et al., 2018)](https://www.nature.com/articles/nbt.4042).    
 
-The functions used below incorporate the precision weights:
+The functions here incorporate the precision weights:
 
-- `limma::lmFit`
-- `crumblr::vst`
 - `variancePartition::fitExtractVarPartModel` 
 - `variancePartition::dream`
+- `crumblr::studentize`
+- `limma::lmFit`
 
 ## Differential testing
 Here we evaluate whether the observed cell proportions change in response to interferon β.  Given the results here, we cannot reject the null hypothesis that interferon β does not affect the cell type proportions.
@@ -72,13 +72,12 @@ data(IFNCellCounts)
 # cobj$weights stores precision weights
 cobj = crumblr(cellCounts)
 
-# Use limma workflow to analyze each cell
+# Use variancePartition workflow to analyze each cell type
 # Perform regression on each cell type separately
 #  then use eBayes to shrink residual variance
-# Also compatible with variancePartition::dream() for linear mixed models
-library(limma)
-design = model.matrix( ~ StimStatus + ind, info)
-fit = lmFit(cobj, design)
+# Also compatible with limma::lmFit() 
+library(variancePartition)
+fit = dream(cobj,  ~ StimStatus + ind, info)
 fit = eBayes(fit)
 
 # Extract results for each cell type
@@ -91,11 +90,11 @@ Performing PCA on the transformed cell counts indicates that the samples cluster
 ```{r pca, fig.height=5, fig.width=5}
 library(ggplot2)
 
-# Apply variance stabilizing transform
-M_vst = vst(cobj)
+# Apply Student transform
+M_student = studentize(cobj)
 
 # Perform PCA
-pca = prcomp(t(M_vst))
+pca = prcomp(t(M_student))
 
 # merge with metadata 
 df_pca = merge(pca$x, info, by="row.names")
@@ -114,7 +113,7 @@ ggplot(df_pca, aes(PC1, PC2, color=as.character(ind),  shape=StimStatus)) +
 ## Hierachical clustering
 The samples from the same subject also cluster together.
 ```{r hclust}
-heatmap(M_vst)
+heatmap(M_student)
 ```
 
 ## Variance partitioning

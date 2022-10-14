@@ -1,11 +1,11 @@
 ---
-title: "Variance stabilizing transform"
+title: "Student transform"
 subtitle: ''
 author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
 date: "Run on `r Sys.time()`"
 documentclass: article
 vignette: >
-  %\VignetteIndexEntry{vst}
+  %\VignetteIndexEntry{Student transform}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
   %\usepackage[utf8]{inputenc}

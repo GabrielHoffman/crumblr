@@ -2,15 +2,15 @@
 # Dec 6, 2021
 
 
-#' Variance stabilizing transform from precision weights
+#' Studentize observations using precision weights
 #'
-#' Compute variance stabilizing transform (VST) from precision weights by scaling each observation by their respective weights
+#' Compute studentized observations from precision weights by scaling each observation by their respective standard error
 #'
 #' @param x object storing data to be transformed
 #'
-#' @details A variance stabilizing transform is usually described in terms of a parametric model of the observed data.  Instead, here inverse variance of each observation are stored in \code{x$weight} and the VST divides the observed data by the scaled standard deviations
+#' @details A Student transform scales the observed value but its standard error.  Here \code{x$weight} stores the inverse variance of each observation.
 #'
-#' @return matrix of variance stabilized values
+#' @return matrix of studentized values
 #'
 #' @examples
 #' # set probability of each category
@@ -30,32 +30,45 @@
 #' # run crumblr on counts
 #' cobj = crumblr(counts)
 #' 
-#' # apply variance stabilizing transform (vst)
-#' df_vst = vst(cobj)
+#' # apply student transform 
+#' df_student = studentize(cobj)
 #' 
-#' # Perform PCA on VST transformed data
-#' pca = prcomp(t(df_vst))
+#' # Perform PCA on student transformed data
+#' pca = prcomp(t(df_student))
 #' df_pca = as.data.frame(pca$x)
 #' 
 #' ggplot(df_pca, aes(PC1, PC2)) + geom_point() + theme_classic() + theme(aspect.ratio=1)
 #' @export
 #' @docType methods
-#' @rdname vst-method
-setGeneric("vst", signature="x",
+#' @rdname studentize-method
+setGeneric("studentize", signature="x",
 	function( x )
-      standardGeneric("vst")
+      standardGeneric("studentize")
 )
 
 #' @export
-#' @rdname vst-method
-#' @aliases vst,EList-method
-setMethod("vst", "EList",
+#' @rdname studentize-method
+#' @aliases studentize,EList-method
+setMethod("studentize", "EList",
 	function( x ){
- 		# x$E * x$weights	
-
+ 		
+ 		# W = with(x, weights / rowMeans(weights))
  		# scale by sd instead of var
  		# set mean scale to 1
  		with(x, E * (sqrt(weights)/rowMeans(sqrt(weights))))	
  	}
 )
+
+
+
+
+
+
+
+
+
+
+
+
+
 

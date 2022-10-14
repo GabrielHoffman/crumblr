@@ -51,7 +51,7 @@ plotScatterDensity = function(x, y, size=1){
 
 #' Plot row standard deviations versus row means
 #' 
-#' Diagnositic plot for variance stabilizing transform
+#' Diagnositic plot for Student transform
 #' 
 #' @param x data matrix
 #' 
@@ -81,11 +81,11 @@ plotScatterDensity = function(x, y, size=1){
 #' # run crumblr on counts
 #' cobj = crumblr(counts[,keep])
 #' 
-#' # run variance stabilizing transform
-#' df_vst = vst(cobj)
+#' # run student transform
+#' df_student = studentize(cobj)
 #' 
 #' # For each sample, plot rank of mean vs sd
-#' meanSdPlot(df_vst) + ggtitle("crumblr vst")
+#' meanSdPlot(df_student) + ggtitle("crumblr student")
 #' 
 #' @seealso \code{vsn::meanSdPlot}
 #' @import ggplot2
