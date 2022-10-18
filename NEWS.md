@@ -1,5 +1,6 @@
 # crumblr 0.99.3
  - `buildClusterTree()` uses cosine distance by default
+ - `treeTest()` now uses `method="treeTest"` by default
 
 # crumblr 0.99.2
  - update `plotTreeTest()`
