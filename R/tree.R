@@ -202,39 +202,48 @@ treeTest = function(fit, obj, hc, coef, method = c("RE2C", "FE", "tstat", "sidak
 #' @param sce \code{SingleCellExperiment} object
 #' @param reduction field of reducedDims(sce) to use
 #' @param labelCol column in \code{SingleCellExperiment} storing cell type annotations
+#' @param method distance metric
 #' 
 #' @importFrom SingleCellExperiment reducedDim colData
 #' @importFrom stats dist hclust
+#' @importFrom stylo dist.cosine
 #' @export
-buildClusterTree <- function(sce, reduction, labelCol){
-   
+buildClusterTree <- function(sce, reduction, labelCol, method=c("cosine", "euclidean", "maximum", "manhattan", "canberra",
+          "binary", "minkowski")){
+  
+	method = match.arg(method)
+
 	if( ! labelCol %in% colnames(colData(sce)) ){
 		stop("labelCol must be a column in colData(sce)")
 	}
 
-   	# extract low dimensional embeddings
-    embeddings <- reducedDim(sce, reduction)
+	# extract low dimensional embeddings
+	embeddings <- reducedDim(sce, reduction)
 
-    # extract unique cell labels
-    lvls = colData(sce)[[labelCol]]
-    if( is.factor(lvls) ){
-    	lvls = levels(lvls)
-    }else{
-    	lvls = unique(lvls)
-    }
+	# extract unique cell labels
+	lvls = colData(sce)[[labelCol]]
+	if( is.factor(lvls) ){
+		lvls = levels(lvls)
+	}else{
+		lvls = unique(lvls)
+	}
 
-    # for each cell type, return mean of each dimension
-    df <- lapply( lvls, function(x) {
-        	idx = colData(sce)[[labelCol]] == x
+	# for each cell type, return mean of each dimension
+	df <- lapply( lvls, function(x) {
+	    	idx = colData(sce)[[labelCol]] == x
 
-        	colMeans(embeddings[idx,,drop=FALSE])
-          })
-    df = do.call(rbind, df)
-    rownames(df) = lvls
+	    	colMeans(embeddings[idx,,drop=FALSE])
+	      })
+	df = do.call(rbind, df)
+	rownames(df) = lvls
 
-    # compute pairwise distances
-    dst <- dist( df )
- 
+	# compute pairwise distances
+	if( method == 'cosine'){
+		dst <- dist.cosine( df )
+	}else{
+		dst <- dist( df, method=method )
+	}
+
  	# perform clustering
  	hclust( dst )
 }

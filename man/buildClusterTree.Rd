@@ -4,7 +4,13 @@
 \alias{buildClusterTree}
 \title{Perform hierarchical clustering on reducedDim}
 \usage{
-buildClusterTree(sce, reduction, labelCol)
+buildClusterTree(
+  sce,
+  reduction,
+  labelCol,
+  method = c("cosine", "euclidean", "maximum", "manhattan", "canberra", "binary",
+    "minkowski")
+)
 }
 \arguments{
 \item{sce}{\code{SingleCellExperiment} object}
@@ -12,6 +18,8 @@ buildClusterTree(sce, reduction, labelCol)
 \item{reduction}{field of reducedDims(sce) to use}
 
 \item{labelCol}{column in \code{SingleCellExperiment} storing cell type annotations}
+
+\item{method}{distance metric}
 }
 \description{
 Perform hierarchical clustering dimension reduction from single cell expression data
