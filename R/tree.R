@@ -66,8 +66,8 @@ NameInternalNodes = function(tb){
 #' 
 #' @param tree phylo object storing tree
 #' @param low low color on gradient
+#' @param mid mid color on gradient
 #' @param high high color on gradient
-#' @param point.size size of point at each node or tip
 #' 
 #' @examples
 #' library(variancePartition)
@@ -93,22 +93,26 @@ NameInternalNodes = function(tb){
 #' res = treeTest( fit, cobj, hc, coef="StimStatusstim", method="RE2C")
 #' 
 #' # Plot hierarchy and testing results
-#' plotTreeTest(res)
+#' # Adjust xlim() until text fits in window 
+#' plotTreeTest(res) + xlim(0, 7)
 #' 
 #' @import ggtree ggplot2
 #' @export
-plotTreeTest = function(tree, low="grey90", high="red", point.size=5){
+plotTreeTest = function(tree, low="grey90", mid = "red", high="darkred"){
 
 	# PASS R check
 	isTip = label = node = FDR = NULL
 
 	ggtree(tree, branch.length = "none") +
-	    geom_text2(aes(label = label, subset=isTip), color = "darkred", size=3, vjust=-1, hjust=1) +
-	    # geom_text2(aes(label = label, subset=!isTip), color = "darkred", size=3, vjust=-1, hjust=0.5) +
-	    geom_point2(aes(label = node, color=-log10(FDR)), size=point.size) + 
-	    scale_color_gradient(name = bquote(-log[10]~FDR), limits=c(0,4), low=low, high=high) +
+	    # geom_text2(aes(label = paste0('     ', label), subset=isTip), color = "black", size=3, hjust=0) + 
+	    geom_tiplab(color = "black", size=3, hjust=0, offset=.2) +
+	    geom_point2(aes(label = node, color=pmin(4,-log10(FDR)), size=pmin(4,-log10(FDR)))) + 
+	    scale_color_gradient2(name = bquote(-log[10]~FDR), limits=c(0,4), low=low, mid=mid, high=high, midpoint=-log10(0.01)) +
+	    scale_size_area(name = bquote(-log[10]~FDR), limits=c(0,4)) +
+	    geom_text2(aes(label = '+', subset=FDR < 0.05), color = "white", size=6, vjust=.3, hjust=.5) +
 	    theme(legend.position="bottom", aspect.ratio=1)
 }
+
 
 #' Perform multivariate testing along a hierarchy
 #' 
@@ -147,7 +151,8 @@ plotTreeTest = function(tree, low="grey90", high="red", point.size=5){
 #' res = treeTest( fit, cobj, hc, coef="StimStatusstim", method="RE2C")
 #' 
 #' # Plot hierarchy and testing results
-#' plotTreeTest(res)
+#' # Adjust xlim() until text fits in window 
+#' plotTreeTest(res) + xlim(0, 7)
 #' 
 #' @importFrom tidytree as_tibble left_join as.treedata
 #' @importFrom variancePartition mvTest

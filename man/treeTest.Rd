@@ -53,7 +53,8 @@ hc = hclust(dist(t(cellCounts)))
 res = treeTest( fit, cobj, hc, coef="StimStatusstim", method="RE2C")
 
 # Plot hierarchy and testing results
-plotTreeTest(res)
+# Adjust xlim() until text fits in window 
+plotTreeTest(res) + xlim(0, 7)
 
 }
 \seealso{

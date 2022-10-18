@@ -1,5 +1,6 @@
 # crumblr 0.99.1
  - add functions to perform `mvTest()` on trees
+ - update `plotTreeTest()`
 
 # crumblr 0.99.0
  - Jun 24, 2022

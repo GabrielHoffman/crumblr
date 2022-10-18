@@ -4,16 +4,16 @@
 \alias{plotTreeTest}
 \title{Plot tree with results from multivariate testing}
 \usage{
-plotTreeTest(tree, low = "grey90", high = "red", point.size = 5)
+plotTreeTest(tree, low = "grey90", mid = "red", high = "darkred")
 }
 \arguments{
 \item{tree}{phylo object storing tree}
 
 \item{low}{low color on gradient}
 
-\item{high}{high color on gradient}
+\item{mid}{mid color on gradient}
 
-\item{point.size}{size of point at each node or tip}
+\item{high}{high color on gradient}
 }
 \description{
 Plot tree with results from multivariate testing
@@ -42,6 +42,7 @@ hc = hclust(dist(t(cellCounts)))
 res = treeTest( fit, cobj, hc, coef="StimStatusstim", method="RE2C")
 
 # Plot hierarchy and testing results
-plotTreeTest(res)
+# Adjust xlim() until text fits in window 
+plotTreeTest(res) + xlim(0, 7)
 
 }
