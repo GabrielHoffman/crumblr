@@ -13,6 +13,9 @@
     <loc>http://gabrielhoffman.github.io/crumblr/articles/index.html</loc>
   </url>
   <url>
+    <loc>http://gabrielhoffman.github.io/crumblr/articles/studentize.html</loc>
+  </url>
+  <url>
     <loc>http://gabrielhoffman.github.io/crumblr/articles/vst.html</loc>
   </url>
   <url>
@@ -26,6 +29,9 @@
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/crumblr/reference/IFNCellCounts.html</loc>
+  </url>
+  <url>
+    <loc>http://gabrielhoffman.github.io/crumblr/reference/buildClusterTree.html</loc>
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/crumblr/reference/cellCounts.html</loc>
@@ -47,6 +53,15 @@
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/crumblr/reference/plotScatterDensity.html</loc>
+  </url>
+  <url>
+    <loc>http://gabrielhoffman.github.io/crumblr/reference/plotTreeTest.html</loc>
+  </url>
+  <url>
+    <loc>http://gabrielhoffman.github.io/crumblr/reference/studentize-method.html</loc>
+  </url>
+  <url>
+    <loc>http://gabrielhoffman.github.io/crumblr/reference/treeTest.html</loc>
   </url>
   <url>
     <loc>http://gabrielhoffman.github.io/crumblr/reference/vst-method.html</loc>

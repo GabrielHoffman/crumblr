@@ -110,7 +110,7 @@ plotTreeTest = function(tree, low="grey90", mid = "red", high="darkred"){
 	    scale_color_gradient2(name = bquote(-log[10]~FDR), limits=c(0,4), low=low, mid=mid, high=high, midpoint=-log10(0.01)) +
 	    scale_size_area(name = bquote(-log[10]~FDR), limits=c(0,4)) +
 	    geom_text2(aes(label = '+', subset=FDR < 0.05), color = "white", size=6, vjust=.3, hjust=.5) +
-	    theme(legend.position="bottom", aspect.ratio=1)
+	    theme(legend.position="bottom", aspect.ratio=1, plot.title = element_text(hjust = 0.5))
 }
 
 

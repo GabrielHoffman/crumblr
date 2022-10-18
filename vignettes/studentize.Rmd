@@ -102,13 +102,13 @@ cobj = crumblr(counts[,keep], tau=1)
 `crumblr` performs the centered log-ratio (CLR) transform, and computes the observation-level precision weights.  The VST scales the transformed values using the precision weights.  Here we see that the `vst()` is almost linear for sufficiently large CLR values.
 
 ```{r vst}
-df_vst = vst(cobj)
+df_vst = studentize(cobj)
 
 plotScatterDensity(cobj$E[,1], df_vst[,1]) + 
 		geom_abline(color="red", size=.3) + 
 		ggtitle("crumblr + vst transform") +
 		xlab("CLR") +
-		ylab("crumblr + vst")
+		ylab("crumblr + studentize")
 ```
 
 ### Concordance between samples for each transform
@@ -130,7 +130,7 @@ fig2 = plotScatterDensity(cobj$E[,1], cobj$E[,2]) +
 
 fig3 = plotScatterDensity(df_vst[,1], df_vst[,2]) + 
 			geom_abline(color="red", size=.3) + 
-			ggtitle("crumblr + vst")  +
+			ggtitle("crumblr + studentize")  +
 			xlab("Sample 1") +
 			ylab("Sample 2") 
 
