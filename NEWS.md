@@ -1,3 +1,6 @@
+# crumblr 0.99.4
+ - enforce `variancePartition` version dependency
+
 # crumblr 0.99.3
  - `buildClusterTree()` uses cosine distance by default
  - `treeTest()` now uses `method="treeTest"` by default
