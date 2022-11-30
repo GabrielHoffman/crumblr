@@ -1,3 +1,7 @@
+# crumblr 0.99.5
+ - Nov 29, 2022
+ - bug fix and update docs
+
 # crumblr 0.99.4
  - enforce `variancePartition` version dependency
 

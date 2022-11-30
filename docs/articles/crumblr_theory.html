@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">crumblr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,8 +86,8 @@
                         <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
-            <h4 data-toc-skip class="date">Run on 2022-10-17
-22:16:41</h4>
+            <h4 data-toc-skip class="date">Run on 2022-11-29
+14:16:08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/GabrielHoffman/crumblr/blob/HEAD/vignettes/crumblr_theory.Rmd" class="external-link"><code>vignettes/crumblr_theory.Rmd</code></a></small>
       <div class="d-none name"><code>crumblr_theory.Rmd</code></div>
@@ -116,6 +116,9 @@ rmarkdown::render("crumblr_theory.Rmd");
 
 --->
 <div style="text-align: justify;">
+<div class="section level2">
+<h2 id="asymptotic-normal-approximation">Asymptotic normal approximation<a class="anchor" aria-label="anchor" href="#asymptotic-normal-approximation"></a>
+</h2>
 <p>Let the vector <span class="math inline">\({\bf p}\)</span> be the
 true fractions across <span class="math inline">\(D\)</span> categories.
 Consider <span class="math inline">\(C\)</span> total counts sampled
@@ -136,28 +139,46 @@ is</p>
 \frac{1}{\hat p_i} - \frac{2}{ D \hat p_i} + \frac{1}{D^2}\sum_{j=1}^D
 \frac{1}{\hat p_j}  \right]. \label{eqn2}
 \end{equation}\]</span></p>
+</div>
+<div class="section level2">
+<h2 id="simulations">Simulations<a class="anchor" aria-label="anchor" href="#simulations"></a>
+</h2>
 <p>The sampling variance is derived from asymototic theory, so we
 examine its behavior for finite total counts. Here we evalute the
-emprical variance from <span class="math inline">\(5,000\)</span> draws
+emprical variance from <span class="math inline">\(1,000\)</span> draws
 from a Dirichlet-multinomial distribution while varying <span class="math inline">\(D\)</span>, <span class="math inline">\(\tau\)</span>, <span class="math inline">\(C\)</span>. A pseudocount of 0.5 is added to the
 observed counts since the asymptotic theory is not defined for counts of
-zero. See plots below.</p>
-<!---
-The grey line indicates 3 counts, so for $nC30$ the line indicates $3/30=0.1$.  For the first case of $D=2$, the empirical and asymptotic variances are symmetric around $1/2$.  In the second case of $D=8$, the variances are no longer symmetric.
---->
-<p>The asymptotic standard deviation shows remarkable agreement with the
-emprical results even for small values of <span class="math inline">\(C\)</span>, <em>when at least 2 counts are
+zero.</p>
+<p>Here we plot the standard deviation after CLR transform from the
+empirical DMN and the asymptotic normal approximation under a range of
+conditions. Results are shown for instances with at least 2 counts.</p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="d2-categories">D=2 categories<a class="anchor" aria-label="anchor" href="#d2-categories"></a>
+</h3>
+<p><img src="crumblr_theory_files/figure-html/plot1-1.png" width="700" style="display: block; margin: auto;"></p>
+</div>
+<div class="section level3">
+<h3 id="d15-categories">D=15 categories<a class="anchor" aria-label="anchor" href="#d15-categories"></a>
+</h3>
+<p><img src="crumblr_theory_files/figure-html/plot2-1.png" width="700" style="display: block; margin: auto;"></p>
+</div>
+<div class="section level3" style="text-align: justify;">
+<h3 id="interpretation">Interpretation<a class="anchor" aria-label="anchor" href="#interpretation"></a>
+</h3>
+<p>The asymptotic standard deviation shows good agreement with the
+empirical results even for small values of <span class="math inline">\(C\)</span>, <em>when at least 2 counts are
 observed</em>. In practice, it is often reasonable to assume a
 sufficient number of counts before a variable is included in an
 analysis. Importantly, with less than 2 counts the asymptotic theory
-gives a <em>larger</em> standard deviation than the emprical results.
-Therefore, this approach is conservative and should not underestimate
-the true amount of variation. The asymptotic normal approximation is
-most accurate for large total counts <span class="math inline">\(C\)</span>, large proportions <span class="math inline">\(p\)</span>, and small overdispersion <span class="math inline">\(\tau\)</span>.</p>
+gives a <em>larger</em> standard deviation than the emprical results
+(results not shown). Therefore, this approach is conservative and should
+not underestimate the true amount of variation. The asymptotic normal
+approximation is most accurate for large total counts <span class="math inline">\(C\)</span>, large proportions <span class="math inline">\(p\)</span>, and small overdispersion <span class="math inline">\(\tau\)</span>.</p>
 </div>
 <div class="section level4">
-<h4 id="crumblr-is-an-important-special-case">
-<code>crumblr</code> is an important special case<a class="anchor" aria-label="anchor" href="#crumblr-is-an-important-special-case"></a>
+<h4 id="consideration-of-overdispersion">Consideration of overdispersion<a class="anchor" aria-label="anchor" href="#consideration-of-overdispersion"></a>
 </h4>
 <p>Based on Equation (2), the variance of the CLR-transformed
 proportions is a <em>linear</em> function of <span class="math inline">\(\tau\)</span>. Importantly, downstream analysis of
@@ -171,21 +192,6 @@ be set to 1 instead of being estimated from the data.</p>
 <code>crumblr(counts, tau=NULL)</code>. This calls
 <code><a href="../reference/dmn.mle.html">dmn.mle()</a></code> to estimate the parameters of the DMN
 distribution and is substantially faster than alternatives.</p>
-</div>
-<div class="section level3">
-<h3 id="d2-categories">D=2 categories<a class="anchor" aria-label="anchor" href="#d2-categories"></a>
-</h3>
-<p>True vector of fractions <span class="math inline">\(\bf p\)</span>
-is (0.0033, 0.996).</p>
-<p><img src="crumblr_theory_files/figure-html/plot1-1.png" width="700"></p>
-</div>
-<div class="section level3">
-<h3 id="d25-categories">D=25 categories<a class="anchor" aria-label="anchor" href="#d25-categories"></a>
-</h3>
-<p>True vector of fractions <span class="math inline">\(\bf p\)</span>
-is (0.0033, 0.2300, 0.0333,…) with all remaining elements also being
-0.0333.</p>
-<p><img src="crumblr_theory_files/figure-html/plot2-1.png" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

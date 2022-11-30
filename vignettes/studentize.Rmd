@@ -25,7 +25,7 @@ https://www.kloppenborg.ca/2021/06/long-running-vignettes/
 cd /Users/gabrielhoffman/workspace/repos/crumblr/vignettes
 R
 
-rmarkdown::render('vst.Rmd')
+rmarkdown::render('studentize.Rmd')
 
 
 

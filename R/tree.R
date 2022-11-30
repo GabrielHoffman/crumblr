@@ -87,10 +87,11 @@ NameInternalNodes = function(tb){
 #' # NOTE: for example only
 #' # Create clustering using prior knowledge 
 #' # or single cell data
-#' hc = hclust(dist(t(cellCounts)))
+#' cellFractions = cellCounts / rowSums(cellCounts)
+#' hc = hclust(dist(t(cellFractions)))
 #' 
 #' # Perform multivariate test across the hierarchy
-#' res = treeTest( fit, cobj, hc, coef="StimStatusstim", method="RE2C")
+#' res = treeTest( fit, cobj, hc, coef="StimStatusstim")
 #' 
 #' # Plot hierarchy and testing results
 #' # Adjust xlim() until text fits in window 
@@ -144,10 +145,11 @@ plotTreeTest = function(tree, low="grey90", mid = "red", high="darkred"){
 #' # NOTE: for example only
 #' # Create clustering using prior knowledge 
 #' # or single cell data
-#' hc = hclust(dist(t(cellCounts)))
+#' cellFractions = cellCounts / rowSums(cellCounts)
+#' hc = hclust(dist(t(cellFractions)))
 #' 
 #' # Perform multivariate test across the hierarchy
-#' res = treeTest( fit, cobj, hc, coef="StimStatusstim", method="RE2C")
+#' res = treeTest( fit, cobj, hc, coef="StimStatusstim")
 #' 
 #' # Plot hierarchy and testing results
 #' # Adjust xlim() until text fits in window 
@@ -158,6 +160,8 @@ plotTreeTest = function(tree, low="grey90", mid = "red", high="darkred"){
 #' @importFrom stats p.adjust
 #' @export
 treeTest = function(fit, obj, hc, coef, method = c("FE", "RE2C", "tstat", "sidak", "fisher")){
+
+	method = match.arg(method)
 
 	# get tips for each node
 	testSets = getTips(hc)

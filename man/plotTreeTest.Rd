@@ -36,10 +36,11 @@ fit = eBayes(fit)
 # NOTE: for example only
 # Create clustering using prior knowledge 
 # or single cell data
-hc = hclust(dist(t(cellCounts)))
+cellFractions = cellCounts / rowSums(cellCounts)
+hc = hclust(dist(t(cellFractions)))
 
 # Perform multivariate test across the hierarchy
-res = treeTest( fit, cobj, hc, coef="StimStatusstim", method="RE2C")
+res = treeTest( fit, cobj, hc, coef="StimStatusstim")
 
 # Plot hierarchy and testing results
 # Adjust xlim() until text fits in window 
