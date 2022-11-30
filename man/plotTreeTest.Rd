@@ -35,7 +35,8 @@ fit = eBayes(fit)
 # Create a hierarchical cluster of cell types
 # NOTE: for example only
 # Create clustering using prior knowledge 
-# or single cell data
+# or single cell data.
+# Using dreamlet::buildClusterTreeFromPB() is recommended
 cellFractions = cellCounts / rowSums(cellCounts)
 hc = hclust(dist(t(cellFractions)))
 

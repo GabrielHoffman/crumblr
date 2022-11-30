@@ -47,6 +47,7 @@ fit = eBayes(fit)
 # NOTE: for example only
 # Create clustering using prior knowledge 
 # or single cell data
+# Using dreamlet::buildClusterTreeFromPB() is recommended
 cellFractions = cellCounts / rowSums(cellCounts)
 hc = hclust(dist(t(cellFractions)))
 

@@ -101,7 +101,8 @@
 <span class="r-in"><span><span class="co"># Create a hierarchical cluster of cell types</span></span></span>
 <span class="r-in"><span><span class="co"># NOTE: for example only</span></span></span>
 <span class="r-in"><span><span class="co"># Create clustering using prior knowledge </span></span></span>
-<span class="r-in"><span><span class="co"># or single cell data</span></span></span>
+<span class="r-in"><span><span class="co"># or single cell data.</span></span></span>
+<span class="r-in"><span><span class="co"># Using dreamlet::buildClusterTreeFromPB() is recommended</span></span></span>
 <span class="r-in"><span><span class="va">cellFractions</span> <span class="op">=</span> <span class="va">cellCounts</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">cellCounts</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">hc</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html" class="external-link">hclust</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">cellFractions</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
