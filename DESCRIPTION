@@ -52,5 +52,4 @@ RoxygenNote: 7.2.2
 RdMacros: Rdpack
 LazyData: false
 Remotes: 
-    github::GabrielHoffman/variancePartition,
-    github::GabrielHoffman/dreamlet
+    github::GabrielHoffman/variancePartition
