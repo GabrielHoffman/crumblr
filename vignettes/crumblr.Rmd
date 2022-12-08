@@ -51,10 +51,9 @@ Here we consider counts for 8 cell types from quantified using single cell RNA-s
 
 The functions here incorporate the precision weights:
 
-- `variancePartition::fitExtractVarPartModel` 
-- `variancePartition::dream`
-- `crumblr::studentize`
-- `limma::lmFit`
+- `variancePartition::fitExtractVarPartModel()` 
+- `variancePartition::dream()`
+- `limma::lmFit()`
 
 ## Differential testing
 Here we evaluate whether the observed cell proportions change in response to interferon β.  Given the results here, we cannot reject the null hypothesis that interferon β does not affect the cell type proportions.
@@ -90,11 +89,8 @@ Performing PCA on the transformed cell counts indicates that the samples cluster
 ```{r pca, fig.height=5, fig.width=5}
 library(ggplot2)
 
-# Apply Student transform
-M_student = studentize(cobj)
-
 # Perform PCA
-pca = prcomp(t(M_student))
+pca = prcomp(t(cobj$E))
 
 # merge with metadata 
 df_pca = merge(pca$x, info, by="row.names")
@@ -113,7 +109,7 @@ ggplot(df_pca, aes(PC1, PC2, color=as.character(ind),  shape=StimStatus)) +
 ## Hierachical clustering
 The samples from the same subject also cluster together.
 ```{r hclust}
-heatmap(M_student)
+heatmap(cobj$E)
 ```
 
 ## Variance partitioning
@@ -128,7 +124,6 @@ vp = fitExtractVarPartModel( cobj, ~ ind + StimStatus, info)
 # Plot variance fractions
 plotPercentBars(vp)
 ```
-
 
 
 

@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">crumblr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.6</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,8 +51,8 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/crumblr_theory.html">crumblr: compare emprical and asymptotic theory</a>
-    <a class="dropdown-item" href="../articles/studentize.html">Student transform</a>
+    <a class="dropdown-item" href="../articles/crumblr_theory.html">Normal approximation vs. empirical simulation</a>
+    <a class="dropdown-item" href="../articles/crumblr_treeTest.html">Multivariate testing along a tree</a>
   </div>
 </li>
 <li class="nav-item">
@@ -86,8 +86,8 @@
                         <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
-            <h4 data-toc-skip class="date">Run on 2022-10-17
-22:16:40</h4>
+            <h4 data-toc-skip class="date">Run on 2022-12-07
+20:21:43</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/GabrielHoffman/crumblr/blob/HEAD/vignettes/crumblr.Rmd" class="external-link"><code>vignettes/crumblr.Rmd</code></a></small>
       <div class="d-none name"><code>crumblr.Rmd</code></div>
@@ -111,10 +111,9 @@ from 8 subjects <a href="https://www.nature.com/articles/nbt.4042" class="extern
 2018)</a>.</p>
 <p>The functions here incorporate the precision weights:</p>
 <ul>
-<li><code><a href="http://gabrielhoffman.github.io/variancePartition/reference/fitExtractVarPartModel-method.html" class="external-link">variancePartition::fitExtractVarPartModel</a></code></li>
-<li><code><a href="http://gabrielhoffman.github.io/variancePartition/reference/dream-method.html" class="external-link">variancePartition::dream</a></code></li>
-<li><code><a href="../reference/studentize-method.html">crumblr::studentize</a></code></li>
-<li><code><a href="https://rdrr.io/pkg/limma/man/lmFit.html" class="external-link">limma::lmFit</a></code></li>
+<li><code><a href="http://gabrielhoffman.github.io/variancePartition/reference/fitExtractVarPartModel-method.html" class="external-link">variancePartition::fitExtractVarPartModel()</a></code></li>
+<li><code><a href="http://gabrielhoffman.github.io/variancePartition/reference/dream-method.html" class="external-link">variancePartition::dream()</a></code></li>
+<li><code><a href="https://rdrr.io/pkg/limma/man/lmFit.html" class="external-link">limma::lmFit()</a></code></li>
 </ul>
 <div class="section level2">
 <h2 id="differential-testing">Differential testing<a class="anchor" aria-label="anchor" href="#differential-testing"></a>
@@ -145,7 +144,7 @@ proportions.</p>
 <span><span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/ebayes.html" class="external-link">eBayes</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Extract results for each cell type</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html" class="external-link">topTable</a></span><span class="op">(</span><span class="va">fit</span>, coef<span class="op">=</span><span class="st">"StimStatusstim"</span>, number<span class="op">=</span><span class="cn">Inf</span>, sort.by<span class="op">=</span><span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">topTable</span><span class="op">(</span><span class="va">fit</span>, coef<span class="op">=</span><span class="st">"StimStatusstim"</span>, number<span class="op">=</span><span class="cn">Inf</span>, sort.by<span class="op">=</span><span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                         logFC    AveExpr          t   P.Value adj.P.Val         B</span></span>
 <span><span class="co">## B cells           -0.09825871  0.5516882 -0.6779201 0.5076669  0.823424 -4.746255</span></span>
 <span><span class="co">## CD14+ Monocytes   -0.12437220  1.2698117 -0.9560159 0.3535191  0.823424 -4.685558</span></span>
@@ -164,11 +163,8 @@ samples cluster based on subject rather than stimulation status.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Apply Student transform</span></span>
-<span><span class="va">M_student</span> <span class="op">=</span> <span class="fu"><a href="../reference/studentize-method.html">studentize</a></span><span class="op">(</span><span class="va">cobj</span><span class="op">)</span></span>
-<span></span>
 <span><span class="co"># Perform PCA</span></span>
-<span><span class="va">pca</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/prcomp.html" class="external-link">prcomp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">M_student</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">pca</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/prcomp.html" class="external-link">prcomp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">cobj</span><span class="op">$</span><span class="va">E</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># merge with metadata </span></span>
 <span><span class="va">df_pca</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">pca</span><span class="op">$</span><span class="va">x</span>, <span class="va">info</span>, by<span class="op">=</span><span class="st">"row.names"</span><span class="op">)</span></span>
@@ -189,7 +185,7 @@ samples cluster based on subject rather than stimulation status.</p>
 </h2>
 <p>The samples from the same subject also cluster together.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/heatmap.html" class="external-link">heatmap</a></span><span class="op">(</span><span class="va">M_student</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/heatmap.html" class="external-link">heatmap</a></span><span class="op">(</span><span class="va">cobj</span><span class="op">$</span><span class="va">E</span><span class="op">)</span></span></code></pre></div>
 <p><img src="crumblr_files/figure-html/hclust-1.png" width="700"></p>
 </div>
 <div class="section level2">

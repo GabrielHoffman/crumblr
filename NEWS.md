@@ -1,3 +1,7 @@
+# crumblr 0.99.6
+ - Dec 7, 2022
+ - update docs, add vignette, dependencies
+
 # crumblr 0.99.5
  - Nov 29, 2022
  - bug fix and update docs

@@ -1,5 +1,5 @@
 ---
-title: "crumblr: compare emprical and asymptotic theory"
+title: "Normal approximation vs. empirical simulation"
 subtitle: ''
 author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
 date: "Run on `r Sys.time()`"
