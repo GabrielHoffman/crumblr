@@ -26,11 +26,11 @@ Yet CLR-transformed data is still highly heteroskedastic: the precision of measu
 
 
 
-
 ### Install
 ```r
-# repo is currently private, so need to include your userid and password
-devtools::install_github("GabrielHoffman/crumblr", auth_token=XXXXX)
+# 1) Make sure Bioconductor is installed
+# 2) Install crumblr and dependencies:
+devtools::install_github("DiseaseNeurogenomics/crumblr")
 ```
 
 ### Introduction to compositional data analysis

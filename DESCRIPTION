@@ -8,8 +8,8 @@ Description: Crumblr enables analysis of count ratio data using precision weight
 VignetteBuilder: knitr
 License: Artistic-2.0
 Encoding: UTF-8
-URL: https://gabrielhoffman.github.io/crumblr
-BugReports: https://github.com/GabrielHoffman/crumblr/issues
+URL: https://DiseaseNeurogenomics.github.io/crumblr
+BugReports: https://github.com/DiseaseNeurogenomics/crumblr/issues
 Suggests:
     BiocStyle,
     knitr,
@@ -26,6 +26,7 @@ biocViews:
     DifferentialExpression,
     BatchEffect,
     QualityControl,
+    SingleCell,
     Regression,
     Epigenetics,
     FunctionalGenomics,
@@ -51,5 +52,3 @@ Imports:
 RoxygenNote: 7.2.2
 RdMacros: Rdpack
 LazyData: false
-Remotes: 
-    github::GabrielHoffman/variancePartition
