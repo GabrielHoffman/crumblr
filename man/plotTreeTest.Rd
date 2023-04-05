@@ -4,7 +4,13 @@
 \alias{plotTreeTest}
 \title{Plot tree with results from multivariate testing}
 \usage{
-plotTreeTest(tree, low = "grey90", mid = "red", high = "darkred")
+plotTreeTest(
+  tree,
+  low = "grey90",
+  mid = "red",
+  high = "darkred",
+  xmax.scale = 1.5
+)
 }
 \arguments{
 \item{tree}{phylo object storing tree}
@@ -14,6 +20,8 @@ plotTreeTest(tree, low = "grey90", mid = "red", high = "darkred")
 \item{mid}{mid color on gradient}
 
 \item{high}{high color on gradient}
+
+\item{xmax.scale}{expand the x-axis by this factor so leaf labels fit in the plot}
 }
 \description{
 Plot tree with results from multivariate testing

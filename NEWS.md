@@ -1,3 +1,7 @@
+# crumblr 0.99.7
+ - April 5, 2023
+ - fix plotting bug in `plotTreeTest()`
+
 # crumblr 0.99.6
  - Dec 7, 2022
  - update docs, add vignette, dependencies
