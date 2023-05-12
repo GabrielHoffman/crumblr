@@ -1,5 +1,5 @@
 # crumblr 0.99.8
- - April 5, 2023
+ - May 12, 2023
  - in `treeTest()` add argument `shrink.cov = TRUE`.  This will give slightly different p-values, but protects against false positives when the number of features get large compared to the sample size
 
 # crumblr 0.99.7
