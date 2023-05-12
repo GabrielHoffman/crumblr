@@ -52,7 +52,8 @@ hc = hclust(dist(t(cellFractions)))
 res = treeTest( fit, cobj, hc, coef="StimStatusstim")
 
 # Plot hierarchy and testing results
-# Adjust xlim() until text fits in window 
-plotTreeTest(res) + xlim(0, 7)
+plotTreeTest(res) 
 
+# Extract results for first 3 nodes
+res[1:3,]
 }

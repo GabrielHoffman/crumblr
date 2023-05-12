@@ -1,12 +1,12 @@
 pandoc: 2.19.2
-pkgdown: 2.0.6
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   crumblr: crumblr.html
   crumblr_theory: crumblr_theory.html
   crumblr_treeTest: crumblr_treeTest.html
-last_built: 2023-01-18T20:22Z
+last_built: 2023-05-12T19:51Z
 urls:
-  reference: http://gabrielhoffman.github.io/crumblr/reference
-  article: http://gabrielhoffman.github.io/crumblr/articles
+  reference: http://DiseaseNeurogenomics.github.io/crumblr/reference
+  article: http://DiseaseNeurogenomics.github.io/crumblr/articles
 
