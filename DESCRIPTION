@@ -42,7 +42,7 @@ Imports:
     Rdpack,
     viridis,
     tidytree,
-    variancePartition (>= 2.0.1),
+    variancePartition (>= 1.31.6),
     SingleCellExperiment,
     ggtree,
     stylo,
