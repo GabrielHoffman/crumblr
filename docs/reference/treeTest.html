@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">crumblr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.9</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,7 +66,7 @@
 <span>  <span class="va">obj</span>,</span>
 <span>  <span class="va">hc</span>,</span>
 <span>  <span class="va">coef</span>,</span>
-<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FE"</span>, <span class="st">"RE2C"</span>, <span class="st">"tstat"</span>, <span class="st">"sidak"</span>, <span class="st">"fisher"</span><span class="op">)</span>,</span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FE.empirical"</span>, <span class="st">"FE"</span>, <span class="st">"RE2C"</span>, <span class="st">"tstat"</span>, <span class="st">"sidak"</span>, <span class="st">"fisher"</span><span class="op">)</span>,</span>
 <span>  shrink.cov <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -90,7 +90,7 @@
 
 
 <dt>method</dt>
-<dd><p>statistical method used to perform multivariate test.  See details.  <code>'FE'</code> is a fixed effect test that models the covariance between coefficients. <code>'RE2C'</code> is a random effect test of heterogeneity of the estimated coefficients that models the covariance between coefficients, and also incorporates a fixed effects test too. <code>'tstat'</code> combines the t-statistics and models the covariance between coefficients. <code>'sidak'</code> returns the smallest p-value and accounting for the number of tests. <code>'fisher'</code> combines the p-value using Fisher's method assuming independent tests.</p></dd>
+<dd><p>statistical method used to perform multivariate test.  See details.  <code>'FE'</code> is a fixed effect test that models the covariance between coefficients. <code>'FE.empirical'</code> use compute empirical p-values by sampling from the null distribution and fitting with a gamma. <code>'RE2C'</code> is a random effect test of heterogeneity of the estimated coefficients that models the covariance between coefficients, and also incorporates a fixed effects test too. <code>'tstat'</code> combines the t-statistics and models the covariance between coefficients. <code>'sidak'</code> returns the smallest p-value and accounting for the number of tests. <code>'fisher'</code> combines the p-value using Fisher's method assuming independent tests.</p></dd>
 
 
 <dt>shrink.cov</dt>
@@ -114,36 +114,36 @@
 <span class="r-in"><span><span class="co">#  https://doi.org/10.1038/nbt.4042</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">IFNCellCounts</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Apply crumblr transformation </span></span></span>
-<span class="r-in"><span><span class="va">cobj</span> <span class="op">=</span> <span class="fu"><a href="crumblr.html">crumblr</a></span><span class="op">(</span><span class="va">cellCounts</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Apply crumblr transformation</span></span></span>
+<span class="r-in"><span><span class="va">cobj</span> <span class="op">&lt;-</span> <span class="fu"><a href="crumblr.html">crumblr</a></span><span class="op">(</span><span class="va">cellCounts</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Use dream workflow to analyze each cell separately</span></span></span>
-<span class="r-in"><span><span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/dream-method.html" class="external-link">dream</a></span><span class="op">(</span><span class="va">cobj</span>, <span class="op">~</span> <span class="va">StimStatus</span> <span class="op">+</span> <span class="va">ind</span>, <span class="va">info</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/ebayes.html" class="external-link">eBayes</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/dream-method.html" class="external-link">dream</a></span><span class="op">(</span><span class="va">cobj</span>, <span class="op">~</span> <span class="va">StimStatus</span> <span class="op">+</span> <span class="va">ind</span>, <span class="va">info</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/ebayes.html" class="external-link">eBayes</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Create a hierarchical cluster of cell types</span></span></span>
 <span class="r-in"><span><span class="co"># NOTE: for example only</span></span></span>
-<span class="r-in"><span><span class="co"># Create clustering using prior knowledge </span></span></span>
+<span class="r-in"><span><span class="co"># Create clustering using prior knowledge</span></span></span>
 <span class="r-in"><span><span class="co"># or single cell data</span></span></span>
 <span class="r-in"><span><span class="co"># Using dreamlet::buildClusterTreeFromPB() is recommended</span></span></span>
-<span class="r-in"><span><span class="va">cellFractions</span> <span class="op">=</span> <span class="va">cellCounts</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">cellCounts</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">hc</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html" class="external-link">hclust</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">cellFractions</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cellFractions</span> <span class="op">&lt;-</span> <span class="va">cellCounts</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">cellCounts</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">hc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html" class="external-link">hclust</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">cellFractions</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Perform multivariate test across the hierarchy</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">=</span> <span class="fu">treeTest</span><span class="op">(</span> <span class="va">fit</span>, <span class="va">cobj</span>, <span class="va">hc</span>, coef<span class="op">=</span><span class="st">"StimStatusstim"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">treeTest</span><span class="op">(</span><span class="va">fit</span>, <span class="va">cobj</span>, <span class="va">hc</span>, coef <span class="op">=</span> <span class="st">"StimStatusstim"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Plot hierarchy and testing results</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plotTreeTest.html">plotTreeTest</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="treeTest-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Extract results for first 3 nodes</span></span></span>
-<span class="r-in"><span><span class="va">res</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">res</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 7</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    node   stat pvalue n_features lambda method   FDR</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     1 -<span style="color: #BB0000;">0.678</span>  0.508          1      1 FE     0.927</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>     2 -<span style="color: #BB0000;">0.956</span>  0.354          1      1 FE     0.927</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>     3 -<span style="color: #BB0000;">0.473</span>  0.643          1      1 FE     0.927</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    node   stat pvalue n_features lambda method         FDR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     1 -<span style="color: #BB0000;">0.678</span>  0.508          1      1 FE.empirical 0.963</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>     2 -<span style="color: #BB0000;">0.956</span>  0.354          1      1 FE.empirical 0.963</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>     3 -<span style="color: #BB0000;">0.473</span>  0.643          1      1 FE.empirical 0.963</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

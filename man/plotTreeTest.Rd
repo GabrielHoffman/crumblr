@@ -33,27 +33,27 @@ library(variancePartition)
 #  https://doi.org/10.1038/nbt.4042
 data(IFNCellCounts)
 
-# Apply crumblr transformation 
-cobj = crumblr(cellCounts)
+# Apply crumblr transformation
+cobj <- crumblr(cellCounts)
 
 # Use dream workflow to analyze each cell separately
-fit = dream(cobj, ~ StimStatus + ind, info)
-fit = eBayes(fit)
+fit <- dream(cobj, ~ StimStatus + ind, info)
+fit <- eBayes(fit)
 
 # Create a hierarchical cluster of cell types
 # NOTE: for example only
-# Create clustering using prior knowledge 
+# Create clustering using prior knowledge
 # or single cell data.
 # Using dreamlet::buildClusterTreeFromPB() is recommended
-cellFractions = cellCounts / rowSums(cellCounts)
-hc = hclust(dist(t(cellFractions)))
+cellFractions <- cellCounts / rowSums(cellCounts)
+hc <- hclust(dist(t(cellFractions)))
 
 # Perform multivariate test across the hierarchy
-res = treeTest( fit, cobj, hc, coef="StimStatusstim")
+res <- treeTest(fit, cobj, hc, coef = "StimStatusstim")
 
 # Plot hierarchy and testing results
-plotTreeTest(res) 
+plotTreeTest(res)
 
 # Extract results for first 3 nodes
-res[1:3,]
+res[1:3, ]
 }

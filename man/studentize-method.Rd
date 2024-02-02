@@ -24,28 +24,31 @@ A Student transform scales the observed value but its standard error.  Here \cod
 }
 \examples{
 # set probability of each category
-prob = c(0.1, 0.2, 0.3, 0.5)
+prob <- c(0.1, 0.2, 0.3, 0.5)
 
 # number of total counts
-countsTotal = 300
+countsTotal <- 300
 
 # number of samples
-n_samples = 100
+n_samples <- 100
 
 # simulate counts from multinomial
-counts = t(rmultinom(n_samples, size = countsTotal, prob = prob))
-colnames(counts) = paste0("cat_", 1:length(prob))
-rownames(counts) = paste0("sample_", 1:n_samples)
+counts <- t(rmultinom(n_samples, size = countsTotal, prob = prob))
+colnames(counts) <- paste0("cat_", 1:length(prob))
+rownames(counts) <- paste0("sample_", 1:n_samples)
 
 # run crumblr on counts
-cobj = crumblr(counts)
+cobj <- crumblr(counts)
 
-# apply student transform 
-df_student = studentize(cobj)
+# apply student transform
+df_student <- studentize(cobj)
 
 # Perform PCA on student transformed data
-pca = prcomp(t(df_student))
-df_pca = as.data.frame(pca$x)
+pca <- prcomp(t(df_student))
+df_pca <- as.data.frame(pca$x)
 
-ggplot(df_pca, aes(PC1, PC2)) + geom_point() + theme_classic() + theme(aspect.ratio=1)
+ggplot(df_pca, aes(PC1, PC2)) +
+  geom_point() +
+  theme_classic() +
+  theme(aspect.ratio = 1)
 }

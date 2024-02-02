@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">crumblr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.9</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,8 +86,8 @@
                         <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
-            <h4 data-toc-skip class="date">Run on 2023-05-12
-15:52:13.40243</h4>
+            <h4 data-toc-skip class="date">Run on 2024-02-01
+21:50:50.685383</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DiseaseNeurogenomics/crumblr/blob/HEAD/vignettes/crumblr_treeTest.Rmd" class="external-link"><code>vignettes/crumblr_treeTest.Rmd</code></a></small>
       <div class="d-none name"><code>crumblr_treeTest.Rmd</code></div>
@@ -124,7 +124,7 @@ to compute pseudobulk before applying <code>crumblr</code>.</p>
 <span></span>
 <span><span class="co"># only keep singlet cells with sufficient reads</span></span>
 <span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/dge.html" class="external-link">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="op">]</span></span>
-<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>,<span class="fu">colData</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">'singlet'</span><span class="op">]</span></span>
+<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>, <span class="fu">colData</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">multiplets</span> <span class="op">==</span> <span class="st">"singlet"</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># compute QC metrics</span></span>
 <span><span class="va">qc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html" class="external-link">perCellQCMetrics</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span>
@@ -134,7 +134,7 @@ to compute pseudobulk before applying <code>crumblr</code>.</p>
 <span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">[</span>, <span class="op">!</span><span class="va">ol</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># set variable indicating stimulated (stim) or control (ctrl)</span></span>
-<span><span class="va">sce</span><span class="op">$</span><span class="va">StimStatus</span> <span class="op">=</span> <span class="va">sce</span><span class="op">$</span><span class="va">stim</span></span>
+<span><span class="va">sce</span><span class="op">$</span><span class="va">StimStatus</span> <span class="op">&lt;-</span> <span class="va">sce</span><span class="op">$</span><span class="va">stim</span></span>
 <span></span>
 <span><span class="co"># Since 'ind' is the individual and 'StimStatus' is the stimulus status,</span></span>
 <span><span class="co"># create unique identifier for each sample</span></span>
@@ -146,10 +146,11 @@ to compute pseudobulk before applying <code>crumblr</code>.</p>
 <span><span class="co"># cluster_id: variable in colData(sce) indicating cell clusters</span></span>
 <span><span class="co"># sample_id: variable in colData(sce) indicating sample id for aggregating cells</span></span>
 <span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://DiseaseNeurogenomics.github.io/dreamlet/reference/aggregateToPseudoBulk.html" class="external-link">aggregateToPseudoBulk</a></span><span class="op">(</span><span class="va">sce</span>,</span>
-<span>    assay <span class="op">=</span> <span class="st">"counts"</span>,     </span>
-<span>    cluster_id <span class="op">=</span> <span class="st">"cell"</span>,  </span>
-<span>    sample_id <span class="op">=</span> <span class="st">"id"</span>,</span>
-<span>    verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span>  assay <span class="op">=</span> <span class="st">"counts"</span>,</span>
+<span>  cluster_id <span class="op">=</span> <span class="st">"cell"</span>,</span>
+<span>  sample_id <span class="op">=</span> <span class="st">"id"</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="standard-crumblr-analysis">Standard <code>crumblr</code> analysis<a class="anchor" aria-label="anchor" href="#standard-crumblr-analysis"></a>
@@ -162,14 +163,14 @@ statistics.</p>
 <span></span>
 <span><span class="co"># crumblr transformation using</span></span>
 <span><span class="co"># cellCounts() to extract counts from pseudobulk</span></span>
-<span><span class="va">cobj</span> <span class="op">=</span> <span class="fu"><a href="../reference/crumblr.html">crumblr</a></span><span class="op">(</span><span class="fu"><a href="../reference/IFNCellCounts.html">cellCounts</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">cobj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/crumblr.html">crumblr</a></span><span class="op">(</span><span class="fu"><a href="../reference/IFNCellCounts.html">cellCounts</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Use dream workflow to analyze each cell separately</span></span>
-<span><span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/dream-method.html" class="external-link">dream</a></span><span class="op">(</span><span class="va">cobj</span>, <span class="op">~</span> <span class="va">StimStatus</span> <span class="op">+</span> <span class="va">ind</span>, <span class="fu">colData</span><span class="op">(</span><span class="va">pb</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/ebayes.html" class="external-link">eBayes</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/dream-method.html" class="external-link">dream</a></span><span class="op">(</span><span class="va">cobj</span>, <span class="op">~</span> <span class="va">StimStatus</span> <span class="op">+</span> <span class="va">ind</span>, <span class="fu">colData</span><span class="op">(</span><span class="va">pb</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/ebayes.html" class="external-link">eBayes</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># extract top results</span></span>
-<span><span class="fu">topTable</span><span class="op">(</span><span class="va">fit</span>, coef<span class="op">=</span><span class="st">"StimStatusstim"</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="fu">topTable</span><span class="op">(</span><span class="va">fit</span>, coef <span class="op">=</span> <span class="st">"StimStatusstim"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                         logFC    AveExpr          t   P.Value adj.P.Val         B</span></span>
 <span><span class="co">## Dendritic cells    0.32516900 -2.1849234  1.0895217 0.2923251  0.823424 -4.590653</span></span>
 <span><span class="co">## CD14+ Monocytes   -0.12437220  1.2698117 -0.9560159 0.3535191  0.823424 -4.685558</span></span>
@@ -198,14 +199,14 @@ package</a>.</p>
 <code class="sourceCode R"><span><span class="co"># Hierarchical clustering of cell types</span></span>
 <span><span class="co"># The tree is based on similarity between cell types</span></span>
 <span><span class="co"># based on gene expression</span></span>
-<span><span class="va">hcl</span> <span class="op">=</span> <span class="fu"><a href="http://DiseaseNeurogenomics.github.io/dreamlet/reference/buildClusterTreeFromPB.html" class="external-link">buildClusterTreeFromPB</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></span>
+<span><span class="va">hcl</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://DiseaseNeurogenomics.github.io/dreamlet/reference/buildClusterTreeFromPB.html" class="external-link">buildClusterTreeFromPB</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Perform multivariate test across the hierarchy</span></span>
 <span><span class="co"># Specify coefficient to test</span></span>
-<span><span class="va">res</span> <span class="op">=</span> <span class="fu"><a href="../reference/treeTest.html">treeTest</a></span><span class="op">(</span> <span class="va">fit</span>, <span class="va">cobj</span>, <span class="va">hcl</span>, coef<span class="op">=</span><span class="st">"StimStatusstim"</span><span class="op">)</span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/treeTest.html">treeTest</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">cobj</span>, <span class="va">hcl</span>, coef <span class="op">=</span> <span class="st">"StimStatusstim"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Plot hierarchy and testing results</span></span>
-<span><span class="co"># Adjust xlim() until text fits in window </span></span>
+<span><span class="co"># Adjust xlim() until text fits in window</span></span>
 <span><span class="fu"><a href="../reference/plotTreeTest.html">plotTreeTest</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">xlim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">7</span><span class="op">)</span></span></code></pre></div>
 <p><img src="crumblr_treeTest_files/figure-html/treeTest-1.png" width="700"></p>
 <p>In this example, no result passes the multiple testing cutoff.</p>

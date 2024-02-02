@@ -7,266 +7,254 @@
 
 # For each node and tip return the set of offspring tips
 
-#' @import tidytree 
-getTips = function(hc){
+#' @import tidytree
+getTips <- function(hc) {
+  # convert to table
+  tb <- as_tibble(as.phylo(hc))
 
-	# convert to table
-	tb = as_tibble(as.phylo(hc))
+  tipLabels <- hc$labels
 
-	tipLabels = hc$labels
+  # for each node, return the tips below it
+  res <- lapply(tb$node, function(id) {
+    # given node, identify offspring
+    nodes <- offspring(tb, id)$node
 
-	# for each node, return the tips below it
-	res = lapply(tb$node, function(id){
-		# given node, identify offspring
-		nodes = offspring(tb, id)$node
+    # if there are no offspring
+    if (length(nodes) == 0) {
+      # return the tip label
+      lab <- tb$label[match(id, tb$node)]
+    } else {
+      # get labels of offspring
+      labels <- tb$label[match(nodes, tb$node)]
 
-		# if there are no offspring
-		if( length(nodes) == 0){
-			# return the tip label
-			lab = tb$label[match(id, tb$node)]
-		}else{
-			# get labels of offspring
-			labels = tb$label[match(nodes, tb$node)]
-
-			# kepe only tip labels
-			lab = labels[labels %in% tipLabels]
-		}
-		lab
-	})
-	names(res) = tb$node
-	res
+      # kepe only tip labels
+      lab <- labels[labels %in% tipLabels]
+    }
+    lab
+  })
+  names(res) <- tb$node
+  res
 }
 
-# Assign names to internal nodes by concatenating 
+# Assign names to internal nodes by concatenating
 # names from the tips
-NameInternalNodes = function(tb){
+NameInternalNodes <- function(tb) {
+  # for each internal node
+  # assign name based on tips
+  df <- lapply(tb$node[is.na(tb$label)], function(id) {
+    labs <- offspring(tb, id)$label
+    txt <- paste0(labs[!is.na(labs)], collapse = "/")
 
-	# for each internal node
-	# assign name based on tips
-	df = lapply(tb$node[is.na(tb$label)], function(id){
+    data.frame(node = id, label = txt)
+  })
+  df <- do.call(rbind, df)
 
-		labs = offspring(tb, id)$label
-		txt = paste0(labs[!is.na(labs)], collapse='/')
+  # assign new labels
+  i <- match(df$node, tb$node)
+  tb$label[i] <- df$label
 
-		data.frame(node = id, label = txt)
-	})
-	df = do.call(rbind, df)
-
-	# assign new labels
-	i = match(df$node, tb$node)
-	tb$label[i] = df$label
-
-	tb
+  tb
 }
 
 
 #' Plot tree with results from multivariate testing
-#' 
+#'
 #' Plot tree with results from multivariate testing
-#' 
+#'
 #' @param tree phylo object storing tree
 #' @param low low color on gradient
 #' @param mid mid color on gradient
 #' @param high high color on gradient
 #' @param xmax.scale expand the x-axis by this factor so leaf labels fit in the plot
-#' 
+#'
 #' @examples
 #' library(variancePartition)
-#' 
+#'
 #' # Load cell counts from Kang, et al. (2018)
 #' #  https://doi.org/10.1038/nbt.4042
 #' data(IFNCellCounts)
-#' 
-#' # Apply crumblr transformation 
-#' cobj = crumblr(cellCounts)
-#' 
+#'
+#' # Apply crumblr transformation
+#' cobj <- crumblr(cellCounts)
+#'
 #' # Use dream workflow to analyze each cell separately
-#' fit = dream(cobj, ~ StimStatus + ind, info)
-#' fit = eBayes(fit)
-#' 
+#' fit <- dream(cobj, ~ StimStatus + ind, info)
+#' fit <- eBayes(fit)
+#'
 #' # Create a hierarchical cluster of cell types
 #' # NOTE: for example only
-#' # Create clustering using prior knowledge 
+#' # Create clustering using prior knowledge
 #' # or single cell data.
 #' # Using dreamlet::buildClusterTreeFromPB() is recommended
-#' cellFractions = cellCounts / rowSums(cellCounts)
-#' hc = hclust(dist(t(cellFractions)))
-#' 
+#' cellFractions <- cellCounts / rowSums(cellCounts)
+#' hc <- hclust(dist(t(cellFractions)))
+#'
 #' # Perform multivariate test across the hierarchy
-#' res = treeTest( fit, cobj, hc, coef="StimStatusstim")
-#' 
+#' res <- treeTest(fit, cobj, hc, coef = "StimStatusstim")
+#'
 #' # Plot hierarchy and testing results
-#' plotTreeTest(res) 
-#' 
+#' plotTreeTest(res)
+#'
 #' # Extract results for first 3 nodes
-#' res[1:3,]
+#' res[1:3, ]
 #' @import ggtree ggplot2
 #' @export
-plotTreeTest = function(tree, low="grey90", mid = "red", high="darkred", xmax.scale=1.5){
+plotTreeTest <- function(tree, low = "grey90", mid = "red", high = "darkred", xmax.scale = 1.5) {
+  # PASS R check
+  isTip <- label <- node <- FDR <- NULL
 
-	# PASS R check
-	isTip = label = node = FDR = NULL
+  fig <- ggtree(tree, branch.length = "none") +
+    geom_tiplab(color = "black", size = 3, hjust = 0, offset = .2) +
+    geom_point2(aes(label = node, color = pmin(4, -log10(FDR)), size = pmin(4, -log10(FDR)))) +
+    scale_color_gradient2(name = bquote(-log[10] ~ FDR), limits = c(0, 4), low = low, mid = mid, high = high, midpoint = -log10(0.01)) +
+    scale_size_area(name = bquote(-log[10] ~ FDR), limits = c(0, 4)) +
+    geom_text2(aes(label = "+", subset = FDR < 0.05), color = "white", size = 6, vjust = .3, hjust = .5) +
+    theme(legend.position = "bottom", plot.title = element_text(hjust = 0.5))
 
-	fig = ggtree(tree, branch.length = "none") + 
-	    geom_tiplab(color = "black", size=3, hjust=0, offset=.2) +
-	    geom_point2(aes(label = node, color=pmin(4,-log10(FDR)), size=pmin(4,-log10(FDR)))) + 
-	    scale_color_gradient2(name = bquote(-log[10]~FDR), limits=c(0,4), low=low, mid=mid, high=high, midpoint=-log10(0.01)) +
-	    scale_size_area(name = bquote(-log[10]~FDR), limits=c(0,4)) +
-	    geom_text2(aes(label = '+', subset=FDR < 0.05), color = "white", size=6, vjust=.3, hjust=.5) +
-	    theme(legend.position="bottom", plot.title = element_text(hjust = 0.5))
+  # get default max value of x-axis
+  xmax <- layer_scales(fig)$x$range$range[2]
 
-	# get default max value of x-axis
-	xmax = layer_scales(fig)$x$range$range[2]
-	
-	# increase x-axis width
-	fig + xlim(0, xmax*xmax.scale) 
+  # increase x-axis width
+  fig + xlim(0, xmax * xmax.scale)
 }
 
 
 
 #' Perform multivariate testing along a hierarchy
-#' 
+#'
 #' Perform multivariate testing using \code{mvTest()} along the nodes of tree
-#' 
+#'
 #' @param fit \code{MArrayLM} object return by \code{lmFit()} or \code{dream()}
 #' @param obj \code{EList} object returned by \code{voom()}
 #' @param hc hierarchical clustering as an \code{hclust} object
 #' @param coef name of coefficient to be extracted
 #' @param method statistical method used to perform multivariate test.  See details.  \code{'FE'} is a fixed effect test that models the covariance between coefficients. \code{'FE.empirical'} use compute empirical p-values by sampling from the null distribution and fitting with a gamma. \code{'RE2C'} is a random effect test of heterogeneity of the estimated coefficients that models the covariance between coefficients, and also incorporates a fixed effects test too. \code{'tstat'} combines the t-statistics and models the covariance between coefficients. \code{'sidak'} returns the smallest p-value and accounting for the number of tests. \code{'fisher'} combines the p-value using Fisher's method assuming independent tests.
 #' @param shrink.cov shrink the covariance matrix between coefficients using the Schafer-Strimmer method
-#' 
+#'
 #' @details See package \code{remaCor} for details about the \code{remaCor::RE2C()} test, and see \code{remaCor::LS()} for details about the fixed effect test.  When only 1 feature is selected, the original t-statistic and p-value are returned.
 #'
 #' @seealso \code{variancePartition::mvTest}
 #' @examples
 #' library(variancePartition)
-#' 
+#'
 #' # Load cell counts from Kang, et al. (2018)
 #' #  https://doi.org/10.1038/nbt.4042
 #' data(IFNCellCounts)
-#' 
-#' # Apply crumblr transformation 
-#' cobj = crumblr(cellCounts)
-#' 
+#'
+#' # Apply crumblr transformation
+#' cobj <- crumblr(cellCounts)
+#'
 #' # Use dream workflow to analyze each cell separately
-#' fit = dream(cobj, ~ StimStatus + ind, info)
-#' fit = eBayes(fit)
-#' 
+#' fit <- dream(cobj, ~ StimStatus + ind, info)
+#' fit <- eBayes(fit)
+#'
 #' # Create a hierarchical cluster of cell types
 #' # NOTE: for example only
-#' # Create clustering using prior knowledge 
+#' # Create clustering using prior knowledge
 #' # or single cell data
 #' # Using dreamlet::buildClusterTreeFromPB() is recommended
-#' cellFractions = cellCounts / rowSums(cellCounts)
-#' hc = hclust(dist(t(cellFractions)))
-#' 
+#' cellFractions <- cellCounts / rowSums(cellCounts)
+#' hc <- hclust(dist(t(cellFractions)))
+#'
 #' # Perform multivariate test across the hierarchy
-#' res = treeTest( fit, cobj, hc, coef="StimStatusstim")
-#' 
+#' res <- treeTest(fit, cobj, hc, coef = "StimStatusstim")
+#'
 #' # Plot hierarchy and testing results
 #' plotTreeTest(res)
-#' 
+#'
 #' # Extract results for first 3 nodes
-#' res[1:3,]
+#' res[1:3, ]
 #' @importFrom tidytree as_tibble left_join as.treedata
 #' @importFrom variancePartition mvTest
 #' @importFrom stats p.adjust
 #' @export
-treeTest = function(fit, obj, hc, coef, method = c("FE.empirical", "FE", "RE2C", "tstat", "sidak", "fisher"), shrink.cov = TRUE){
+treeTest <- function(fit, obj, hc, coef, method = c("FE.empirical", "FE", "RE2C", "tstat", "sidak", "fisher"), shrink.cov = TRUE) {
+  method <- match.arg(method)
 
-	method = match.arg(method)
+  # get tips for each node
+  testSets <- getTips(hc)
 
-	# get tips for each node
-	testSets = getTips(hc)
+  uniqTips <- unique(unlist(testSets))
 
-	uniqTips = unique(unlist(testSets))
+  if (!identical(sort(uniqTips), sort(rownames(fit)))) {
+    stop("Tree and fit have non-shared labels")
+  }
 
-	if( ! identical(sort(uniqTips), sort(rownames(fit))) ){
-		stop("Tree and fit have non-shared labels")
-	}
+  # for each node
+  res <- lapply(seq(length(testSets)), function(i) {
+    labels <- testSets[[i]]
 
-	# for each node
-	res = lapply(seq(length(testSets)), function(i){
+    # peform a multivariate test based on labels
+    res <- mvTest(fit, obj, labels, coef, method, shrink.cov)
 
-		labels = testSets[[i]]
+    tibble(node = as.integer(names(testSets)[i]), res)
+  })
+  res <- do.call(rbind, res)
 
-		# peform a multivariate test based on labels
-		res = mvTest(fit, obj, labels, coef, method, shrink.cov)
+  # convert to table
+  tb <- as_tibble(as.phylo(hc))
 
-		tibble(node = as.integer(names(testSets)[i]), res)
-	})
-	res = do.call(rbind, res)
+  # join to combine with test results
+  tb <- left_join(tb, res, by = "node")
 
-	# convert to table
-	tb = as_tibble(as.phylo(hc))
+  # assign names to internal nodes based on tips
+  tb <- NameInternalNodes(tb)
 
-	# join to combine with test results 
-	tb = left_join(tb, res, by="node")
+  tb$FDR <- p.adjust(tb$pvalue, "BH")
 
-	# assign names to internal nodes based on tips
-	tb = NameInternalNodes(tb)
-
-	tb$FDR = p.adjust(tb$pvalue, "BH")
-
-	as.treedata(tb)
+  as.treedata(tb)
 }
 
 #' Perform hierarchical clustering on reducedDim
 #'
-#' Perform hierarchical clustering dimension reduction from single cell expression data 
-#' 
+#' Perform hierarchical clustering dimension reduction from single cell expression data
+#'
 #' @param sce \code{SingleCellExperiment} object
 #' @param reduction field of reducedDims(sce) to use
 #' @param labelCol column in \code{SingleCellExperiment} storing cell type annotations
 #' @param method distance metric
-#' 
+#'
 #' @importFrom SingleCellExperiment reducedDim colData
 #' @importFrom stats dist hclust
 #' @importFrom stylo dist.cosine
 #' @export
-buildClusterTree <- function(sce, reduction, labelCol, method=c("cosine", "euclidean", "maximum", "manhattan", "canberra",
-          "binary", "minkowski")){
-  
-	method = match.arg(method)
+buildClusterTree <- function(sce, reduction, labelCol, method = c(
+                               "cosine", "euclidean", "maximum", "manhattan", "canberra",
+                               "binary", "minkowski"
+                             )) {
+  method <- match.arg(method)
 
-	if( ! labelCol %in% colnames(colData(sce)) ){
-		stop("labelCol must be a column in colData(sce)")
-	}
+  if (!labelCol %in% colnames(colData(sce))) {
+    stop("labelCol must be a column in colData(sce)")
+  }
 
-	# extract low dimensional embeddings
-	embeddings <- reducedDim(sce, reduction)
+  # extract low dimensional embeddings
+  embeddings <- reducedDim(sce, reduction)
 
-	# extract unique cell labels
-	lvls = colData(sce)[[labelCol]]
-	if( is.factor(lvls) ){
-		lvls = levels(lvls)
-	}else{
-		lvls = unique(lvls)
-	}
+  # extract unique cell labels
+  lvls <- colData(sce)[[labelCol]]
+  if (is.factor(lvls)) {
+    lvls <- levels(lvls)
+  } else {
+    lvls <- unique(lvls)
+  }
 
-	# for each cell type, return mean of each dimension
-	df <- lapply( lvls, function(x) {
-	    	idx = colData(sce)[[labelCol]] == x
+  # for each cell type, return mean of each dimension
+  df <- lapply(lvls, function(x) {
+    idx <- colData(sce)[[labelCol]] == x
 
-	    	colMeans(embeddings[idx,,drop=FALSE])
-	      })
-	df = do.call(rbind, df)
-	rownames(df) = lvls
+    colMeans(embeddings[idx, , drop = FALSE])
+  })
+  df <- do.call(rbind, df)
+  rownames(df) <- lvls
 
-	# compute pairwise distances
-	if( method == 'cosine'){
-		dst <- dist.cosine( df )
-	}else{
-		dst <- dist( df, method=method )
-	}
+  # compute pairwise distances
+  if (method == "cosine") {
+    dst <- dist.cosine(df)
+  } else {
+    dst <- dist(df, method = method)
+  }
 
- 	# perform clustering
- 	hclust( dst )
+  # perform clustering
+  hclust(dst)
 }
-
-
-
-
-
-
-

@@ -20,27 +20,27 @@ Plot the sd versus rank mean of each row like \code{vsn::meanSdPlot}.  Also show
 }
 \examples{
 # set probability of each category
-prob = runif(300)
+prob <- runif(300)
 
 # number of samples
-n_samples = 1000
+n_samples <- 1000
 
 # number of counts
-nCounts = 3000
+nCounts <- 3000
 
 # simulate counts from multinomial
-counts = t(rmultinom(n_samples, size = nCounts, prob = prob))
-colnames(counts) = paste0("cat_", 1:length(prob))
-rownames(counts) = paste0("sample_", 1:n_samples)
+counts <- t(rmultinom(n_samples, size = nCounts, prob = prob))
+colnames(counts) <- paste0("cat_", 1:length(prob))
+rownames(counts) <- paste0("sample_", 1:n_samples)
 
 # keep categories with at least 5 counts in at least 10 samples
-keep = colSums(counts > 5) > 10
+keep <- colSums(counts > 5) > 10
 
 # run crumblr on counts
-cobj = crumblr(counts[,keep])
+cobj <- crumblr(counts[, keep])
 
 # run student transform
-df_student = studentize(cobj)
+df_student <- studentize(cobj)
 
 # For each sample, plot rank of mean vs sd
 meanSdPlot(df_student) + ggtitle("crumblr student")

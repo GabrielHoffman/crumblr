@@ -1,3 +1,7 @@
+# crumblr 0.99.9
+ - Feb 1, 2024
+ - add `crumblr(..,method=method)` for `method %in% c("clr", "clr_2class")`
+
 # crumblr 0.99.8
  - May 12, 2023
  - in `treeTest()` add argument `shrink.cov = TRUE`.  This will give slightly different p-values, but protects against false positives when the number of features get large compared to the sample size

@@ -7,9 +7,9 @@
 \alias{cellCounts}
 \title{Cell counts following interferon treatment}
 \format{
-\itemize{    
-\item \code{info} is metadata for each sample
-\item \code{cellCounts} data.frame of counts for each sample
+\itemize{
+	\item \code{info} is metadata for each sample
+	\item \code{cellCounts} data.frame of counts for each sample
 }
 
 An object of class \code{data.frame} with 16 rows and 4 columns.

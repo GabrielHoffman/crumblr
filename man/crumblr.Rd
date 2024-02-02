@@ -6,24 +6,26 @@
 \alias{crumblr,data.frame-method}
 \title{Count ratio uncertainty modeling based linear regression}
 \usage{
-crumblr(counts, pseudocount = 0.5, tau = 1)
+crumblr(counts, pseudocount = 0.5, method = c("clr", "clr_2class"), tau = 1)
 
-\S4method{crumblr}{matrix}(counts, pseudocount = 0.5, tau = 1)
+\S4method{crumblr}{matrix}(counts, pseudocount = 0.5, method = c("clr", "clr_2class"), tau = 1)
 
-\S4method{crumblr}{data.frame}(counts, pseudocount = 0.5, tau = 1)
+\S4method{crumblr}{data.frame}(counts, pseudocount = 0.5, method = c("clr", "clr_2class"), tau = 1)
 }
 \arguments{
 \item{counts}{count data with samples as rows and variables are columns}
 
 \item{pseudocount}{added to counts to avoid issues with zeros}
 
+\item{method}{\code{"clr"} computes standard centered log ratio and precision weights based on the delta approximation. \code{"clr_2class"} computes the \code{clr()} transform for category \code{i} using 2 classes: 1) counts in category i, and 2) counts _not_ in category i.}
+
 \item{tau}{overdispersion parameter for Dirichlet multinomial.  If \code{NULL}, estimate from observed counts.}
 }
 \value{
 An \code{EList} object with the following components:
 \itemize{
- \item{E: }{numeric matrix of CLR transformed counts}
- \item{weights: }{numeric matrix of observation-level inverse-variance weights}
+ \item{\code{E}: }{numeric matrix of CLR transformed counts}
+ \item{\code{weights}: }{numeric matrix of observation-level inverse-variance weights}
 }
 }
 \description{
@@ -31,38 +33,39 @@ Count ratio uncertainty modeling based linear regression (crumblr) returns CLR-t
 }
 \details{
 Evalute the centered log ratio (CLR) transform of the count matrix, and the asymptotic theoretical variances of each transformed observation.  The asymptotic normal approximation is increasingly accurate for small overdispersion \eqn{\tau}, large total counts \eqn{C}, and large proportions \eqn{p}, but shows good agreement with the empirical results in most situtations. In practice, it is often reasonable to assume a sufficient number of counts before a variable is included in an analysis anyway.  But the feasability of this assumption is up to the user to determine.
+
+Given the array \code{p} storing proportions for one sample across all categories, the delta approximation uses the term \code{1/p}.  This can be unstable for small values of \code{p}, and the estimated variances can be sensitive to small changes in the proprtions.  To address this, the \code{"clr_2class"} method computes the \code{clr()} transform for category \code{i} using 2 classes: 1) counts in category i, and 2) counts _not_ in category i. Since class (2) now sums counts across all other categories, the small proportions are avoided and the variance estimates are more stable.
 }
 \examples{
-
 # set probability of each category
-prob = c(0.1, 0.2, 0.3, 0.5)
+prob <- c(0.1, 0.2, 0.3, 0.5)
 
 # number of total counts
-countsTotal = 300
+countsTotal <- 300
 
 # number of samples
-n_samples = 100
+n_samples <- 100
 
 # simulate info for each sample
-info = data.frame(Age = rgamma(n_samples, 50, 1))
-rownames(info) = paste0("sample_", 1:n_samples)
+info <- data.frame(Age = rgamma(n_samples, 50, 1))
+rownames(info) <- paste0("sample_", 1:n_samples)
 
 # simulate counts from multinomial
-counts = t(rmultinom(n_samples, size = countsTotal, prob = prob))
-colnames(counts) = paste0("cat_", 1:length(prob))
-rownames(counts) = paste0("sample_", 1:n_samples)
+counts <- t(rmultinom(n_samples, size = countsTotal, prob = prob))
+colnames(counts) <- paste0("cat_", 1:length(prob))
+rownames(counts) <- paste0("sample_", 1:n_samples)
 
 # run crumblr on counts
-cobj = crumblr(counts)
+cobj <- crumblr(counts)
 
 # run standard variancePartition analysis on crumblr results
 library(variancePartition)
 
-fit = dream(cobj, ~ Age, info)
-fit = eBayes(fit)
+fit <- dream(cobj, ~Age, info)
+fit <- eBayes(fit)
 
-topTable(fit, coef="Age", sort.by="none")
-
+topTable(fit, coef = "Age", sort.by = "none")
+#
 }
 \seealso{
 \code{limma::voom}, \code{variancePartition::dream}

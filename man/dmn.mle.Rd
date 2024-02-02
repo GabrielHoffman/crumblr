@@ -37,27 +37,30 @@ library(HMP)
 
 set.seed(1)
 
-n_samples = 1000
-n_counts = 5000
-alpha = c(500, 1000, 2000)
+n_samples <- 1000
+n_counts <- 5000
+alpha <- c(500, 1000, 2000)
 
 # Dirichlet.multinomial
-counts = Dirichlet.multinomial(rep(n_counts, n_samples), alpha)
+counts <- Dirichlet.multinomial(rep(n_counts, n_samples), alpha)
 
-fit = dmn.mle(counts)
+fit <- dmn.mle(counts)
 
 fit
 
 # overdispersion: true value
-a0 = sum(alpha)
-rhoSq = 1 / (a0 + 1)
-1 + rhoSq*(n_counts-1) 
+a0 <- sum(alpha)
+rhoSq <- 1 / (a0 + 1)
+1 + rhoSq * (n_counts - 1)
 
 # multinomial, so overdispersion is 1
-counts = t(rmultinom(n_samples, n_counts, prob=alpha / sum(alpha)))
+counts <- t(rmultinom(n_samples, n_counts, prob = alpha / sum(alpha)))
 
 dmn.mle(counts)
 
+#
+#
+#
 
 }
 \seealso{

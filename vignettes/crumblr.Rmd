@@ -25,19 +25,20 @@ rmarkdown::render('crumblr.Rmd')
 --->
 
 ```{r setup, echo=FALSE, results="hide"}
-knitr::opts_chunk$set(	tidy=FALSE, 
-												cache=TRUE,
-												echo=TRUE,
-                      	dev=c("png", "pdf"),
-                      	package.startup.message = FALSE,
-                      	message=FALSE, 
-                      	error=FALSE, 
-                      	warning=FALSE
-											  )
+knitr::opts_chunk$set(
+  tidy = FALSE,
+  cache = TRUE,
+  echo = TRUE,
+  dev = c("png", "pdf"),
+  package.startup.message = FALSE,
+  message = FALSE,
+  error = FALSE,
+  warning = FALSE
+)
 
 knitr::opts_chunk$set()
 
-options(width=100)
+options(width = 100)
 ```	
 
 
@@ -65,22 +66,22 @@ library(crumblr)
 #  https://doi.org/10.1038/nbt.4042
 data(IFNCellCounts)
 
-# Apply crumblr transformation 
+# Apply crumblr transformation
 # cobj is an EList object compatable with limma workflow
-# cobj$E stores transformed values 
+# cobj$E stores transformed values
 # cobj$weights stores precision weights
-cobj = crumblr(cellCounts)
+cobj <- crumblr(cellCounts)
 
 # Use variancePartition workflow to analyze each cell type
 # Perform regression on each cell type separately
 #  then use eBayes to shrink residual variance
-# Also compatible with limma::lmFit() 
+# Also compatible with limma::lmFit()
 library(variancePartition)
-fit = dream(cobj,  ~ StimStatus + ind, info)
-fit = eBayes(fit)
+fit <- dream(cobj, ~ StimStatus + ind, info)
+fit <- eBayes(fit)
 
 # Extract results for each cell type
-topTable(fit, coef="StimStatusstim", number=Inf, sort.by="none")
+topTable(fit, coef = "StimStatusstim", number = Inf, sort.by = "none")
 ```
 
 ## PCA
@@ -90,20 +91,21 @@ Performing PCA on the transformed cell counts indicates that the samples cluster
 library(ggplot2)
 
 # Perform PCA
-pca = prcomp(t(cobj$E))
+pca <- prcomp(t(cobj$E))
 
-# merge with metadata 
-df_pca = merge(pca$x, info, by="row.names")
+# merge with metadata
+df_pca <- merge(pca$x, info, by = "row.names")
 
-# Plot PCA 
+# Plot PCA
 #   color by Subject
 # 	shape by Stimulated vs unstimulated
-ggplot(df_pca, aes(PC1, PC2, color=as.character(ind),  shape=StimStatus)) + 
-		geom_point(size=3) + 
-		theme_classic() + 
-		theme(aspect.ratio=1) + 
-		scale_color_discrete(name="Subject") +
-		xlab("PC1") + ylab("PC2")
+ggplot(df_pca, aes(PC1, PC2, color = as.character(ind), shape = StimStatus)) +
+  geom_point(size = 3) +
+  theme_classic() +
+  theme(aspect.ratio = 1) +
+  scale_color_discrete(name = "Subject") +
+  xlab("PC1") +
+  ylab("PC2")
 ```
 
 ## Hierachical clustering
@@ -119,7 +121,7 @@ library(variancePartition)
 
 # Partition variance into components for Subject (i.e. ind)
 #   and stimulation status, and residual variation
-vp = fitExtractVarPartModel( cobj, ~ ind + StimStatus, info)
+vp <- fitExtractVarPartModel(cobj, ~ ind + StimStatus, info)
 
 # Plot variance fractions
 plotPercentBars(vp)
