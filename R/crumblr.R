@@ -61,9 +61,9 @@ clr <- function(counts, pseudocount = 0.5) {
 #' @param tau overdispersion parameter for Dirichlet multinomial.  If \code{NULL}, estimate from observed counts.
 #'
 #' @return  An \code{EList} object with the following components:
-#' \itemize{
-#'  \item{\code{E}: }{numeric matrix of CLR transformed counts}
-#'  \item{\code{weights}: }{numeric matrix of observation-level inverse-variance weights}
+#' \describe{
+#'  \item{E: }{numeric matrix of CLR transformed counts}
+#'  \item{weights: }{numeric matrix of observation-level inverse-variance weights}
 #' }
 #'
 #' @details

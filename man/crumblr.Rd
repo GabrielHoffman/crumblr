@@ -23,9 +23,9 @@ crumblr(counts, pseudocount = 0.5, method = c("clr", "clr_2class"), tau = 1)
 }
 \value{
 An \code{EList} object with the following components:
-\itemize{
- \item{\code{E}: }{numeric matrix of CLR transformed counts}
- \item{\code{weights}: }{numeric matrix of observation-level inverse-variance weights}
+\describe{
+ \item{E: }{numeric matrix of CLR transformed counts}
+ \item{weights: }{numeric matrix of observation-level inverse-variance weights}
 }
 }
 \description{

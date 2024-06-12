@@ -1,3 +1,7 @@
+# crumblr 0.99.10
+ - June 12, 2024
+ - add `diffTree()` and `plotTreeTestBeta()`
+
 # crumblr 0.99.9
  - Feb 1, 2024
  - add `crumblr(..,method=method)` for `method %in% c("clr", "clr_2class")`

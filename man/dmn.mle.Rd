@@ -13,7 +13,7 @@ dmn.mle(counts, ...)
 }
 \value{
 list storing \code{alpha} parameter estimates, logLik, and details about convergence
-\itemize{
+\describe{
  \item{\code{alpha}}{estimated \eqn{alpha} parameters}
  \item{\code{overdispersion}}{Overdispersion value \eqn{1 + \rho^2(n-1)} compared to multinomial}
  \item{\code{logLik}}{value of function}
@@ -57,11 +57,7 @@ rhoSq <- 1 / (a0 + 1)
 counts <- t(rmultinom(n_samples, n_counts, prob = alpha / sum(alpha)))
 
 dmn.mle(counts)
-
 #
-#
-#
-
 }
 \seealso{
 Other functions also estimate DMN parameters.  \code{MGLM::MGLMfit()} and \code{dirmult::dirmult()} give good parameter estimates but are slower.  \code{Rfast::dirimultinom.mle()} often fails to converge

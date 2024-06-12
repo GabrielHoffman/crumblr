@@ -112,7 +112,7 @@ run_sim <- function(prop_other = NULL, pseudocount = .5) {
     targetValues <- unique(targetValues)
 
     df_res <- mclapply(targetValues, function(targetCount) {
-      df_res <- lapply(c(1, 10, 20), function(tau) {
+      df_res <- lapply(c(1, 5, 10), function(tau) {
         targetCount2 <- max(countTotal - targetCount - countsOther, 0)
 
         # create vector of alpha values
@@ -127,7 +127,9 @@ run_sim <- function(prop_other = NULL, pseudocount = .5) {
         if (tau == 1) {
           # large a0 corresponds to multinomial
           alpha <- p * 1e9
-        } else {
+        } else if (tau < 1){
+          stop("tau must be greater than 1")
+        }else {
           # convert tau overdispersion value to alpha from p
           a0 <- (countTotal - tau) / (tau - 1)
           alpha <- p * a0
@@ -149,8 +151,8 @@ run_sim <- function(prop_other = NULL, pseudocount = .5) {
 
         # expected variance based on *true* values
         D <- ncol(counts)
-        p <- (expectedCounts + pseudocount) / sum(expectedCounts + pseudocount)
-        v_theoretical_est <- tau * (1 / p - 2 / (p * D) + sum(1 / p) / D^2) / countTotal
+        p <- (expectedCounts + pseudocount) / sum(expectedCounts + pseudocount) 
+        v_theoretical_est <- tau * (1 / p - 2 / (p * D) + sum(1 / p) / D^2) / countTotal   
 
         data.frame(
           targetCount = targetCount,
@@ -162,7 +164,7 @@ run_sim <- function(prop_other = NULL, pseudocount = .5) {
         )
       })
       do.call(rbind, df_res)
-    }, mc.cores = 4)
+    }, mc.cores = 10)
     do.call(rbind, df_res)
   })
   df_res <- do.call(rbind, df_res)
@@ -208,9 +210,9 @@ ggplot() +
 
 ### D=15 categories
 
-```{r sim2, cache=TRUE}
+```{r sim2, cache=FALSE}
 prop_other <- rep(.05, 15)
-df_res <- run_sim(prop_other, .5)
+df_res <- run_sim(prop_other)
 
 cols <- c("tau", "targetCount", "countTotal", "countsOther", "v_empirical", "v_theoretical_est")
 df_v <- reshape2::melt(df_res[, cols], id.vars = cols[1:4])

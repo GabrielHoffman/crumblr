@@ -120,6 +120,73 @@ plotTreeTest <- function(tree, low = "grey90", mid = "red", high = "darkred", xm
 
 
 
+#' Plot tree coefficients from multivariate testing
+#'
+#' Plot tree coefficients from multivariate testing at each node.  Only applicable top fixed effect tests
+#'
+#' @param tree phylo object storing tree
+#' @param low low color on gradient
+#' @param mid mid color on gradient
+#' @param high high color on gradient
+#' @param xmax.scale expand the x-axis by this factor so leaf labels fit in the plot
+#'
+#' @examples
+#' library(variancePartition)
+#'
+#' # Load cell counts from Kang, et al. (2018)
+#' #  https://doi.org/10.1038/nbt.4042
+#' data(IFNCellCounts)
+#'
+#' # Apply crumblr transformation
+#' cobj <- crumblr(cellCounts)
+#'
+#' # Use dream workflow to analyze each cell separately
+#' fit <- dream(cobj, ~ StimStatus + ind, info)
+#' fit <- eBayes(fit)
+#'
+#' # Create a hierarchical cluster of cell types
+#' # NOTE: for example only
+#' # Create clustering using prior knowledge
+#' # or single cell data.
+#' # Using dreamlet::buildClusterTreeFromPB() is recommended
+#' cellFractions <- cellCounts / rowSums(cellCounts)
+#' hc <- hclust(dist(t(cellFractions)))
+#'
+#' # Perform multivariate test across the hierarchy
+#' res <- treeTest(fit, cobj, hc, coef = "StimStatusstim")
+#'
+#' # Plot hierarchy, no tests are significant 
+#' plotTreeTestBeta(res)
+#' @import ggtree ggplot2
+#' @export
+plotTreeTestBeta <- function(tree, low = "blue", mid = "white", high = "red", xmax.scale = 1.5) {
+  # PASS R check
+  isTip <- label <- node <- FDR <- NULL
+
+  # comparison only works for fixed effects models
+  if( ! all(tree@data$method %in% c("FE", "FE.empirical"))){
+    stop("tree1 must be evaluated with a fixed effect model")
+  }
+
+  beta_max = max(abs(tree@data$beta))
+
+  fig <- ggtree(tree, branch.length = "none") +
+    geom_tiplab(color = "black", size = 3, hjust = 0, offset = .2) +
+    geom_point2(aes(label = node, color = beta, size = pmin(4, -log10(FDR)))) +
+    scale_color_gradient2(name = bquote(beta), low = low, mid = mid, high = high, midpoint =0, limits=c(-beta_max, beta_max)) +
+    scale_size_area(name = bquote(-log[10] ~ FDR), limits = c(0, 4)) +
+    geom_text2(aes(label = "+", subset = FDR < 0.05), color = "white", size = 6, vjust = .3, hjust = .5) +
+    theme(legend.position = "bottom", plot.title = element_text(hjust = 0.5))
+
+  # get default max value of x-axis
+  xmax <- layer_scales(fig)$x$range$range[2]
+
+  # increase x-axis width
+  fig + xlim(0, xmax * xmax.scale)
+}
+
+
+
 #' Perform multivariate testing along a hierarchy
 #'
 #' Perform multivariate testing using \code{mvTest()} along the nodes of tree
@@ -167,6 +234,7 @@ plotTreeTest <- function(tree, low = "grey90", mid = "red", high = "darkred", xm
 #' @importFrom tidytree as_tibble left_join as.treedata
 #' @importFrom variancePartition mvTest
 #' @importFrom stats p.adjust
+#' @importFrom dplyr bind_rows
 #' @export
 treeTest <- function(fit, obj, hc, coef, method = c("FE.empirical", "FE", "RE2C", "tstat", "sidak", "fisher"), shrink.cov = TRUE) {
   method <- match.arg(method)
@@ -189,7 +257,7 @@ treeTest <- function(fit, obj, hc, coef, method = c("FE.empirical", "FE", "RE2C"
 
     tibble(node = as.integer(names(testSets)[i]), res)
   })
-  res <- do.call(rbind, res)
+  res <- bind_rows(res)
 
   # convert to table
   tb <- as_tibble(as.phylo(hc))
@@ -258,3 +326,94 @@ buildClusterTree <- function(sce, reduction, labelCol, method = c(
   # perform clustering
   hclust(dst)
 }
+
+
+#' Compare difference in estimates between two trees
+#' 
+#' Compare difference in cofficient estimates between two trees.  For node \code{i}, the test evaluates \code{tree1[i] - tree2[i] = 0}.
+#' 
+#' @param tree1 object of type \code{treedata} from \code{treeTest()}
+#' @param tree2 object of type \code{treedata} from \code{treeTest()}
+#' 
+#' @details When a fixed effect test is performed at each node using \code{treeTest()} with \code{method = "FE.empirical"} or \code{method = "FE"}, a coefficient estimate and standard error are estimated for each node based on the children.  This function performs a two-sample z-test to test if a given coefficient from \code{tree1} is significantly different from the corresponding coefficient in \code{tree2}.
+#' 
+#' @examples
+#' library(variancePartition)
+#'
+#' # Load cell counts from Kang, et al. (2018)
+#' #  https://doi.org/10.1038/nbt.4042
+#' data(IFNCellCounts)
+#'
+#' # Simulate a factor with 2 levels called DiseaseRand
+#' set.seed(123)
+#' info$DiseaseRand = sample(LETTERS[seq(2)], nrow(info), replace=TRUE)
+#' info$DiseaseRand = factor(info$DiseaseRand, LETTERS[seq(2)])
+#'
+#' # Apply crumblr transformation
+#' cobj <- crumblr(cellCounts)
+#'
+#' # Use dream workflow to analyze each cell separately
+#' fit <- dream(cobj, ~ StimStatus + ind, info)
+#' fit <- eBayes(fit)
+#'
+#' # Create a hierarchical cluster of cell types
+#' # NOTE: for example only
+#' # Create clustering using prior knowledge
+#' # or single cell data
+#' # Using dreamlet::buildClusterTreeFromPB() is recommended
+#' cellFractions <- cellCounts / rowSums(cellCounts)
+#' hc <- hclust(dist(t(cellFractions)))
+#'
+#' # Perform multivariate test across the hierarchy
+#' res1 <- treeTest(fit, cobj, hc, coef = "StimStatusstim")
+#'
+#' # Perform same test, but on DiseaseRand
+#' fit2 <- dream(cobj, ~ DiseaseRand, info)
+#' fit2 <- eBayes(fit2)
+#' res2 <- treeTest(fit2, cobj, hc, coef = "DiseaseRandB")
+#'
+#' # Compare the coefficient estimates at each node
+#' # Test if res1 - res2 is significantly different from zero
+#' resDiff = diffTree(res1, res2)
+#' 
+#' resDiff
+#' 
+#' plotTreeTest(resDiff)
+#' 
+#' plotTreeTestBeta(resDiff)
+#' @importFrom dplyr inner_join
+#' @export
+diffTree = function(tree1, tree2){
+
+  df1 = as_tibble(tree1)
+  df2 = as_tibble(tree2)
+
+  # comparison only works for fixed effects models
+  if( ! all(df1$method %in% c("FE", "FE.empirical"))){
+    stop("tree1 must be evaluated with a fixed effect model")
+  }
+
+  if( ! all(df2$method %in% c("FE", "FE.empirical"))){
+    stop("tree2 must be evaluated with a fixed effect model")
+  }
+
+  # join data.frames from each tree
+  df_merge = inner_join(df1, df2, by=c("parent", "node", "label"))
+
+  # initialize
+  df_out = df1
+
+  # perform two-sample z-test
+  df_out$beta = with(df_merge, beta.x - beta.y)
+  df_out$se = with(df_merge, sqrt(se.x^2 + se.y^2))
+  df_out$stat = with(df_out, beta / se)
+  df_out$pvalue = with(df_out, 2*pnorm(abs(stat), lower.tail=FALSE))
+  df_out$FDR = with(df_out, p.adjust(pvalue, "BH"))
+
+  as.treedata(df_out)
+}
+
+
+
+
+
