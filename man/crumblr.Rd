@@ -6,11 +6,32 @@
 \alias{crumblr,data.frame-method}
 \title{Count ratio uncertainty modeling based linear regression}
 \usage{
-crumblr(counts, pseudocount = 0.5, method = c("clr", "clr_2class"), tau = 1)
+crumblr(
+  counts,
+  pseudocount = 0.5,
+  method = c("clr", "clr_2class"),
+  tau = 1,
+  max.ratio = 10,
+  quant = 0.05
+)
 
-\S4method{crumblr}{matrix}(counts, pseudocount = 0.5, method = c("clr", "clr_2class"), tau = 1)
+\S4method{crumblr}{matrix}(
+  counts,
+  pseudocount = 0.5,
+  method = c("clr", "clr_2class"),
+  tau = 1,
+  max.ratio = 10,
+  quant = 0.05
+)
 
-\S4method{crumblr}{data.frame}(counts, pseudocount = 0.5, method = c("clr", "clr_2class"), tau = 1)
+\S4method{crumblr}{data.frame}(
+  counts,
+  pseudocount = 0.5,
+  method = c("clr", "clr_2class"),
+  tau = 1,
+  max.ratio = 10,
+  quant = 0.05
+)
 }
 \arguments{
 \item{counts}{count data with samples as rows and variables are columns}
@@ -20,6 +41,10 @@ crumblr(counts, pseudocount = 0.5, method = c("clr", "clr_2class"), tau = 1)
 \item{method}{\code{"clr"} computes standard centered log ratio and precision weights based on the delta approximation. \code{"clr_2class"} computes the \code{clr()} transform for category \code{i} using 2 classes: 1) counts in category i, and 2) counts _not_ in category i.}
 
 \item{tau}{overdispersion parameter for Dirichlet multinomial.  If \code{NULL}, estimate from observed counts.}
+
+\item{max.ratio}{regularize estimates of the weights to have a maximum ratio of \code{max.ratio} between the maximum and \code{quant} quantile value}
+
+\item{quant}{quantile value used for \code{max.ratio}}
 }
 \value{
 An \code{EList} object with the following components:
@@ -35,6 +60,8 @@ Count ratio uncertainty modeling based linear regression (crumblr) returns CLR-t
 Evalute the centered log ratio (CLR) transform of the count matrix, and the asymptotic theoretical variances of each transformed observation.  The asymptotic normal approximation is increasingly accurate for small overdispersion \eqn{\tau}, large total counts \eqn{C}, and large proportions \eqn{p}, but shows good agreement with the empirical results in most situtations. In practice, it is often reasonable to assume a sufficient number of counts before a variable is included in an analysis anyway.  But the feasability of this assumption is up to the user to determine.
 
 Given the array \code{p} storing proportions for one sample across all categories, the delta approximation uses the term \code{1/p}.  This can be unstable for small values of \code{p}, and the estimated variances can be sensitive to small changes in the proprtions.  To address this, the \code{"clr_2class"} method computes the \code{clr()} transform for category \code{i} using 2 classes: 1) counts in category i, and 2) counts _not_ in category i. Since class (2) now sums counts across all other categories, the small proportions are avoided and the variance estimates are more stable.
+
+For real data, the asymptotic variance formula can give weights that vary substantially across samples and give very high weights for a subset of samples.  In order to address this, we regularize the weights to reduce the variation in the weights to have a maximum ratio of \code{max.ratio} between the maximum and \code{quant} quantile value.
 }
 \examples{
 # set probability of each category
@@ -65,7 +92,6 @@ fit <- dream(cobj, ~Age, info)
 fit <- eBayes(fit)
 
 topTable(fit, coef = "Age", sort.by = "none")
-#
 }
 \seealso{
 \code{limma::voom}, \code{variancePartition::dream}

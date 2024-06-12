@@ -1,6 +1,7 @@
 # crumblr 0.99.10
  - June 12, 2024
  - add `diffTree()` and `plotTreeTestBeta()`
+ - regularize weight estimates
 
 # crumblr 0.99.9
  - Feb 1, 2024

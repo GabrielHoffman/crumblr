@@ -61,13 +61,34 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">crumblr</span><span class="op">(</span><span class="va">counts</span>, pseudocount <span class="op">=</span> <span class="fl">0.5</span>, method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"clr"</span>, <span class="st">"clr_2class"</span><span class="op">)</span>, tau <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">crumblr</span><span class="op">(</span></span>
+<span>  <span class="va">counts</span>,</span>
+<span>  pseudocount <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"clr"</span>, <span class="st">"clr_2class"</span><span class="op">)</span>,</span>
+<span>  tau <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  max.ratio <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  quant <span class="op">=</span> <span class="fl">0.05</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for matrix</span></span>
-<span><span class="fu">crumblr</span><span class="op">(</span><span class="va">counts</span>, pseudocount <span class="op">=</span> <span class="fl">0.5</span>, method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"clr"</span>, <span class="st">"clr_2class"</span><span class="op">)</span>, tau <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu">crumblr</span><span class="op">(</span></span>
+<span>  <span class="va">counts</span>,</span>
+<span>  pseudocount <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"clr"</span>, <span class="st">"clr_2class"</span><span class="op">)</span>,</span>
+<span>  tau <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  max.ratio <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  quant <span class="op">=</span> <span class="fl">0.05</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for data.frame</span></span>
-<span><span class="fu">crumblr</span><span class="op">(</span><span class="va">counts</span>, pseudocount <span class="op">=</span> <span class="fl">0.5</span>, method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"clr"</span>, <span class="st">"clr_2class"</span><span class="op">)</span>, tau <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">crumblr</span><span class="op">(</span></span>
+<span>  <span class="va">counts</span>,</span>
+<span>  pseudocount <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"clr"</span>, <span class="st">"clr_2class"</span><span class="op">)</span>,</span>
+<span>  tau <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  max.ratio <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  quant <span class="op">=</span> <span class="fl">0.05</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -87,6 +108,14 @@
 <dt>tau</dt>
 <dd><p>overdispersion parameter for Dirichlet multinomial.  If <code>NULL</code>, estimate from observed counts.</p></dd>
 
+
+<dt>max.ratio</dt>
+<dd><p>regularize estimates of the weights to have a maximum ratio of <code>max.ratio</code> between the maximum and <code>quant</code> quantile value</p></dd>
+
+
+<dt>quant</dt>
+<dd><p>quantile value used for <code>max.ratio</code></p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -104,6 +133,7 @@
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Evalute the centered log ratio (CLR) transform of the count matrix, and the asymptotic theoretical variances of each transformed observation.  The asymptotic normal approximation is increasingly accurate for small overdispersion \(\tau\), large total counts \(C\), and large proportions \(p\), but shows good agreement with the empirical results in most situtations. In practice, it is often reasonable to assume a sufficient number of counts before a variable is included in an analysis anyway.  But the feasability of this assumption is up to the user to determine.</p>
 <p>Given the array <code>p</code> storing proportions for one sample across all categories, the delta approximation uses the term <code>1/p</code>.  This can be unstable for small values of <code>p</code>, and the estimated variances can be sensitive to small changes in the proprtions.  To address this, the <code>"clr_2class"</code> method computes the <code><a href="clr.html">clr()</a></code> transform for category <code>i</code> using 2 classes: 1) counts in category i, and 2) counts _not_ in category i. Since class (2) now sums counts across all other categories, the small proportions are avoided and the variance estimates are more stable.</p>
+<p>For real data, the asymptotic variance formula can give weights that vary substantially across samples and give very high weights for a subset of samples.  In order to address this, we regularize the weights to reduce the variation in the weights to have a maximum ratio of <code>max.ratio</code> between the maximum and <code>quant</code> quantile value.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -148,11 +178,10 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">topTable</span><span class="op">(</span><span class="va">fit</span>, coef <span class="op">=</span> <span class="st">"Age"</span>, sort.by <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>               logFC    AveExpr          t   P.Value adj.P.Val         B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat_1 -0.0005477589 -0.8566924 -0.2658383 0.7905035 0.8547902 -8.442235</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat_2  0.0010873618 -0.1446856  0.6771578 0.4987053 0.8547902 -8.497601</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat_3 -0.0005053861  0.2350211 -0.3548523 0.7228911 0.8547902 -8.783823</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat_4  0.0002294497  0.7663569  0.1831307 0.8547902 0.8547902 -8.958119</span>
-<span class="r-in"><span><span class="co">#</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat_1 -0.0005477589 -0.8566924 -0.2637090 0.7925229 0.8449837 -8.860497</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat_2  0.0010873618 -0.1446856  0.6497158 0.5172998 0.8449837 -8.625395</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat_3 -0.0005053861  0.2350211 -0.3532166 0.7246368 0.8449837 -8.747617</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat_4  0.0002294497  0.7663569  0.1960085 0.8449837 0.8449837 -8.770189</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
