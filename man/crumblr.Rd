@@ -11,7 +11,7 @@ crumblr(
   pseudocount = 0.5,
   method = c("clr", "clr_2class"),
   tau = 1,
-  max.ratio = 10,
+  max.ratio = 5,
   quant = 0.05
 )
 
@@ -20,7 +20,7 @@ crumblr(
   pseudocount = 0.5,
   method = c("clr", "clr_2class"),
   tau = 1,
-  max.ratio = 10,
+  max.ratio = 5,
   quant = 0.05
 )
 
@@ -29,7 +29,7 @@ crumblr(
   pseudocount = 0.5,
   method = c("clr", "clr_2class"),
   tau = 1,
-  max.ratio = 10,
+  max.ratio = 5,
   quant = 0.05
 )
 }

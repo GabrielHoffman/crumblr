@@ -108,7 +108,7 @@ clr <- function(counts, pseudocount = 0.5) {
 #' @export
 setGeneric(
   "crumblr",
-  function(counts, pseudocount = 0.5, method = c("clr", "clr_2class"), tau = 1, max.ratio=10, quant=0.05) {
+  function(counts, pseudocount = 0.5, method = c("clr", "clr_2class"), tau = 1, max.ratio=5, quant=0.05) {
     standardGeneric("crumblr")
   }
 )
@@ -120,7 +120,7 @@ setGeneric(
 #' @importFrom methods new
 setMethod(
   "crumblr", "matrix",
-  function(counts, pseudocount = 0.5, method = c("clr", "clr_2class"), tau = 1, max.ratio=10, quant=0.05) {
+  function(counts, pseudocount = 0.5, method = c("clr", "clr_2class"), tau = 1, max.ratio=5, quant=0.05) {
     method <- match.arg(method)
 
     if (method == "clr") {
@@ -137,7 +137,7 @@ setMethod(
 #' @importFrom methods new
 setMethod(
   "crumblr", "data.frame",
-  function(counts, pseudocount = 0.5, method = c("clr", "clr_2class"), tau = 1, max.ratio=10, quant=0.05) {
+  function(counts, pseudocount = 0.5, method = c("clr", "clr_2class"), tau = 1, max.ratio=5, quant=0.05) {
     method <- match.arg(method)
 
     if (method == "clr") {
@@ -151,7 +151,7 @@ setMethod(
 
 # @param max.ratio regularize estimates of the weights to have a maximum ratio of \code{max.ratio} between the maximum and \code{quant} qauntile value
 # @param quant qauntile value used for \code{max.ratio}
-.cap_ratio = function(W, max.ratio=10, quant=0.05){
+.cap_ratio = function(W, max.ratio=5, quant=0.05){
   t(apply(W, 1, function(x){
     x = x / quantile(x, quant)
     pmin(x,max.ratio)
@@ -160,7 +160,7 @@ setMethod(
 
 # @param max.ratio regularize estimates of the weights to have a maximum ratio of \code{max.ratio} between the maximum and \code{quant} qauntile value
 # @param quant qauntile value used for \code{max.ratio}
-.crumblr <- function(counts, pseudocount = 0.5, tau = 1, max.ratio=10, quant=0.5) {
+.crumblr <- function(counts, pseudocount = 0.5, tau = 1, max.ratio=5, quant=0.05) {
   D <- ncol(counts)
 
   # estimate overdispersion from observed counts
@@ -195,7 +195,7 @@ setMethod(
 # 2) sum of all other counts
 # This avoids the 1/p term for small values of p in the
 # delta approximation for rare cell types
-.clr_2class <- function(counts, pseudocount = 0.5, tau = 1, max.ratio=10, quant=0.05) {
+.clr_2class <- function(counts, pseudocount = 0.5, tau = 1, max.ratio=5, quant=0.05) {
   # sunm counts for each row
   rs <- rowSums(counts)
 
