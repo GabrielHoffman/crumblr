@@ -151,6 +151,7 @@ setMethod(
 
 # @param max.ratio regularize estimates of the weights to have a maximum ratio of \code{max.ratio} between the maximum and \code{quant} qauntile value
 # @param quant qauntile value used for \code{max.ratio}
+#' @importFrom stats quantile
 .cap_ratio = function(W, max.ratio=5, quant=0.05){
   t(apply(W, 1, function(x){
     x = x / quantile(x, quant)

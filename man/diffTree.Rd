@@ -20,8 +20,8 @@ When a fixed effect test is performed at each node using \code{treeTest()} with 
 \examples{
 library(variancePartition)
 
-# Load cell counts from Kang, et al. (2018)
-#  https://doi.org/10.1038/nbt.4042
+# Load cell counts, clustering and metadata
+# from Kang, et al. (2018) https://doi.org/10.1038/nbt.4042
 data(IFNCellCounts)
 
 # Simulate a factor with 2 levels called DiseaseRand
@@ -30,27 +30,19 @@ info$DiseaseRand = sample(LETTERS[seq(2)], nrow(info), replace=TRUE)
 info$DiseaseRand = factor(info$DiseaseRand, LETTERS[seq(2)])
 
 # Apply crumblr transformation
-cobj <- crumblr(cellCounts)
+cobj <- crumblr(df_cellCounts)
 
 # Use dream workflow to analyze each cell separately
 fit <- dream(cobj, ~ StimStatus + ind, info)
 fit <- eBayes(fit)
 
-# Create a hierarchical cluster of cell types
-# NOTE: for example only
-# Create clustering using prior knowledge
-# or single cell data
-# Using dreamlet::buildClusterTreeFromPB() is recommended
-cellFractions <- cellCounts / rowSums(cellCounts)
-hc <- hclust(dist(t(cellFractions)))
-
 # Perform multivariate test across the hierarchy
-res1 <- treeTest(fit, cobj, hc, coef = "StimStatusstim")
+res1 <- treeTest(fit, cobj, hcl, coef = "StimStatusstim")
 
 # Perform same test, but on DiseaseRand
 fit2 <- dream(cobj, ~ DiseaseRand, info)
 fit2 <- eBayes(fit2)
-res2 <- treeTest(fit2, cobj, hc, coef = "DiseaseRandB")
+res2 <- treeTest(fit2, cobj, hcl, coef = "DiseaseRandB")
 
 # Compare the coefficient estimates at each node
 # Test if res1 - res2 is significantly different from zero

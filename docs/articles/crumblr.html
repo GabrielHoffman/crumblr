@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">crumblr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.11</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,7 +52,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/crumblr_theory.html">Normal approximation vs. empirical simulation</a>
-    <a class="dropdown-item" href="../articles/crumblr_treeTest.html">Multivariate testing along a tree</a>
+    <a class="dropdown-item" href="../articles/integration.html">Integration with dreamlet / SingleCellExperiment</a>
   </div>
 </li>
 <li class="nav-item">
@@ -86,8 +86,8 @@
                         <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
-            <h4 data-toc-skip class="date">Run on 2024-06-12
-13:32:12.023663</h4>
+            <h4 data-toc-skip class="date">Run on 2024-06-17
+12:20:48.044915</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DiseaseNeurogenomics/crumblr/blob/HEAD/vignettes/crumblr.Rmd" class="external-link"><code>vignettes/crumblr.Rmd</code></a></small>
       <div class="d-none name"><code>crumblr.Rmd</code></div>
@@ -98,6 +98,8 @@
 <!---
 cd /Users/gabrielhoffman/workspace/repos/crumblr/vignettes
 R
+
+# rm -rf crumblr_cache/
 
 rmarkdown::render('crumblr.Rmd')
 --->
@@ -116,55 +118,73 @@ from 8 subjects <a href="https://www.nature.com/articles/nbt.4042" class="extern
 <li><code><a href="https://rdrr.io/pkg/limma/man/lmFit.html" class="external-link">limma::lmFit()</a></code></li>
 </ul>
 <div class="section level2">
-<h2 id="differential-testing">Differential testing<a class="anchor" aria-label="anchor" href="#differential-testing"></a>
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
+<p>To install this package, start R and enter:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://bioconductor.github.io/BiocManager/" class="external-link">"BiocManager"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># Select release #1 or #2</span></span>
+<span></span>
+<span><span class="co"># 1) Bioconductor release (coming soon...)</span></span>
+<span><span class="co"># BiocManager::install("crumblr")</span></span>
+<span></span>
+<span><span class="co"># 2) Latest stable release</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"DiseaseNeurogenomics/crumblr"</span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="process-data">Process data<a class="anchor" aria-label="anchor" href="#process-data"></a>
+</h3>
 <p>Here we evaluate whether the observed cell proportions change in
 response to interferon β. Given the results here, we cannot reject the
 null hypothesis that interferon β does not affect the cell type
 proportions.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://DiseaseNeurogenomics.github.io/crumblr" class="external-link">crumblr</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Load cell counts from Kang, et al. (2018)</span></span>
-<span><span class="co">#  https://doi.org/10.1038/nbt.4042</span></span>
+<span><span class="co"># Load cell counts, clustering and metadata</span></span>
+<span><span class="co"># from Kang, et al. (2018) https://doi.org/10.1038/nbt.4042</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">IFNCellCounts</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Apply crumblr transformation</span></span>
 <span><span class="co"># cobj is an EList object compatable with limma workflow</span></span>
 <span><span class="co"># cobj$E stores transformed values</span></span>
 <span><span class="co"># cobj$weights stores precision weights</span></span>
-<span><span class="va">cobj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/crumblr.html">crumblr</a></span><span class="op">(</span><span class="va">cellCounts</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Use variancePartition workflow to analyze each cell type</span></span>
-<span><span class="co"># Perform regression on each cell type separately</span></span>
-<span><span class="co">#  then use eBayes to shrink residual variance</span></span>
-<span><span class="co"># Also compatible with limma::lmFit()</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://bioconductor.org/packages/variancePartition" class="external-link">variancePartition</a></span><span class="op">)</span></span>
-<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/dream-method.html" class="external-link">dream</a></span><span class="op">(</span><span class="va">cobj</span>, <span class="op">~</span> <span class="va">StimStatus</span> <span class="op">+</span> <span class="va">ind</span>, <span class="va">info</span><span class="op">)</span></span>
-<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/ebayes.html" class="external-link">eBayes</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Extract results for each cell type</span></span>
-<span><span class="fu">topTable</span><span class="op">(</span><span class="va">fit</span>, coef <span class="op">=</span> <span class="st">"StimStatusstim"</span>, number <span class="op">=</span> <span class="cn">Inf</span>, sort.by <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##                         logFC    AveExpr          t   P.Value adj.P.Val         B</span></span>
-<span><span class="co">## B cells           -0.09825871  0.5516882 -0.6779201 0.5076669  0.823424 -4.746255</span></span>
-<span><span class="co">## CD14+ Monocytes   -0.12437220  1.2698117 -0.9560159 0.3535191  0.823424 -4.685558</span></span>
-<span><span class="co">## CD4 T cells       -0.07763160  2.0201947 -0.4732415 0.6425378  0.823424 -4.900413</span></span>
-<span><span class="co">## CD8 T cells       -0.16431725  0.0857175 -0.3892080 0.7023377  0.823424 -4.758201</span></span>
-<span><span class="co">## Dendritic cells    0.32516900 -2.1849234  1.0895217 0.2923251  0.823424 -4.590653</span></span>
-<span><span class="co">## FCGR3A+ Monocytes  0.06580754 -0.2567492  0.3460969 0.7338531  0.823424 -4.734622</span></span>
-<span><span class="co">## Megakaryocytes     0.04681137 -1.8655172  0.2268978 0.8234240  0.823424 -4.635391</span></span>
-<span><span class="co">## NK cells           0.08494553  0.3797777  0.5814645 0.5691622  0.823424 -4.753355</span></span></code></pre>
+<span><span class="co">#    corresponding to the regularized inverse variance</span></span>
+<span><span class="va">cobj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/crumblr.html">crumblr</a></span><span class="op">(</span> <span class="va">df_cellCounts</span> <span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="pca">PCA<a class="anchor" aria-label="anchor" href="#pca"></a>
-</h2>
+<div class="section level3">
+<h3 id="variance-partitioning">Variance partitioning<a class="anchor" aria-label="anchor" href="#variance-partitioning"></a>
+</h3>
+<p>Decomposing the variance illustrates that more variation is explained
+by subject than stimulation status.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://bioconductor.org/packages/variancePartition" class="external-link">variancePartition</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Partition variance into components for Subject (i.e. ind)</span></span>
+<span><span class="co">#   and stimulation status, and residual variation</span></span>
+<span><span class="va">form</span> <span class="op">=</span>  <span class="op">~</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">ind</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">StimStatus</span><span class="op">)</span></span>
+<span><span class="va">vp</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/fitExtractVarPartModel-method.html" class="external-link">fitExtractVarPartModel</a></span><span class="op">(</span><span class="va">cobj</span>, <span class="va">form</span>, <span class="va">info</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Plot variance fractions</span></span>
+<span><span class="va">fig.vp</span> <span class="op">=</span> <span class="fu"><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/plotPercentBars-method.html" class="external-link">plotPercentBars</a></span><span class="op">(</span><span class="va">vp</span><span class="op">)</span></span>
+<span><span class="va">fig.vp</span></span></code></pre></div>
+<p><img src="crumblr_files/figure-html/vp-1.png" width="576"></p>
+</div>
+<div class="section level3">
+<h3 id="pca">PCA<a class="anchor" aria-label="anchor" href="#pca"></a>
+</h3>
 <p>Performing PCA on the transformed cell counts indicates that the
 samples cluster based on subject rather than stimulation status.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Perform PCA</span></span>
-<span><span class="va">pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/prcomp.html" class="external-link">prcomp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">cobj</span><span class="op">$</span><span class="va">E</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># use crumblr::standardize() to get values with </span></span>
+<span><span class="co"># approximately equal sampling variance,</span></span>
+<span><span class="co"># which is a key property for downstream PCA and clustering analysis.</span></span>
+<span><span class="va">pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/prcomp.html" class="external-link">prcomp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="../reference/standardize-method.html">standardize</a></span><span class="op">(</span><span class="va">cobj</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># merge with metadata</span></span>
 <span><span class="va">df_pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">pca</span><span class="op">$</span><span class="va">x</span>, <span class="va">info</span>, by <span class="op">=</span> <span class="st">"row.names"</span><span class="op">)</span></span>
@@ -181,29 +201,73 @@ samples cluster based on subject rather than stimulation status.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"PC2"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="crumblr_files/figure-html/pca-1.png" width="480"></p>
 </div>
-<div class="section level2">
-<h2 id="hierachical-clustering">Hierachical clustering<a class="anchor" aria-label="anchor" href="#hierachical-clustering"></a>
-</h2>
+<div class="section level3">
+<h3 id="hierachical-clustering">Hierachical clustering<a class="anchor" aria-label="anchor" href="#hierachical-clustering"></a>
+</h3>
 <p>The samples from the same subject also cluster together.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/heatmap.html" class="external-link">heatmap</a></span><span class="op">(</span><span class="va">cobj</span><span class="op">$</span><span class="va">E</span><span class="op">)</span></span></code></pre></div>
 <p><img src="crumblr_files/figure-html/hclust-1.png" width="700"></p>
 </div>
-<div class="section level2">
-<h2 id="variance-partitioning">Variance partitioning<a class="anchor" aria-label="anchor" href="#variance-partitioning"></a>
-</h2>
-<p>Decomposing the variance illustrates that more variation is explained
-by subject than stimulation status.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://bioconductor.org/packages/variancePartition" class="external-link">variancePartition</a></span><span class="op">)</span></span>
+<div class="section level3">
+<h3 id="differential-testing">Differential testing<a class="anchor" aria-label="anchor" href="#differential-testing"></a>
+</h3>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Use variancePartition workflow to analyze each cell type</span></span>
+<span><span class="co"># Perform regression on each cell type separately</span></span>
+<span><span class="co">#  then use eBayes to shrink residual variance</span></span>
+<span><span class="co"># Also compatible with limma::lmFit()</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/dream-method.html" class="external-link">dream</a></span><span class="op">(</span><span class="va">cobj</span>, <span class="op">~</span> <span class="va">StimStatus</span> <span class="op">+</span> <span class="va">ind</span>, <span class="va">info</span><span class="op">)</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/ebayes.html" class="external-link">eBayes</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Partition variance into components for Subject (i.e. ind)</span></span>
-<span><span class="co">#   and stimulation status, and residual variation</span></span>
-<span><span class="va">vp</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/fitExtractVarPartModel-method.html" class="external-link">fitExtractVarPartModel</a></span><span class="op">(</span><span class="va">cobj</span>, <span class="op">~</span> <span class="va">ind</span> <span class="op">+</span> <span class="va">StimStatus</span>, <span class="va">info</span><span class="op">)</span></span>
+<span><span class="co"># Extract results for each cell type</span></span>
+<span><span class="fu">topTable</span><span class="op">(</span><span class="va">fit</span>, coef <span class="op">=</span> <span class="st">"StimStatusstim"</span>, number <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##                         logFC    AveExpr          t     P.Value  adj.P.Val         B</span></span>
+<span><span class="co">## CD8 T cells       -0.25085170  0.0857175 -4.0787416 0.002436375 0.01949100 -1.279815</span></span>
+<span><span class="co">## Dendritic cells    0.37386979 -2.1849234  3.1619195 0.010692544 0.02738587 -2.638507</span></span>
+<span><span class="co">## CD14+ Monocytes   -0.10525402  1.2698117 -3.1226341 0.011413912 0.02738587 -2.709377</span></span>
+<span><span class="co">## B cells           -0.10478652  0.5516882 -3.0134349 0.013692935 0.02738587 -2.940542</span></span>
+<span><span class="co">## CD4 T cells       -0.07840101  2.0201947 -2.2318104 0.050869691 0.08139151 -4.128069</span></span>
+<span><span class="co">## FCGR3A+ Monocytes  0.07425165 -0.2567492  1.6647681 0.128337022 0.17111603 -4.935304</span></span>
+<span><span class="co">## NK cells           0.10270672  0.3797777  1.5181860 0.161321761 0.18436773 -5.247806</span></span>
+<span><span class="co">## Megakaryocytes     0.01377768 -1.8655172  0.1555131 0.879651456 0.87965146 -6.198336</span></span></code></pre>
+<div class="section level4">
+<h4 id="multivariate-testing-along-a-tree">Multivariate testing along a tree<a class="anchor" aria-label="anchor" href="#multivariate-testing-along-a-tree"></a>
+</h4>
+<p>We can gain power by jointly testing multiple cell types using a
+multivariate statistical model, instead of testing one cell type at a
+time. Here we construct a hierarchical clustering between cell types
+based on gene expression from pseudobulk, and perform a multivariate
+test for each internal node of the tree based on its leaf nodes. The
+results for the leaves are the same as from <code>topTable()</code>
+above. At each internal node <code><a href="../reference/treeTest.html">treeTest()</a></code> performs a fixed
+effects meta-analysis of the coefficients of the leaves while modeling
+the covariance between coefficient estimates. In the backend, this is
+implemented using <code><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/mvTest-method.html" class="external-link">variancePartition::mvTest()</a></code> and <a href="https://cran.r-project.org/package=remaCor" class="external-link">remaCor</a>
+package.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Perform multivariate test across the hierarchy</span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/treeTest.html">treeTest</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">cobj</span>, <span class="va">hcl</span>, coef <span class="op">=</span> <span class="st">"StimStatusstim"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Plot variance fractions</span></span>
-<span><span class="fu"><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/plotPercentBars-method.html" class="external-link">plotPercentBars</a></span><span class="op">(</span><span class="va">vp</span><span class="op">)</span></span></code></pre></div>
-<p><img src="crumblr_files/figure-html/vp-1.png" width="576"></p>
+<span><span class="co"># Plot hierarchy and testing results</span></span>
+<span><span class="fu"><a href="../reference/plotTreeTest.html">plotTreeTest</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></code></pre></div>
+<p><img src="crumblr_files/figure-html/treeTest-1.png" width="700"></p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Plot hierarchy and regression coefficients</span></span>
+<span><span class="fu"><a href="../reference/plotTreeTestBeta.html">plotTreeTestBeta</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></code></pre></div>
+<p><img src="crumblr_files/figure-html/treeTest-2.png" width="700"></p>
+<div class="section level5">
+<h5 id="combined-plotting">Combined plotting<a class="anchor" aria-label="anchor" href="#combined-plotting"></a>
+</h5>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotTreeTestBeta.html">plotTreeTestBeta</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"bottom"</span>, legend.box <span class="op">=</span> <span class="st">"vertical"</span><span class="op">)</span> <span class="op">|</span> </span>
+<span>  <span class="fu"><a href="../reference/plotForest-methods.html">plotForest</a></span><span class="op">(</span><span class="va">res</span>, hide<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">|</span> </span>
+<span>  <span class="va">fig.vp</span></span></code></pre></div>
+<p><img src="crumblr_files/figure-html/combined-1.png" width="1152"></p>
+</div>
+</div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

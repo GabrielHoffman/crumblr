@@ -57,133 +57,6 @@ NameInternalNodes <- function(tb) {
 }
 
 
-#' Plot tree with results from multivariate testing
-#'
-#' Plot tree with results from multivariate testing
-#'
-#' @param tree phylo object storing tree
-#' @param low low color on gradient
-#' @param mid mid color on gradient
-#' @param high high color on gradient
-#' @param xmax.scale expand the x-axis by this factor so leaf labels fit in the plot
-#'
-#' @examples
-#' library(variancePartition)
-#'
-#' # Load cell counts from Kang, et al. (2018)
-#' #  https://doi.org/10.1038/nbt.4042
-#' data(IFNCellCounts)
-#'
-#' # Apply crumblr transformation
-#' cobj <- crumblr(cellCounts)
-#'
-#' # Use dream workflow to analyze each cell separately
-#' fit <- dream(cobj, ~ StimStatus + ind, info)
-#' fit <- eBayes(fit)
-#'
-#' # Create a hierarchical cluster of cell types
-#' # NOTE: for example only
-#' # Create clustering using prior knowledge
-#' # or single cell data.
-#' # Using dreamlet::buildClusterTreeFromPB() is recommended
-#' cellFractions <- cellCounts / rowSums(cellCounts)
-#' hc <- hclust(dist(t(cellFractions)))
-#'
-#' # Perform multivariate test across the hierarchy
-#' res <- treeTest(fit, cobj, hc, coef = "StimStatusstim")
-#'
-#' # Plot hierarchy and testing results
-#' plotTreeTest(res)
-#'
-#' # Extract results for first 3 nodes
-#' res[1:3, ]
-#' @import ggtree ggplot2
-#' @export
-plotTreeTest <- function(tree, low = "grey90", mid = "red", high = "darkred", xmax.scale = 1.5) {
-  # PASS R check
-  isTip <- label <- node <- FDR <- NULL
-
-  fig <- ggtree(tree, branch.length = "none") +
-    geom_tiplab(color = "black", size = 3, hjust = 0, offset = .2) +
-    geom_point2(aes(label = node, color = pmin(4, -log10(FDR)), size = pmin(4, -log10(FDR)))) +
-    scale_color_gradient2(name = bquote(-log[10] ~ FDR), limits = c(0, 4), low = low, mid = mid, high = high, midpoint = -log10(0.01)) +
-    scale_size_area(name = bquote(-log[10] ~ FDR), limits = c(0, 4)) +
-    geom_text2(aes(label = "+", subset = FDR < 0.05), color = "white", size = 6, vjust = .3, hjust = .5) +
-    theme(legend.position = "bottom", plot.title = element_text(hjust = 0.5))
-
-  # get default max value of x-axis
-  xmax <- layer_scales(fig)$x$range$range[2]
-
-  # increase x-axis width
-  fig + xlim(0, xmax * xmax.scale)
-}
-
-
-
-#' Plot tree coefficients from multivariate testing
-#'
-#' Plot tree coefficients from multivariate testing at each node.  Only applicable top fixed effect tests
-#'
-#' @param tree phylo object storing tree
-#' @param low low color on gradient
-#' @param mid mid color on gradient
-#' @param high high color on gradient
-#' @param xmax.scale expand the x-axis by this factor so leaf labels fit in the plot
-#'
-#' @examples
-#' library(variancePartition)
-#'
-#' # Load cell counts from Kang, et al. (2018)
-#' #  https://doi.org/10.1038/nbt.4042
-#' data(IFNCellCounts)
-#'
-#' # Apply crumblr transformation
-#' cobj <- crumblr(cellCounts)
-#'
-#' # Use dream workflow to analyze each cell separately
-#' fit <- dream(cobj, ~ StimStatus + ind, info)
-#' fit <- eBayes(fit)
-#'
-#' # Create a hierarchical cluster of cell types
-#' # NOTE: for example only
-#' # Create clustering using prior knowledge
-#' # or single cell data.
-#' # Using dreamlet::buildClusterTreeFromPB() is recommended
-#' cellFractions <- cellCounts / rowSums(cellCounts)
-#' hc <- hclust(dist(t(cellFractions)))
-#'
-#' # Perform multivariate test across the hierarchy
-#' res <- treeTest(fit, cobj, hc, coef = "StimStatusstim")
-#'
-#' # Plot hierarchy, no tests are significant 
-#' plotTreeTestBeta(res)
-#' @import ggtree ggplot2
-#' @export
-plotTreeTestBeta <- function(tree, low = "blue", mid = "white", high = "red", xmax.scale = 1.5) {
-  # PASS R check
-  isTip <- label <- node <- FDR <- NULL
-
-  # comparison only works for fixed effects models
-  if( ! all(tree@data$method %in% c("FE", "FE.empirical"))){
-    stop("tree1 must be evaluated with a fixed effect model")
-  }
-
-  beta_max = max(abs(tree@data$beta))
-
-  fig <- ggtree(tree, branch.length = "none") +
-    geom_tiplab(color = "black", size = 3, hjust = 0, offset = .2) +
-    geom_point2(aes(label = node, color = beta, size = pmin(4, -log10(FDR)))) +
-    scale_color_gradient2(name = bquote(beta), low = low, mid = mid, high = high, midpoint =0, limits=c(-beta_max, beta_max)) +
-    scale_size_area(name = bquote(-log[10] ~ FDR), limits = c(0, 4)) +
-    geom_text2(aes(label = "+", subset = FDR < 0.05), color = "white", size = 6, vjust = .3, hjust = .5) +
-    theme(legend.position = "bottom", plot.title = element_text(hjust = 0.5))
-
-  # get default max value of x-axis
-  xmax <- layer_scales(fig)$x$range$range[2]
-
-  # increase x-axis width
-  fig + xlim(0, xmax * xmax.scale)
-}
 
 
 
@@ -204,27 +77,19 @@ plotTreeTestBeta <- function(tree, low = "blue", mid = "white", high = "red", xm
 #' @examples
 #' library(variancePartition)
 #'
-#' # Load cell counts from Kang, et al. (2018)
-#' #  https://doi.org/10.1038/nbt.4042
+#' # Load cell counts, clustering and metadata
+#' # from Kang, et al. (2018) https://doi.org/10.1038/nbt.4042
 #' data(IFNCellCounts)
 #'
 #' # Apply crumblr transformation
-#' cobj <- crumblr(cellCounts)
+#' cobj <- crumblr(df_cellCounts)
 #'
 #' # Use dream workflow to analyze each cell separately
 #' fit <- dream(cobj, ~ StimStatus + ind, info)
 #' fit <- eBayes(fit)
 #'
-#' # Create a hierarchical cluster of cell types
-#' # NOTE: for example only
-#' # Create clustering using prior knowledge
-#' # or single cell data
-#' # Using dreamlet::buildClusterTreeFromPB() is recommended
-#' cellFractions <- cellCounts / rowSums(cellCounts)
-#' hc <- hclust(dist(t(cellFractions)))
-#'
 #' # Perform multivariate test across the hierarchy
-#' res <- treeTest(fit, cobj, hc, coef = "StimStatusstim")
+#' res <- treeTest(fit, cobj, hcl, coef = "StimStatusstim")
 #'
 #' # Plot hierarchy and testing results
 #' plotTreeTest(res)
@@ -280,17 +145,17 @@ treeTest <- function(fit, obj, hc, coef, method = c("FE.empirical", "FE", "RE2C"
 #' @param sce \code{SingleCellExperiment} object
 #' @param reduction field of reducedDims(sce) to use
 #' @param labelCol column in \code{SingleCellExperiment} storing cell type annotations
-#' @param method distance metric
+#' @param method.dist method for \code{dist(..,method=method.dist)}
+#' @param method.hclust method for \code{hclust(..,method=method.hclust)}
 #'
 #' @importFrom SingleCellExperiment reducedDim colData
 #' @importFrom stats dist hclust
 #' @importFrom stylo dist.cosine
 #' @export
-buildClusterTree <- function(sce, reduction, labelCol, method = c(
-                               "cosine", "euclidean", "maximum", "manhattan", "canberra",
-                               "binary", "minkowski"
-                             )) {
-  method <- match.arg(method)
+buildClusterTree <- function(sce, reduction, labelCol, method.dist = c("cosine", "euclidean", "maximum", "manhattan", "canberra", "binary", "minkowski"), method.hclust = c("complete", "ward.D", "ward.D2")) {
+
+  method.dist <- match.arg(method.dist)
+  method.hclust <- match.arg(method.hclust)
 
   if (!labelCol %in% colnames(colData(sce))) {
     stop("labelCol must be a column in colData(sce)")
@@ -317,14 +182,14 @@ buildClusterTree <- function(sce, reduction, labelCol, method = c(
   rownames(df) <- lvls
 
   # compute pairwise distances
-  if (method == "cosine") {
+  if (method.dist == "cosine") {
     dst <- dist.cosine(df)
   } else {
-    dst <- dist(df, method = method)
+    dst <- dist(df, method = method.dist)
   }
 
   # perform clustering
-  hclust(dst)
+  hclust(dst, method = method.hclust)
 }
 
 
@@ -340,8 +205,8 @@ buildClusterTree <- function(sce, reduction, labelCol, method = c(
 #' @examples
 #' library(variancePartition)
 #'
-#' # Load cell counts from Kang, et al. (2018)
-#' #  https://doi.org/10.1038/nbt.4042
+#' # Load cell counts, clustering and metadata
+#' # from Kang, et al. (2018) https://doi.org/10.1038/nbt.4042
 #' data(IFNCellCounts)
 #'
 #' # Simulate a factor with 2 levels called DiseaseRand
@@ -350,27 +215,19 @@ buildClusterTree <- function(sce, reduction, labelCol, method = c(
 #' info$DiseaseRand = factor(info$DiseaseRand, LETTERS[seq(2)])
 #'
 #' # Apply crumblr transformation
-#' cobj <- crumblr(cellCounts)
+#' cobj <- crumblr(df_cellCounts)
 #'
 #' # Use dream workflow to analyze each cell separately
 #' fit <- dream(cobj, ~ StimStatus + ind, info)
 #' fit <- eBayes(fit)
 #'
-#' # Create a hierarchical cluster of cell types
-#' # NOTE: for example only
-#' # Create clustering using prior knowledge
-#' # or single cell data
-#' # Using dreamlet::buildClusterTreeFromPB() is recommended
-#' cellFractions <- cellCounts / rowSums(cellCounts)
-#' hc <- hclust(dist(t(cellFractions)))
-#'
 #' # Perform multivariate test across the hierarchy
-#' res1 <- treeTest(fit, cobj, hc, coef = "StimStatusstim")
+#' res1 <- treeTest(fit, cobj, hcl, coef = "StimStatusstim")
 #'
 #' # Perform same test, but on DiseaseRand
 #' fit2 <- dream(cobj, ~ DiseaseRand, info)
 #' fit2 <- eBayes(fit2)
-#' res2 <- treeTest(fit2, cobj, hc, coef = "DiseaseRandB")
+#' res2 <- treeTest(fit2, cobj, hcl, coef = "DiseaseRandB")
 #'
 #' # Compare the coefficient estimates at each node
 #' # Test if res1 - res2 is significantly different from zero

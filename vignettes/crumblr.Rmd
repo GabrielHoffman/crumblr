@@ -21,6 +21,8 @@ vignette: >
 cd /Users/gabrielhoffman/workspace/repos/crumblr/vignettes
 R
 
+# rm -rf crumblr_cache/
+
 rmarkdown::render('crumblr.Rmd')
 --->
 
@@ -56,33 +58,59 @@ The functions here incorporate the precision weights:
 - `variancePartition::dream()`
 - `limma::lmFit()`
 
-## Differential testing
+
+# Installation
+To install this package, start R and enter:
+
+```{r install, eval=FALSE}
+if (!require("BiocManager", quietly = TRUE)) {
+  install.packages("BiocManager")
+}
+
+# Select release #1 or #2
+
+# 1) Bioconductor release (coming soon...)
+# BiocManager::install("crumblr")
+
+# 2) Latest stable release
+devtools::install_github("DiseaseNeurogenomics/crumblr")
+```
+
+
+## Process data
+
 Here we evaluate whether the observed cell proportions change in response to interferon β.  Given the results here, we cannot reject the null hypothesis that interferon β does not affect the cell type proportions.
  
 ```{r crumblr}
 library(crumblr)
 
-# Load cell counts from Kang, et al. (2018)
-#  https://doi.org/10.1038/nbt.4042
+# Load cell counts, clustering and metadata
+# from Kang, et al. (2018) https://doi.org/10.1038/nbt.4042
 data(IFNCellCounts)
 
 # Apply crumblr transformation
 # cobj is an EList object compatable with limma workflow
 # cobj$E stores transformed values
 # cobj$weights stores precision weights
-cobj <- crumblr(cellCounts)
-
-# Use variancePartition workflow to analyze each cell type
-# Perform regression on each cell type separately
-#  then use eBayes to shrink residual variance
-# Also compatible with limma::lmFit()
-library(variancePartition)
-fit <- dream(cobj, ~ StimStatus + ind, info)
-fit <- eBayes(fit)
-
-# Extract results for each cell type
-topTable(fit, coef = "StimStatusstim", number = Inf, sort.by = "none")
+#    corresponding to the regularized inverse variance
+cobj <- crumblr( df_cellCounts )
 ```
+
+## Variance partitioning
+Decomposing the variance illustrates that more variation is explained by subject than stimulation status.
+```{r vp, fig.height=4, fig.width=6}
+library(variancePartition)
+
+# Partition variance into components for Subject (i.e. ind)
+#   and stimulation status, and residual variation
+form =  ~ (1|ind) + (1|StimStatus)
+vp <- fitExtractVarPartModel(cobj, form, info)
+
+# Plot variance fractions
+fig.vp = plotPercentBars(vp)
+fig.vp
+```
+
 
 ## PCA
 Performing PCA on the transformed cell counts indicates that the samples cluster based on subject rather than stimulation status.
@@ -91,7 +119,10 @@ Performing PCA on the transformed cell counts indicates that the samples cluster
 library(ggplot2)
 
 # Perform PCA
-pca <- prcomp(t(cobj$E))
+# use crumblr::standardize() to get values with 
+# approximately equal sampling variance,
+# which is a key property for downstream PCA and clustering analysis.
+pca <- prcomp(t(standardize(cobj)))
 
 # merge with metadata
 df_pca <- merge(pca$x, info, by = "row.names")
@@ -114,23 +145,40 @@ The samples from the same subject also cluster together.
 heatmap(cobj$E)
 ```
 
-## Variance partitioning
-Decomposing the variance illustrates that more variation is explained by subject than stimulation status.
-```{r vp, fig.height=4, fig.width=6}
-library(variancePartition)
 
-# Partition variance into components for Subject (i.e. ind)
-#   and stimulation status, and residual variation
-vp <- fitExtractVarPartModel(cobj, ~ ind + StimStatus, info)
+## Differential testing
+```{r dream}
+# Use variancePartition workflow to analyze each cell type
+# Perform regression on each cell type separately
+#  then use eBayes to shrink residual variance
+# Also compatible with limma::lmFit()
+fit <- dream(cobj, ~ StimStatus + ind, info)
+fit <- eBayes(fit)
 
-# Plot variance fractions
-plotPercentBars(vp)
+# Extract results for each cell type
+topTable(fit, coef = "StimStatusstim", number = Inf)
 ```
 
 
+### Multivariate testing along a tree
+We can gain power by jointly testing multiple cell types using a multivariate statistical model, instead of testing one cell type at a time.  Here we construct a hierarchical clustering between cell types based on gene expression from pseudobulk, and perform a multivariate test for each internal node of the tree based on its leaf nodes.  The results for the leaves are the same as from `topTable()` above. At each internal node `treeTest()` performs a fixed effects meta-analysis of the coefficients of the leaves while modeling the covariance between coefficient estimates.  In the backend, this is implemented using `variancePartition::mvTest()` and [remaCor](https://cran.r-project.org/package=remaCor) package.
 
 
+```{r treeTest}
+# Perform multivariate test across the hierarchy
+res <- treeTest(fit, cobj, hcl, coef = "StimStatusstim")
 
+# Plot hierarchy and testing results
+plotTreeTest(res)
+     
+# Plot hierarchy and regression coefficients
+plotTreeTestBeta(res)
+```     
 
-
-
+#### Combined plotting
+```{r combined, fig.width=12}
+plotTreeTestBeta(res) + 
+  theme(legend.position="bottom", legend.box = "vertical") | 
+  plotForest(res, hide=FALSE) | 
+  fig.vp
+```

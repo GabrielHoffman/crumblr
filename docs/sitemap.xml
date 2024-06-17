@@ -16,6 +16,9 @@
     <loc>http://DiseaseNeurogenomics.github.io/crumblr/articles/index.html</loc>
   </url>
   <url>
+    <loc>http://DiseaseNeurogenomics.github.io/crumblr/articles/integration.html</loc>
+  </url>
+  <url>
     <loc>http://DiseaseNeurogenomics.github.io/crumblr/articles/studentize.html</loc>
   </url>
   <url>
@@ -55,6 +58,12 @@
     <loc>http://DiseaseNeurogenomics.github.io/crumblr/reference/meanSdPlot.html</loc>
   </url>
   <url>
+    <loc>http://DiseaseNeurogenomics.github.io/crumblr/reference/plotForest-methods.html</loc>
+  </url>
+  <url>
+    <loc>http://DiseaseNeurogenomics.github.io/crumblr/reference/plotForest-treedata-method.html</loc>
+  </url>
+  <url>
     <loc>http://DiseaseNeurogenomics.github.io/crumblr/reference/plotScatterDensity.html</loc>
   </url>
   <url>
@@ -62,6 +71,9 @@
   </url>
   <url>
     <loc>http://DiseaseNeurogenomics.github.io/crumblr/reference/plotTreeTestBeta.html</loc>
+  </url>
+  <url>
+    <loc>http://DiseaseNeurogenomics.github.io/crumblr/reference/standardize-method.html</loc>
   </url>
   <url>
     <loc>http://DiseaseNeurogenomics.github.io/crumblr/reference/studentize-method.html</loc>

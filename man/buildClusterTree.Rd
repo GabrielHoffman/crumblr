@@ -8,8 +8,9 @@ buildClusterTree(
   sce,
   reduction,
   labelCol,
-  method = c("cosine", "euclidean", "maximum", "manhattan", "canberra", "binary",
-    "minkowski")
+  method.dist = c("cosine", "euclidean", "maximum", "manhattan", "canberra", "binary",
+    "minkowski"),
+  method.hclust = c("complete", "ward.D", "ward.D2")
 )
 }
 \arguments{
@@ -19,7 +20,9 @@ buildClusterTree(
 
 \item{labelCol}{column in \code{SingleCellExperiment} storing cell type annotations}
 
-\item{method}{distance metric}
+\item{method.dist}{method for \code{dist(..,method=method.dist)}}
+
+\item{method.hclust}{method for \code{hclust(..,method=method.hclust)}}
 }
 \description{
 Perform hierarchical clustering dimension reduction from single cell expression data

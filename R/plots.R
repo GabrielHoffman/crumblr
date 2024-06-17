@@ -52,16 +52,16 @@ plotScatterDensity <- function(x, y, size = 1) {
 
 
 
-#' Plot row standard deviations versus row means
+#' Plot row standard deviations versus rank of row means
 #'
-#' Diagnositic plot for Student transform
+#' Diagnositic plot for homoscedasticity across variables
 #'
 #' @param x data matrix
 #'
 #' @return plot from ggplot2
 #'
 #' @details
-#' Plot the sd versus rank mean of each row like \code{vsn::meanSdPlot}.  Also show the coefficient of variation of the variances.  A a lower value indicates stronger variance stabilization
+#' Plot the sd versus rank mean of each row like \code{vsn::meanSdPlot}.  Also show the coefficient of variation of the variances.  A lower value indicates stronger variance stabilization
 #'
 #' @examples
 #' # set probability of each category
@@ -82,14 +82,21 @@ plotScatterDensity <- function(x, y, size = 1) {
 #' keep <- colSums(counts > 5) > 10
 #'
 #' # run crumblr on counts
-#' cobj <- crumblr(counts[, keep])
+#' cobj <- crumblr(counts[, keep], max.ratio=10)
 #'
-#' # run student transform
-#' df_student <- studentize(cobj)
-#'
+#' # Plot for CLR
 #' # For each sample, plot rank of mean vs sd
-#' meanSdPlot(df_student) + ggtitle("crumblr student")
+#' fig1 = meanSdPlot(cobj$E) + ggtitle("CLR")
 #'
+#' # run crumblr::standardize()
+#' df_std <- standardize(cobj)
+#'
+#' # Standardized crumblr 
+#' fig2 = meanSdPlot(df_std) + ggtitle("Standardized crumblr")
+#'
+#' # Standardizing the crumblr results better stabilizes
+#' # the variances across variables
+#' fig1 | fig2
 #' @seealso \code{vsn::meanSdPlot}
 #' @import ggplot2
 #' @importFrom stats var

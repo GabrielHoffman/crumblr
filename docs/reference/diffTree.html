@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">crumblr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.11</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,7 +28,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/crumblr_theory.html">Normal approximation vs. empirical simulation</a>
-    <a class="dropdown-item" href="../articles/crumblr_treeTest.html">Multivariate testing along a tree</a>
+    <a class="dropdown-item" href="../articles/integration.html">Integration with dreamlet / SingleCellExperiment</a>
   </div>
 </li>
 <li class="nav-item">
@@ -83,8 +83,8 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://bioconductor.org/packages/variancePartition" class="external-link">variancePartition</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Load cell counts from Kang, et al. (2018)</span></span></span>
-<span class="r-in"><span><span class="co">#  https://doi.org/10.1038/nbt.4042</span></span></span>
+<span class="r-in"><span><span class="co"># Load cell counts, clustering and metadata</span></span></span>
+<span class="r-in"><span><span class="co"># from Kang, et al. (2018) https://doi.org/10.1038/nbt.4042</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">IFNCellCounts</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Simulate a factor with 2 levels called DiseaseRand</span></span></span>
@@ -93,27 +93,19 @@
 <span class="r-in"><span><span class="va">info</span><span class="op">$</span><span class="va">DiseaseRand</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">info</span><span class="op">$</span><span class="va">DiseaseRand</span>, <span class="va">LETTERS</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Apply crumblr transformation</span></span></span>
-<span class="r-in"><span><span class="va">cobj</span> <span class="op">&lt;-</span> <span class="fu"><a href="crumblr.html">crumblr</a></span><span class="op">(</span><span class="va">cellCounts</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cobj</span> <span class="op">&lt;-</span> <span class="fu"><a href="crumblr.html">crumblr</a></span><span class="op">(</span><span class="va">df_cellCounts</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Use dream workflow to analyze each cell separately</span></span></span>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/dream-method.html" class="external-link">dream</a></span><span class="op">(</span><span class="va">cobj</span>, <span class="op">~</span> <span class="va">StimStatus</span> <span class="op">+</span> <span class="va">ind</span>, <span class="va">info</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/ebayes.html" class="external-link">eBayes</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Create a hierarchical cluster of cell types</span></span></span>
-<span class="r-in"><span><span class="co"># NOTE: for example only</span></span></span>
-<span class="r-in"><span><span class="co"># Create clustering using prior knowledge</span></span></span>
-<span class="r-in"><span><span class="co"># or single cell data</span></span></span>
-<span class="r-in"><span><span class="co"># Using dreamlet::buildClusterTreeFromPB() is recommended</span></span></span>
-<span class="r-in"><span><span class="va">cellFractions</span> <span class="op">&lt;-</span> <span class="va">cellCounts</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">cellCounts</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">hc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html" class="external-link">hclust</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">cellFractions</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Perform multivariate test across the hierarchy</span></span></span>
-<span class="r-in"><span><span class="va">res1</span> <span class="op">&lt;-</span> <span class="fu"><a href="treeTest.html">treeTest</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">cobj</span>, <span class="va">hc</span>, coef <span class="op">=</span> <span class="st">"StimStatusstim"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">res1</span> <span class="op">&lt;-</span> <span class="fu"><a href="treeTest.html">treeTest</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">cobj</span>, <span class="va">hcl</span>, coef <span class="op">=</span> <span class="st">"StimStatusstim"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Perform same test, but on DiseaseRand</span></span></span>
 <span class="r-in"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/dream-method.html" class="external-link">dream</a></span><span class="op">(</span><span class="va">cobj</span>, <span class="op">~</span> <span class="va">DiseaseRand</span>, <span class="va">info</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/ebayes.html" class="external-link">eBayes</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">res2</span> <span class="op">&lt;-</span> <span class="fu"><a href="treeTest.html">treeTest</a></span><span class="op">(</span><span class="va">fit2</span>, <span class="va">cobj</span>, <span class="va">hc</span>, coef <span class="op">=</span> <span class="st">"DiseaseRandB"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">res2</span> <span class="op">&lt;-</span> <span class="fu"><a href="treeTest.html">treeTest</a></span><span class="op">(</span><span class="va">fit2</span>, <span class="va">cobj</span>, <span class="va">hcl</span>, coef <span class="op">=</span> <span class="st">"DiseaseRandB"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Compare the coefficient estimates at each node</span></span></span>
 <span class="r-in"><span><span class="co"># Test if res1 - res2 is significantly different from zero</span></span></span>
@@ -131,11 +123,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Monocytes, ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Node labels:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   B cells/CD14+ Monocytes/CD4 T cells/CD8 T cells/Dendritic cells/FCGR3A+</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Monocytes/Megakaryocytes/NK cells, B cells/CD14+ Monocytes/CD8 T</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cells/Dendritic cells/FCGR3A+ Monocytes/Megakaryocytes/NK cells, B cells/CD8 T</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cells/Dendritic cells/FCGR3A+ Monocytes/Megakaryocytes/NK cells, B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cells/Dendritic cells/FCGR3A+ Monocytes/Megakaryocytes/NK cells, B cells/NK</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cells, Dendritic cells/FCGR3A+ Monocytes/Megakaryocytes, ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Monocytes/Megakaryocytes/NK cells, B cells/CD4 T cells/CD8 T</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cells/Megakaryocytes/NK cells, CD14+ Monocytes/Dendritic cells/FCGR3A+</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Monocytes, CD14+ Monocytes/FCGR3A+ Monocytes, B cells/CD4 T cells/CD8 T</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cells/NK cells, CD4 T cells/CD8 T cells/NK cells, ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Rooted; includes branch lengths.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -144,18 +135,18 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># The associated data tibble abstraction: 15 × 11</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># The 'node', 'label' and 'isTip' are from the phylo tree.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     node label    isTip     beta     se   stat   pvalue n_features lambda method</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     1 B cells  TRUE   0.066<span style="text-decoration: underline;">5</span>  0.029<span style="text-decoration: underline;">1</span>  2.29  2.21<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span>          1   0.01 FE.em…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     2 CD14+ M… TRUE  -<span style="color: #BB0000;">0.068</span><span style="color: #BB0000; text-decoration: underline;">4</span>  0.025<span style="text-decoration: underline;">4</span> -<span style="color: #BB0000;">2.69</span>  7.11<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span>          1   0.01 FE.em…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     3 CD4 T c… TRUE  -<span style="color: #BB0000;">0.334</span>   0.055<span style="text-decoration: underline;">2</span> -<span style="color: #BB0000;">6.05</span>  1.41<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>          1   0.01 FE.em…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     4 CD8 T c… TRUE  -<span style="color: #BB0000;">0.181</span>   0.245  -<span style="color: #BB0000;">0.739</span> 4.60<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span>          1   0.01 FE.em…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     5 Dendrit… TRUE   0.333   0.109   3.06  2.21<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span>          1   0.01 FE.em…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     6 FCGR3A+… TRUE   0.522   0.048<span style="text-decoration: underline;">0</span> 10.9   1.61<span style="color: #949494;">e</span><span style="color: #BB0000;">-27</span>          1   0.01 FE.em…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     7 Megakar… TRUE  -<span style="color: #BB0000;">0.129</span>   0.038<span style="text-decoration: underline;">8</span> -<span style="color: #BB0000;">3.33</span>  8.63<span style="color: #949494;">e</span><span style="color: #BB0000;">- 4</span>          1   0.01 FE.em…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>     8 NK cells TRUE  -<span style="color: #BB0000;">0.103</span>   0.028<span style="text-decoration: underline;">3</span> -<span style="color: #BB0000;">3.66</span>  2.57<span style="color: #949494;">e</span><span style="color: #BB0000;">- 4</span>          1   0.01 FE.em…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>     9 B cells… FALSE -<span style="color: #BB0000;">0.008</span><span style="color: #BB0000; text-decoration: underline;">73</span> 0.032<span style="text-decoration: underline;">5</span> -<span style="color: #BB0000;">0.268</span> 7.89<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span>          8   0.01 FE.em…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>    10 B cells… FALSE  0.043<span style="text-decoration: underline;">5</span>  0.034<span style="text-decoration: underline;">1</span>  1.28  2.02<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span>          7   0.01 FE.em…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     node label      isTip    beta     se  stat   pvalue n_features lambda method</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     1 B cells    TRUE   0.062<span style="text-decoration: underline;">5</span> 0.019<span style="text-decoration: underline;">3</span>  3.24 1.18<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span>          1   0.01 FE.em…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     2 CD14+ Mon… TRUE  -<span style="color: #BB0000;">0.049</span><span style="color: #BB0000; text-decoration: underline;">3</span> 0.018<span style="text-decoration: underline;">0</span> -<span style="color: #BB0000;">2.74</span> 6.24<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span>          1   0.01 FE.em…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     3 CD4 T cel… TRUE  -<span style="color: #BB0000;">0.327</span>  0.045<span style="text-decoration: underline;">5</span> -<span style="color: #BB0000;">7.19</span> 6.71<span style="color: #949494;">e</span><span style="color: #BB0000;">-13</span>          1   0.01 FE.em…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     4 CD8 T cel… TRUE  -<span style="color: #BB0000;">0.229</span>  0.171  -<span style="color: #BB0000;">1.34</span> 1.81<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span>          1   0.01 FE.em…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     5 Dendritic… TRUE   0.367  0.078<span style="text-decoration: underline;">4</span>  4.68 2.88<span style="color: #949494;">e</span><span style="color: #BB0000;">- 6</span>          1   0.01 FE.em…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     6 FCGR3A+ M… TRUE   0.528  0.029<span style="text-decoration: underline;">2</span> 18.1  3.10<span style="color: #949494;">e</span><span style="color: #BB0000;">-73</span>          1   0.01 FE.em…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     7 Megakaryo… TRUE  -<span style="color: #BB0000;">0.152</span>  0.028<span style="text-decoration: underline;">5</span> -<span style="color: #BB0000;">5.34</span> 9.27<span style="color: #949494;">e</span><span style="color: #BB0000;">- 8</span>          1   0.01 FE.em…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>     8 NK cells   TRUE  -<span style="color: #BB0000;">0.095</span><span style="color: #BB0000; text-decoration: underline;">5</span> 0.019<span style="text-decoration: underline;">2</span> -<span style="color: #BB0000;">4.98</span> 6.25<span style="color: #949494;">e</span><span style="color: #BB0000;">- 7</span>          1   0.01 FE.em…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>     9 B cells/C… FALSE -<span style="color: #BB0000;">0.045</span><span style="color: #BB0000; text-decoration: underline;">9</span> 0.024<span style="text-decoration: underline;">2</span> -<span style="color: #BB0000;">1.90</span> 5.74<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span>          8   0.01 FE.em…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>    10 B cells/C… FALSE -<span style="color: #BB0000;">0.197</span>  0.052<span style="text-decoration: underline;">0</span> -<span style="color: #BB0000;">3.79</span> 1.51<span style="color: #949494;">e</span><span style="color: #BB0000;">- 4</span>          5   0.01 FE.em…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 5 more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1 more variable: FDR &lt;dbl&gt;</span></span>
 <span class="r-in"><span></span></span>

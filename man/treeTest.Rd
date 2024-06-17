@@ -35,27 +35,19 @@ See package \code{remaCor} for details about the \code{remaCor::RE2C()} test, an
 \examples{
 library(variancePartition)
 
-# Load cell counts from Kang, et al. (2018)
-#  https://doi.org/10.1038/nbt.4042
+# Load cell counts, clustering and metadata
+# from Kang, et al. (2018) https://doi.org/10.1038/nbt.4042
 data(IFNCellCounts)
 
 # Apply crumblr transformation
-cobj <- crumblr(cellCounts)
+cobj <- crumblr(df_cellCounts)
 
 # Use dream workflow to analyze each cell separately
 fit <- dream(cobj, ~ StimStatus + ind, info)
 fit <- eBayes(fit)
 
-# Create a hierarchical cluster of cell types
-# NOTE: for example only
-# Create clustering using prior knowledge
-# or single cell data
-# Using dreamlet::buildClusterTreeFromPB() is recommended
-cellFractions <- cellCounts / rowSums(cellCounts)
-hc <- hclust(dist(t(cellFractions)))
-
 # Perform multivariate test across the hierarchy
-res <- treeTest(fit, cobj, hc, coef = "StimStatusstim")
+res <- treeTest(fit, cobj, hcl, coef = "StimStatusstim")
 
 # Plot hierarchy and testing results
 plotTreeTest(res)

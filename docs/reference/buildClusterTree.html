@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">crumblr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.11</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,7 +28,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/crumblr_theory.html">Normal approximation vs. empirical simulation</a>
-    <a class="dropdown-item" href="../articles/crumblr_treeTest.html">Multivariate testing along a tree</a>
+    <a class="dropdown-item" href="../articles/integration.html">Integration with dreamlet / SingleCellExperiment</a>
   </div>
 </li>
 <li class="nav-item">
@@ -65,8 +65,9 @@
 <span>  <span class="va">sce</span>,</span>
 <span>  <span class="va">reduction</span>,</span>
 <span>  <span class="va">labelCol</span>,</span>
-<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cosine"</span>, <span class="st">"euclidean"</span>, <span class="st">"maximum"</span>, <span class="st">"manhattan"</span>, <span class="st">"canberra"</span>, <span class="st">"binary"</span>,</span>
-<span>    <span class="st">"minkowski"</span><span class="op">)</span></span>
+<span>  method.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cosine"</span>, <span class="st">"euclidean"</span>, <span class="st">"maximum"</span>, <span class="st">"manhattan"</span>, <span class="st">"canberra"</span>, <span class="st">"binary"</span>,</span>
+<span>    <span class="st">"minkowski"</span><span class="op">)</span>,</span>
+<span>  method.hclust <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"complete"</span>, <span class="st">"ward.D"</span>, <span class="st">"ward.D2"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -84,8 +85,12 @@
 <dd><p>column in <code>SingleCellExperiment</code> storing cell type annotations</p></dd>
 
 
-<dt>method</dt>
-<dd><p>distance metric</p></dd>
+<dt>method.dist</dt>
+<dd><p>method for <code>dist(..,method=method.dist)</code></p></dd>
+
+
+<dt>method.hclust</dt>
+<dd><p>method for <code>hclust(..,method=method.hclust)</code></p></dd>
 
 </dl></div>
 

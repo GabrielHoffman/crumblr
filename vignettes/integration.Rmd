@@ -1,0 +1,129 @@
+---
+title: "Integration with dreamlet / SingleCellExperiment"
+subtitle: ''
+author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
+date: "Run on `r Sys.time()`"
+documentclass: article
+output: 
+  html_document:
+  toc: true
+  toc_float: true
+vignette: >
+  %\VignetteIndexEntry{crumblr_treeTest}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  %\usepackage[utf8]{inputenc}
+---
+
+
+
+<!---
+cd /Users/gabrielhoffman/workspace/repos/crumblr/vignettes
+R
+
+rmarkdown::render('integation.Rmd')
+--->
+
+```{r setup, echo=FALSE, results="hide"}
+knitr::opts_chunk$set(
+  tidy = FALSE,
+  cache = TRUE,
+  echo = TRUE,
+  dev = c("png", "pdf"),
+  package.startup.message = FALSE,
+  message = FALSE,
+  error = FALSE,
+  warning = FALSE
+)
+
+knitr::opts_chunk$set()
+
+options(width = 100)
+```	
+
+
+
+<style>
+body {
+text-align: justify}
+</style>
+
+# Load and process single cell data
+Here we perform analysis of PBMCs from 8 individuals stimulated with interferon-β [Kang, et al, 2018, Nature Biotech](https://www.nature.com/articles/nbt.4042).  We perform standard processing with [dreamlet](https://gabrielhoffman.github.io/dreamlet/index.html) to compute pseudobulk before applying `crumblr`.
+
+Here, single cell RNA-seq data is downloaded from [ExperimentHub](https://bioconductor.org/packages/ExperimentHub/).
+
+```{r preprocess.data}
+library(dreamlet)
+library(muscat)
+library(ExperimentHub)
+library(zenith)
+library(scater)
+
+# Download data, specifying EH2259 for the Kang, et al study
+eh <- ExperimentHub()
+sce <- eh[["EH2259"]]
+
+sce$ind = as.character(sce$ind)
+
+# only keep singlet cells with sufficient reads
+sce <- sce[rowSums(counts(sce) > 0) > 0, ]
+sce <- sce[, colData(sce)$multiplets == "singlet"]
+
+# compute QC metrics
+qc <- perCellQCMetrics(sce)
+
+# remove cells with few or many detected genes
+ol <- isOutlier(metric = qc$detected, nmads = 2, log = TRUE)
+sce <- sce[, !ol]
+
+# set variable indicating stimulated (stim) or control (ctrl)
+sce$StimStatus <- sce$stim
+```
+
+## Aggregate to pseudobulk
+Dreamlet creates the pseudobulk dataset:
+```{r aggregate}
+# Since 'ind' is the individual and 'StimStatus' is the stimulus status,
+# create unique identifier for each sample
+sce$id <- paste0(sce$StimStatus, sce$ind)
+
+# Create pseudobulk data by specifying cluster_id and sample_id for aggregating cells
+pb <- aggregateToPseudoBulk(sce,
+  assay = "counts",
+  cluster_id = "cell",
+  sample_id = "id",
+  verbose = FALSE)
+```
+
+
+
+## Process data
+Here we evaluate whether the observed cell proportions change in response to interferon-β.  
+ 
+```{r crumblr}
+library(crumblr)
+
+# use dreamlet::cellCounts() to extract data
+cellCounts(pb)[1:3,1:3]
+
+# Apply crumblr transformation
+# cobj is an EList object compatable with limma workflow
+# cobj$E stores transformed values
+# cobj$weights stores precision weights
+cobj <- crumblr(cellCounts(pb))
+```
+
+## Analysis
+Now continue on with the downstream analysis
+```{r vp}
+library(variancePartition)
+
+fit <- dream(cobj, ~ StimStatus + ind, colData(pb))
+fit <- eBayes(fit)
+
+topTable(fit, coef = "StimStatusstim", number = Inf)
+```
+
+Given the results here, we see that CD8 T cells at others change relative abundance following treatment with iterferon-β.
+

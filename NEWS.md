@@ -1,3 +1,10 @@
+# crumblr 0.99.11
+ - June 14, 2024
+ - improve documentation 
+ - add `plotForest()`
+ - add `standardize()`
+
+
 # crumblr 0.99.10
  - June 12, 2024
  - add `diffTree()` and `plotTreeTestBeta()`
