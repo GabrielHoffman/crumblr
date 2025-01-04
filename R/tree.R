@@ -150,7 +150,6 @@ treeTest <- function(fit, obj, hc, coef, method = c("FE.empirical", "FE", "RE2C"
 #'
 #' @importFrom SingleCellExperiment reducedDim colData
 #' @importFrom stats dist hclust
-#' @importFrom stylo dist.cosine
 #' @export
 buildClusterTree <- function(sce, reduction, labelCol, method.dist = c("cosine", "euclidean", "maximum", "manhattan", "canberra", "binary", "minkowski"), method.hclust = c("complete", "ward.D", "ward.D2")) {
 

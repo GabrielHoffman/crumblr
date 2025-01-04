@@ -46,10 +46,9 @@ Imports:
     SingleCellExperiment,
     ggtree,
     dplyr,
-    stylo,
     stats,
     MASS,
     Rfast
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 RdMacros: Rdpack
 LazyData: false
