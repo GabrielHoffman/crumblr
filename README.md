@@ -29,7 +29,15 @@ Yet CLR-transformed data is still highly heteroskedastic: the precision of measu
 ### Install
 ```r
 # 1) Make sure Bioconductor is installed
+if (!require("BiocManager", quietly = TRUE)) {
+  install.packages("BiocManager")
+}
+
 # 2) Install crumblr and dependencies:
+# From Bioconductor
+BiocManager::install("crumblr")
+
+# or from GitHub
 devtools::install_github("DiseaseNeurogenomics/crumblr")
 ```
 

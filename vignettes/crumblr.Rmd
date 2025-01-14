@@ -15,17 +15,6 @@ vignette: >
   %\usepackage[utf8]{inputenc}
 ---
 
-
-
-<!---
-cd /Users/gabrielhoffman/workspace/repos/crumblr/vignettes
-R
-
-# rm -rf crumblr_cache/
-
-rmarkdown::render('crumblr.Rmd')
---->
-
 ```{r setup, echo=FALSE, results="hide"}
 knitr::opts_chunk$set(
   tidy = FALSE,
@@ -50,6 +39,8 @@ body {
 text-align: justify}
 </style>
 
+Changes in cell type composition play an important role in health and disease.  Recent advances in single cell technology have enabled measurement of cell type composition at increasing cell lineage resolution across large cohorts of individuals.  Yet this raises new challenges for statistical analysis of these compositional data to identify changes associated with a phenotype.  We introduce `crumblr`, a scalable statistical method for analyzing count ratio data using precision-weighted linear models incorporating random effects for complex study designs.  Uniquely, `crumblr` performs tests of association at multiple levels of the cell lineage hierarchy using multivariate regression to increase power over tests of a single cell component.  In simulations, `crumblr` increases power compared to existing methods, while controlling the false positive rate.
+
 Here we consider counts for 8 cell types from quantified using single cell RNA-seq data from unstimulated and interferon β stimulated PBMCs from 8 subjects [(Kang, et al., 2018)](https://www.nature.com/articles/nbt.4042).    
 
 The functions here incorporate the precision weights:
@@ -63,16 +54,16 @@ The functions here incorporate the precision weights:
 To install this package, start R and enter:
 
 ```{r install, eval=FALSE}
+# 1) Make sure Bioconductor is installed
 if (!require("BiocManager", quietly = TRUE)) {
   install.packages("BiocManager")
 }
 
-# Select release #1 or #2
+# 2) Install crumblr and dependencies:
+# From Bioconductor
+BiocManager::install("crumblr")
 
-# 1) Bioconductor release (coming soon...)
-# BiocManager::install("crumblr")
-
-# 2) Latest stable release
+# or from GitHub
 devtools::install_github("DiseaseNeurogenomics/crumblr")
 ```
 

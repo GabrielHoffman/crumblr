@@ -1,3 +1,7 @@
+# crumblr 0.99.13
+ - Jan 14, 2025
+ - Bioc submission
+
 # crumblr 0.99.11
  - June 14, 2024
  - improve documentation 

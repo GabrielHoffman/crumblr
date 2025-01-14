@@ -1,12 +1,11 @@
-pandoc: '3.2'
-pkgdown: 2.0.9
+pandoc: '3.5'
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   crumblr_theory: crumblr_theory.html
   crumblr: crumblr.html
   integration: integration.html
-last_built: 2024-06-17T17:34Z
+last_built: 2025-01-14T14:58Z
 urls:
   reference: http://DiseaseNeurogenomics.github.io/crumblr/reference
   article: http://DiseaseNeurogenomics.github.io/crumblr/articles
-

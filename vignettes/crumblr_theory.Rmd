@@ -16,28 +16,6 @@ vignette: >
 ---
 
 
-
-<!---
-Cache long-running vignettes
-https://www.kloppenborg.ca/2021/06/long-running-vignettes/
-
-
-cd /Users/gabrielhoffman/workspace/repos/crumblr/vignettes
-R
-
-rm -f sim*.pdf sim*.png
-rmarkdown::render('crumblr_theory.Rmd')
-
-
-cd /hpc/users/hoffmg01/work/eval_methods/dreamlet
-R
-# rm -rf test_ctc_cache
-system2("ml git; git pull")
-rmarkdown::render("crumblr_theory.Rmd");
-
-
---->
-
 ```{r setup, echo=FALSE, results="hide"}
 knitr::opts_chunk$set(
   tidy = FALSE,

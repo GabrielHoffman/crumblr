@@ -17,13 +17,6 @@ vignette: >
 
 
 
-<!---
-cd /Users/gabrielhoffman/workspace/repos/crumblr/vignettes
-R
-
-rmarkdown::render('integation.Rmd')
---->
-
 ```{r setup, echo=FALSE, results="hide"}
 knitr::opts_chunk$set(
   tidy = FALSE,
