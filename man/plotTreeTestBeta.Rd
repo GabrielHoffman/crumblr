@@ -43,6 +43,6 @@ fit <- eBayes(fit)
 # Perform multivariate test across the hierarchy
 res <- treeTest(fit, cobj, hcl, coef = "StimStatusstim")
 
-# Plot hierarchy, no tests are significant 
+# Plot hierarchy, no tests are significant
 plotTreeTestBeta(res)
 }

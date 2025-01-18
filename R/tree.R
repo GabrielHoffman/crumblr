@@ -152,7 +152,6 @@ treeTest <- function(fit, obj, hc, coef, method = c("FE.empirical", "FE", "RE2C"
 #' @importFrom stats dist hclust
 #' @export
 buildClusterTree <- function(sce, reduction, labelCol, method.dist = c("cosine", "euclidean", "maximum", "manhattan", "canberra", "binary", "minkowski"), method.hclust = c("complete", "ward.D", "ward.D2")) {
-
   method.dist <- match.arg(method.dist)
   method.hclust <- match.arg(method.hclust)
 
@@ -193,14 +192,14 @@ buildClusterTree <- function(sce, reduction, labelCol, method.dist = c("cosine",
 
 
 #' Compare difference in estimates between two trees
-#' 
+#'
 #' Compare difference in cofficient estimates between two trees.  For node \code{i}, the test evaluates \code{tree1[i] - tree2[i] = 0}.
-#' 
+#'
 #' @param tree1 object of type \code{treedata} from \code{treeTest()}
 #' @param tree2 object of type \code{treedata} from \code{treeTest()}
-#' 
+#'
 #' @details When a fixed effect test is performed at each node using \code{treeTest()} with \code{method = "FE.empirical"} or \code{method = "FE"}, a coefficient estimate and standard error are estimated for each node based on the children.  This function performs a two-sample z-test to test if a given coefficient from \code{tree1} is significantly different from the corresponding coefficient in \code{tree2}.
-#' 
+#'
 #' @examples
 #' library(variancePartition)
 #'
@@ -210,8 +209,8 @@ buildClusterTree <- function(sce, reduction, labelCol, method.dist = c("cosine",
 #'
 #' # Simulate a factor with 2 levels called DiseaseRand
 #' set.seed(123)
-#' info$DiseaseRand = sample(LETTERS[seq(2)], nrow(info), replace=TRUE)
-#' info$DiseaseRand = factor(info$DiseaseRand, LETTERS[seq(2)])
+#' info$DiseaseRand <- sample(LETTERS[seq(2)], nrow(info), replace = TRUE)
+#' info$DiseaseRand <- factor(info$DiseaseRand, LETTERS[seq(2)])
 #'
 #' # Apply crumblr transformation
 #' cobj <- crumblr(df_cellCounts)
@@ -224,52 +223,46 @@ buildClusterTree <- function(sce, reduction, labelCol, method.dist = c("cosine",
 #' res1 <- treeTest(fit, cobj, hcl, coef = "StimStatusstim")
 #'
 #' # Perform same test, but on DiseaseRand
-#' fit2 <- dream(cobj, ~ DiseaseRand, info)
+#' fit2 <- dream(cobj, ~DiseaseRand, info)
 #' fit2 <- eBayes(fit2)
 #' res2 <- treeTest(fit2, cobj, hcl, coef = "DiseaseRandB")
 #'
 #' # Compare the coefficient estimates at each node
 #' # Test if res1 - res2 is significantly different from zero
-#' resDiff = diffTree(res1, res2)
-#' 
+#' resDiff <- diffTree(res1, res2)
+#'
 #' resDiff
-#' 
+#'
 #' plotTreeTest(resDiff)
-#' 
+#'
 #' plotTreeTestBeta(resDiff)
 #' @importFrom dplyr inner_join
 #' @export
-diffTree = function(tree1, tree2){
-
-  df1 = as_tibble(tree1)
-  df2 = as_tibble(tree2)
+diffTree <- function(tree1, tree2) {
+  df1 <- as_tibble(tree1)
+  df2 <- as_tibble(tree2)
 
   # comparison only works for fixed effects models
-  if( ! all(df1$method %in% c("FE", "FE.empirical"))){
+  if (!all(df1$method %in% c("FE", "FE.empirical"))) {
     stop("tree1 must be evaluated with a fixed effect model")
   }
 
-  if( ! all(df2$method %in% c("FE", "FE.empirical"))){
+  if (!all(df2$method %in% c("FE", "FE.empirical"))) {
     stop("tree2 must be evaluated with a fixed effect model")
   }
 
   # join data.frames from each tree
-  df_merge = inner_join(df1, df2, by=c("parent", "node", "label"))
+  df_merge <- inner_join(df1, df2, by = c("parent", "node", "label"))
 
   # initialize
-  df_out = df1
+  df_out <- df1
 
   # perform two-sample z-test
-  df_out$beta = with(df_merge, beta.x - beta.y)
-  df_out$se = with(df_merge, sqrt(se.x^2 + se.y^2))
-  df_out$stat = with(df_out, beta / se)
-  df_out$pvalue = with(df_out, 2*pnorm(abs(stat), lower.tail=FALSE))
-  df_out$FDR = with(df_out, p.adjust(pvalue, "BH"))
+  df_out$beta <- with(df_merge, beta.x - beta.y)
+  df_out$se <- with(df_merge, sqrt(se.x^2 + se.y^2))
+  df_out$stat <- with(df_out, beta / se)
+  df_out$pvalue <- with(df_out, 2 * pnorm(abs(stat), lower.tail = FALSE))
+  df_out$FDR <- with(df_out, p.adjust(pvalue, "BH"))
 
   as.treedata(df_out)
 }
-
-
-
-
-

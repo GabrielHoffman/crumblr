@@ -43,7 +43,7 @@
 #' counts <- t(rmultinom(n_samples, n_counts, prob = alpha / sum(alpha)))
 #'
 #' dmn.mle(counts)
-#
+#' #
 # # where n is number of counts
 # n = rowsums(counts)[1]
 # a0 = sum(alpha)

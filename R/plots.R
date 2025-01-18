@@ -82,17 +82,17 @@ plotScatterDensity <- function(x, y, size = 1) {
 #' keep <- colSums(counts > 5) > 10
 #'
 #' # run crumblr on counts
-#' cobj <- crumblr(counts[, keep], max.ratio=10)
+#' cobj <- crumblr(counts[, keep], max.ratio = 10)
 #'
 #' # Plot for CLR
 #' # For each sample, plot rank of mean vs sd
-#' fig1 = meanSdPlot(cobj$E) + ggtitle("CLR")
+#' fig1 <- meanSdPlot(cobj$E) + ggtitle("CLR")
 #'
 #' # run crumblr::standardize()
 #' df_std <- standardize(cobj)
 #'
-#' # Standardized crumblr 
-#' fig2 = meanSdPlot(df_std) + ggtitle("Standardized crumblr")
+#' # Standardized crumblr
+#' fig2 <- meanSdPlot(df_std) + ggtitle("Standardized crumblr")
 #'
 #' # Standardizing the crumblr results better stabilizes
 #' # the variances across variables

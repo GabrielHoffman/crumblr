@@ -31,8 +31,6 @@ knitr::opts_chunk$set(
   # fig.path = ""  # Added this line to the standard setup chunk)
 )
 
-knitr::opts_chunk$set()
-
 options(width = 100)
 ```	
 
@@ -105,9 +103,9 @@ run_sim <- function(prop_other = NULL, pseudocount = .5) {
         if (tau == 1) {
           # large a0 corresponds to multinomial
           alpha <- p * 1e9
-        } else if (tau < 1){
+        } else if (tau < 1) {
           stop("tau must be greater than 1")
-        }else {
+        } else {
           # convert tau overdispersion value to alpha from p
           a0 <- (countTotal - tau) / (tau - 1)
           alpha <- p * a0
@@ -129,8 +127,8 @@ run_sim <- function(prop_other = NULL, pseudocount = .5) {
 
         # expected variance based on *true* values
         D <- ncol(counts)
-        p <- (expectedCounts + pseudocount) / sum(expectedCounts + pseudocount) 
-        v_theoretical_est <- tau * (1 / p - 2 / (p * D) + sum(1 / p) / D^2) / countTotal   
+        p <- (expectedCounts + pseudocount) / sum(expectedCounts + pseudocount)
+        v_theoretical_est <- tau * (1 / p - 2 / (p * D) + sum(1 / p) / D^2) / countTotal
 
         data.frame(
           targetCount = targetCount,
@@ -256,42 +254,15 @@ For other applications, `crumblr` can estimate $\tau$ from the data by using `cr
 
 
 
-```{r exit, cache=FALSE, eval=FALSE}
-knitr::knit_exit()
+# Session Info
+<details>
+```{r session, echo=FALSE}
+sessionInfo()
 ```
-
-```{r test, eval=FALSE}
-library(compositions)
-
-x <- c(1, 2, 3, 6)
-V <- ilrBase(D = length(x))
-
-crossprod(V, clr(x))
-ilr(x)
-
-V %*% ilr(x)
-clr(x)
-
-ginv(V) - t(V)
+</details>
 
 
-# variance from multinomial
-# diag(diag(p) - tcrossprod(p)) / countTotal
-# rowVars(apply(c_mat, 1, function(x) x/sum(x)))
-
-# # variance from ilr using delta method
-# library(compositions)
-# library(matrixStats)
-# V = ilrBase(D=ncol(c_mat))
-# head(ilr(c_mat))
-# head(clr(c_mat) %*% V)
-
-# colVars(ilr(c_mat))
-# diag((crossprod(V, diag(1/p)) %*% V) / countTotal)
 
 
-# One = rep(1, D)
-# I = diag(1,D)
-# C = (I-tcrossprod(One)/ D) %*% diag(1/p) %*% (I-tcrossprod(One)/ D) / countTotal
-# diag(C)
-```
+
+

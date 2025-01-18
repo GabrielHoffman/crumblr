@@ -19,7 +19,7 @@ Compute the centered log ratio (CLR) transform of a count matrix.
 }
 \details{
 The CLR of a vector \code{x} of counts in \code{D} categories is defined as
-\code{clr(x) = log(x) - mean(log(x))}. For details see van den Boogaart and  Tolosana-Delgado (2013).
+\code{clr(x) = log(x) - mean(log(x))}. For details see van den Boogaart and  Tolosana-Delgado (2013) .
 }
 \examples{
 # set probability of each category
@@ -45,9 +45,7 @@ clr(counts)[1:4, ]
 
 }
 \references{
-{
-  \insertRef{van2013analyzing}{crumblr}
-}
+\insertCite{van2013analyzing}{crumblr}
 }
 \seealso{
 \code{compositions::clr}

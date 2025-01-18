@@ -58,6 +58,7 @@ counts <- t(rmultinom(n_samples, n_counts, prob = alpha / sum(alpha)))
 
 dmn.mle(counts)
 #
+#
 }
 \seealso{
 Other functions also estimate DMN parameters.  \code{MGLM::MGLMfit()} and \code{dirmult::dirmult()} give good parameter estimates but are slower.  \code{Rfast::dirimultinom.mle()} often fails to converge

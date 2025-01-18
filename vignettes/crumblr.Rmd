@@ -27,8 +27,6 @@ knitr::opts_chunk$set(
   warning = FALSE
 )
 
-knitr::opts_chunk$set()
-
 options(width = 100)
 ```	
 
@@ -84,7 +82,7 @@ data(IFNCellCounts)
 # cobj$E stores transformed values
 # cobj$weights stores precision weights
 #    corresponding to the regularized inverse variance
-cobj <- crumblr( df_cellCounts )
+cobj <- crumblr(df_cellCounts)
 ```
 
 ## Variance partitioning
@@ -94,11 +92,11 @@ library(variancePartition)
 
 # Partition variance into components for Subject (i.e. ind)
 #   and stimulation status, and residual variation
-form =  ~ (1|ind) + (1|StimStatus)
+form <- ~ (1 | ind) + (1 | StimStatus)
 vp <- fitExtractVarPartModel(cobj, form, info)
 
 # Plot variance fractions
-fig.vp = plotPercentBars(vp)
+fig.vp <- plotPercentBars(vp)
 fig.vp
 ```
 
@@ -110,7 +108,7 @@ Performing PCA on the transformed cell counts indicates that the samples cluster
 library(ggplot2)
 
 # Perform PCA
-# use crumblr::standardize() to get values with 
+# use crumblr::standardize() to get values with
 # approximately equal sampling variance,
 # which is a key property for downstream PCA and clustering analysis.
 pca <- prcomp(t(standardize(cobj)))
@@ -161,15 +159,29 @@ res <- treeTest(fit, cobj, hcl, coef = "StimStatusstim")
 
 # Plot hierarchy and testing results
 plotTreeTest(res)
-     
+
 # Plot hierarchy and regression coefficients
 plotTreeTestBeta(res)
 ```     
 
 #### Combined plotting
 ```{r combined, fig.width=12}
-plotTreeTestBeta(res) + 
-  theme(legend.position="bottom", legend.box = "vertical") | 
-  plotForest(res, hide=FALSE) | 
+plotTreeTestBeta(res) +
+  theme(legend.position = "bottom", legend.box = "vertical") |
+  plotForest(res, hide = FALSE) |
   fig.vp
 ```
+
+
+# Session Info
+<details>
+```{r session, echo=FALSE}
+sessionInfo()
+```
+</details>
+
+
+
+
+
+

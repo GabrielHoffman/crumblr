@@ -29,8 +29,6 @@ knitr::opts_chunk$set(
   warning = FALSE
 )
 
-knitr::opts_chunk$set()
-
 options(width = 100)
 ```	
 
@@ -57,7 +55,7 @@ library(scater)
 eh <- ExperimentHub()
 sce <- eh[["EH2259"]]
 
-sce$ind = as.character(sce$ind)
+sce$ind <- as.character(sce$ind)
 
 # only keep singlet cells with sufficient reads
 sce <- sce[rowSums(counts(sce) > 0) > 0, ]
@@ -86,7 +84,8 @@ pb <- aggregateToPseudoBulk(sce,
   assay = "counts",
   cluster_id = "cell",
   sample_id = "id",
-  verbose = FALSE)
+  verbose = FALSE
+)
 ```
 
 
@@ -98,7 +97,7 @@ Here we evaluate whether the observed cell proportions change in response to int
 library(crumblr)
 
 # use dreamlet::cellCounts() to extract data
-cellCounts(pb)[1:3,1:3]
+cellCounts(pb)[1:3, 1:3]
 
 # Apply crumblr transformation
 # cobj is an EList object compatable with limma workflow
@@ -119,4 +118,18 @@ topTable(fit, coef = "StimStatusstim", number = Inf)
 ```
 
 Given the results here, we see that CD8 T cells at others change relative abundance following treatment with iterferon-β.
+
+
+# Session Info
+<details>
+```{r session, echo=FALSE}
+sessionInfo()
+```
+</details>
+
+
+
+
+
+
 

@@ -9,11 +9,10 @@
 #' @param pseudocount added to counts to avoid issues with zeros
 #'
 #' @details The CLR of a vector \code{x} of counts in \code{D} categories is defined as
-#' \code{clr(x) = log(x) - mean(log(x))}. For details see van den Boogaart and  Tolosana-Delgado (2013).
+#' \code{clr(x) = log(x) - mean(log(x))}. For details see van den Boogaart and  Tolosana-Delgado (2013) .
 #'
-#' @references{
-#'   \insertRef{van2013analyzing}{crumblr}
-#' }
+#' @references
+#'  \insertCite{van2013analyzing}{crumblr}
 #'
 #' @return matrix of CLR transformed counts
 #'
@@ -39,7 +38,7 @@
 #' # centered log ratio
 #' clr(counts)[1:4, ]
 #'
-#' @import Rdpack
+#' @importFrom Rdpack reprompt
 #' @seealso \code{compositions::clr}
 #' @export
 clr <- function(counts, pseudocount = 0.5) {
@@ -72,9 +71,9 @@ clr <- function(counts, pseudocount = 0.5) {
 #' Evalute the centered log ratio (CLR) transform of the count matrix, and the asymptotic theoretical variances of each transformed observation.  The asymptotic normal approximation is increasingly accurate for small overdispersion \eqn{\tau}, large total counts \eqn{C}, and large proportions \eqn{p}, but shows good agreement with the empirical results in most situtations. In practice, it is often reasonable to assume a sufficient number of counts before a variable is included in an analysis anyway.  But the feasability of this assumption is up to the user to determine.
 #'
 #' Given the array \code{p} storing proportions for one sample across all categories, the delta approximation uses the term \code{1/p}.  This can be unstable for small values of \code{p}, and the estimated variances can be sensitive to small changes in the proprtions.  To address this, the \code{"clr_2class"} method computes the \code{clr()} transform for category \code{i} using 2 classes: 1) counts in category i, and 2) counts _not_ in category i. Since class (2) now sums counts across all other categories, the small proportions are avoided and the variance estimates are more stable.
-#' 
-#' For real data, the asymptotic variance formula can give weights that vary substantially across samples and give very high weights for a subset of samples.  In order to address this, we regularize the weights to reduce the variation in the weights to have a maximum ratio of \code{max.ratio} between the maximum and \code{quant} quantile value.  
-#' 
+#'
+#' For real data, the asymptotic variance formula can give weights that vary substantially across samples and give very high weights for a subset of samples.  In order to address this, we regularize the weights to reduce the variation in the weights to have a maximum ratio of \code{max.ratio} between the maximum and \code{quant} quantile value.
+#'
 #' @examples
 #' # set probability of each category
 #' prob <- c(0.1, 0.2, 0.3, 0.5)
@@ -108,7 +107,7 @@ clr <- function(counts, pseudocount = 0.5) {
 #' @export
 setGeneric(
   "crumblr",
-  function(counts, pseudocount = 0.5, method = c("clr", "clr_2class"), tau = 1, max.ratio=5, quant=0.05) {
+  function(counts, pseudocount = 0.5, method = c("clr", "clr_2class"), tau = 1, max.ratio = 5, quant = 0.05) {
     standardGeneric("crumblr")
   }
 )
@@ -120,7 +119,7 @@ setGeneric(
 #' @importFrom methods new
 setMethod(
   "crumblr", "matrix",
-  function(counts, pseudocount = 0.5, method = c("clr", "clr_2class"), tau = 1, max.ratio=5, quant=0.05) {
+  function(counts, pseudocount = 0.5, method = c("clr", "clr_2class"), tau = 1, max.ratio = 5, quant = 0.05) {
     method <- match.arg(method)
 
     if (method == "clr") {
@@ -137,7 +136,7 @@ setMethod(
 #' @importFrom methods new
 setMethod(
   "crumblr", "data.frame",
-  function(counts, pseudocount = 0.5, method = c("clr", "clr_2class"), tau = 1, max.ratio=5, quant=0.05) {
+  function(counts, pseudocount = 0.5, method = c("clr", "clr_2class"), tau = 1, max.ratio = 5, quant = 0.05) {
     method <- match.arg(method)
 
     if (method == "clr") {
@@ -152,16 +151,16 @@ setMethod(
 # @param max.ratio regularize estimates of the weights to have a maximum ratio of \code{max.ratio} between the maximum and \code{quant} qauntile value
 # @param quant qauntile value used for \code{max.ratio}
 #' @importFrom stats quantile
-.cap_ratio = function(W, max.ratio=5, quant=0.05){
-  t(apply(W, 1, function(x){
-    x = x / quantile(x, quant)
-    pmin(x,max.ratio)
-    }))
+.cap_ratio <- function(W, max.ratio = 5, quant = 0.05) {
+  t(apply(W, 1, function(x) {
+    x <- x / quantile(x, quant)
+    pmin(x, max.ratio)
+  }))
 }
 
 # @param max.ratio regularize estimates of the weights to have a maximum ratio of \code{max.ratio} between the maximum and \code{quant} qauntile value
 # @param quant qauntile value used for \code{max.ratio}
-.crumblr <- function(counts, pseudocount = 0.5, tau = 1, max.ratio=5, quant=0.05) {
+.crumblr <- function(counts, pseudocount = 0.5, tau = 1, max.ratio = 5, quant = 0.05) {
   D <- ncol(counts)
 
   # estimate overdispersion from observed counts
@@ -178,16 +177,18 @@ setMethod(
   })
 
   # regularise the variance estimates
-  weights = 1 / var_asymp
-  weights = .cap_ratio( weights, max.ratio, quant)
+  weights <- 1 / var_asymp
+  weights <- .cap_ratio(weights, max.ratio, quant)
 
   # get CLR values
   Y_clr <- t(clr(counts, pseudocount))
 
   # return clr transformed counts and the corresponding observation level precision
   # (i.e. inverse variances)
-  new("EList", list(E = Y_clr, 
-                    weights = weights))
+  new("EList", list(
+    E = Y_clr,
+    weights = weights
+  ))
 }
 
 
@@ -196,7 +197,7 @@ setMethod(
 # 2) sum of all other counts
 # This avoids the 1/p term for small values of p in the
 # delta approximation for rare cell types
-.clr_2class <- function(counts, pseudocount = 0.5, tau = 1, max.ratio=5, quant=0.05) {
+.clr_2class <- function(counts, pseudocount = 0.5, tau = 1, max.ratio = 5, quant = 0.05) {
   # sunm counts for each row
   rs <- rowSums(counts)
 

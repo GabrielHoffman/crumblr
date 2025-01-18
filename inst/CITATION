@@ -1,0 +1,11 @@
+citEntry(entry="article",
+   title = "Fast, flexible analysis of differences in cellular composition with crumblr",
+   author = personList( as.person("Gabriel E. Hoffman"), as.person("Panos Roussos")),
+   year = 2025,
+   journal = "In prep",
+   doi = "",
+   volume = "",
+   issue = "",
+   pages = "",
+   textVersion = 
+   paste("Hoffman and Roussos. (2025) Fast, flexible analysis of differences in cellular composition with crumblr. In prep"))

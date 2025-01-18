@@ -4,7 +4,7 @@
 
 #' Standardize observations using precision weights
 #'
-#' Compute standardized observations by dividing the observed values by their standard deviations based on the precision weights 
+#' Compute standardized observations by dividing the observed values by their standard deviations based on the precision weights
 #'
 #' @param x object storing data to be transformed
 #' @param ... other arguments
@@ -47,7 +47,7 @@
 #' @rdname standardize-method
 setGeneric("standardize",
   signature = "x",
-  function(x,...) {
+  function(x, ...) {
     standardGeneric("standardize")
   }
 )
@@ -57,28 +57,20 @@ setGeneric("standardize",
 #' @aliases standardize,EList-method
 setMethod(
   "standardize", "EList",
-  function(x,...) {  
-    if( is.null(data) ){
-      data = data.frame(tmp = seq(ncol(x)))
-      rownames(data) = colnames(x)
+  function(x, ...) {
+    if (is.null(data)) {
+      data <- data.frame(tmp = seq(ncol(x)))
+      rownames(data) <- colnames(x)
     }
 
     # scale weights
-    w = x$weights / rowSums(x$weights)
-   
+    w <- x$weights / rowSums(x$weights)
+
     # since weights is proprotional 1 / variance
     # standard deviation is proportional to sqrt(1 / weights)
-    SD = sqrt(1/w)
+    SD <- sqrt(1 / w)
 
     # divide observed values by their standard deviation
-    x$E / SD  
+    x$E / SD
   }
 )
-
-
-
-
-
-
-
-

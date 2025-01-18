@@ -26,8 +26,8 @@ data(IFNCellCounts)
 
 # Simulate a factor with 2 levels called DiseaseRand
 set.seed(123)
-info$DiseaseRand = sample(LETTERS[seq(2)], nrow(info), replace=TRUE)
-info$DiseaseRand = factor(info$DiseaseRand, LETTERS[seq(2)])
+info$DiseaseRand <- sample(LETTERS[seq(2)], nrow(info), replace = TRUE)
+info$DiseaseRand <- factor(info$DiseaseRand, LETTERS[seq(2)])
 
 # Apply crumblr transformation
 cobj <- crumblr(df_cellCounts)
@@ -40,13 +40,13 @@ fit <- eBayes(fit)
 res1 <- treeTest(fit, cobj, hcl, coef = "StimStatusstim")
 
 # Perform same test, but on DiseaseRand
-fit2 <- dream(cobj, ~ DiseaseRand, info)
+fit2 <- dream(cobj, ~DiseaseRand, info)
 fit2 <- eBayes(fit2)
 res2 <- treeTest(fit2, cobj, hcl, coef = "DiseaseRandB")
 
 # Compare the coefficient estimates at each node
 # Test if res1 - res2 is significantly different from zero
-resDiff = diffTree(res1, res2)
+resDiff <- diffTree(res1, res2)
 
 resDiff
 
