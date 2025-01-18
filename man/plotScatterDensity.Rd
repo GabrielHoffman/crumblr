@@ -14,7 +14,7 @@ plotScatterDensity(x, y, size = 1)
 \item{size}{size of point}
 }
 \value{
-plot from ggplot2
+ggplot2 object
 }
 \description{
 Scatter plot with 2D density using viridis colors

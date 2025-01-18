@@ -73,7 +73,8 @@ NameInternalNodes <- function(tb) {
 #'
 #' @details See package \code{remaCor} for details about the \code{remaCor::RE2C()} test, and see \code{remaCor::LS()} for details about the fixed effect test.  When only 1 feature is selected, the original t-statistic and p-value are returned.
 #'
-#' @seealso \code{variancePartition::mvTest}
+#' @seealso \code{variancePartition::mvTest()}
+#' @return object of type \code{treedata} storing results
 #' @examples
 #' library(variancePartition)
 #'
@@ -148,6 +149,8 @@ treeTest <- function(fit, obj, hc, coef, method = c("FE.empirical", "FE", "RE2C"
 #' @param method.dist method for \code{dist(..,method=method.dist)}
 #' @param method.hclust method for \code{hclust(..,method=method.hclust)}
 #'
+#' @return hierarchical clustering computed by \code{hclust()}
+#'
 #' @importFrom SingleCellExperiment reducedDim colData
 #' @importFrom stats dist hclust
 #' @export
@@ -199,6 +202,8 @@ buildClusterTree <- function(sce, reduction, labelCol, method.dist = c("cosine",
 #' @param tree2 object of type \code{treedata} from \code{treeTest()}
 #'
 #' @details When a fixed effect test is performed at each node using \code{treeTest()} with \code{method = "FE.empirical"} or \code{method = "FE"}, a coefficient estimate and standard error are estimated for each node based on the children.  This function performs a two-sample z-test to test if a given coefficient from \code{tree1} is significantly different from the corresponding coefficient in \code{tree2}.
+#'
+#' @return a comparison of the coefficient estimates at each node
 #'
 #' @examples
 #' library(variancePartition)

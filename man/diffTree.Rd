@@ -11,6 +11,9 @@ diffTree(tree1, tree2)
 
 \item{tree2}{object of type \code{treedata} from \code{treeTest()}}
 }
+\value{
+a comparison of the coefficient estimates at each node
+}
 \description{
 Compare difference in cofficient estimates between two trees.  For node \code{i}, the test evaluates \code{tree1[i] - tree2[i] = 0}.
 }

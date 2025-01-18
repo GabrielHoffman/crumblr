@@ -10,7 +10,7 @@ meanSdPlot(x)
 \item{x}{data matrix}
 }
 \value{
-plot from ggplot2
+ggplot2 object
 }
 \description{
 Diagnositic plot for homoscedasticity across variables

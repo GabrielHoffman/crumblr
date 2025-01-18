@@ -18,8 +18,10 @@ Suggests:
     muscat,
     ExperimentHub,
     scater,
-    RdMacros,
     HMP,
+    reshape2,
+    glue,
+    tidyverse,
     BiocGenerics
 biocViews: 
     RNASeq,

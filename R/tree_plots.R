@@ -8,6 +8,7 @@
 #' @param high high color on gradient
 #' @param xmax.scale expand the x-axis by this factor so leaf labels fit in the plot
 #'
+#' @return ggplot2 object
 #' @examples
 #' library(variancePartition)
 #'
@@ -63,6 +64,7 @@ plotTreeTest <- function(tree, low = "grey90", mid = "red", high = "darkred", xm
 #' @param high high color on gradient
 #' @param xmax.scale expand the x-axis by this factor so leaf labels fit in the plot
 #'
+#' @return ggplot2 object
 #' @examples
 #' library(variancePartition)
 #'
@@ -180,6 +182,7 @@ setGeneric("plotForest", function(x, ...) {
 #' @param ... other arguments
 #' @param hide hide rownames and legend
 #'
+#' @return ggplot2 object
 #' @examples
 #' library(variancePartition)
 #'

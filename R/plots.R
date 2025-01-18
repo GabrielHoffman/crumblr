@@ -16,7 +16,7 @@ get_density <- function(x, y, n = 250) {
 #' @param y the y-coordinates of points in the plot
 #' @param size size of point
 #'
-#' @return plot from ggplot2
+#' @return ggplot2 object
 #'
 #' @examples
 #' # simulate data
@@ -58,7 +58,7 @@ plotScatterDensity <- function(x, y, size = 1) {
 #'
 #' @param x data matrix
 #'
-#' @return plot from ggplot2
+#' @return ggplot2 object
 #'
 #' @details
 #' Plot the sd versus rank mean of each row like \code{vsn::meanSdPlot}.  Also show the coefficient of variation of the variances.  A lower value indicates stronger variance stabilization

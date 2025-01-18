@@ -18,6 +18,9 @@ plotForest(x, ...)
 
 \item{hide}{hide rownames and legend}
 }
+\value{
+ggplot2 object
+}
 \description{
 Forest plot
 

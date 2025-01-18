@@ -24,6 +24,9 @@ buildClusterTree(
 
 \item{method.hclust}{method for \code{hclust(..,method=method.hclust)}}
 }
+\value{
+hierarchical clustering computed by \code{hclust()}
+}
 \description{
 Perform hierarchical clustering dimension reduction from single cell expression data
 }

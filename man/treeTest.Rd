@@ -26,6 +26,9 @@ treeTest(
 
 \item{shrink.cov}{shrink the covariance matrix between coefficients using the Schafer-Strimmer method}
 }
+\value{
+object of type \code{treedata} storing results
+}
 \description{
 Perform multivariate testing using \code{mvTest()} along the nodes of tree
 }
@@ -56,5 +59,5 @@ plotTreeTest(res)
 res[1:3, ]
 }
 \seealso{
-\code{variancePartition::mvTest}
+\code{variancePartition::mvTest()}
 }

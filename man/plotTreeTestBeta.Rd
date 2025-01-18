@@ -23,6 +23,9 @@ plotTreeTestBeta(
 
 \item{xmax.scale}{expand the x-axis by this factor so leaf labels fit in the plot}
 }
+\value{
+ggplot2 object
+}
 \description{
 Plot tree coefficients from multivariate testing at each node.  Only applicable top fixed effect tests
 }
