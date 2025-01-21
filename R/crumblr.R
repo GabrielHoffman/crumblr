@@ -95,7 +95,7 @@ clr <- function(counts, pseudocount = 0.5) {
 #'
 #' @seealso \code{compositions::clrInv()}
 #' @export
-clrInv = function( x ){
+clrInv <- function( x ){
   exp(x) / rowSums(exp(x))
 }
 

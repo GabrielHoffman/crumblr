@@ -1,7 +1,7 @@
 Package: crumblr
 Type: Package
 Title: Count ratio uncertainty modeling base linear regression
-Version: 0.99.14
+Version: 0.99.15
 Date: 2025-01-21
 Authors@R: person("Gabriel", "Hoffman", role=c("aut", "cre"), email="gabriel.hoffman@mssm.edu", comment=c(ORCID="0000-0002-0957-0224"))
 Description: Crumblr enables analysis of count ratio data using precision weighted linear (mixed) models.  It uses an asymptotic normal approximation of the variance following the centered log ration transform (CLR) that is widely used in compositional data analysis.  Crumblr provides a fast, flexable alternative to GLMs and GLMM's while retaining high power and controlling the false positive rate.  
@@ -10,50 +10,19 @@ License: Artistic-2.0
 Encoding: UTF-8
 URL: https://DiseaseNeurogenomics.github.io/crumblr
 BugReports: https://github.com/DiseaseNeurogenomics/crumblr/issues
-Suggests:
-    BiocStyle,
-    knitr,
-    rmarkdown,
-    dreamlet,
-    muscat,
-    ExperimentHub,
-    scater,
-    HMP,
-    reshape2,
-    glue,
-    tidyverse,
-    BiocGenerics
-biocViews: 
-    RNASeq,
-    GeneExpression,
-    DifferentialExpression,
-    BatchEffect,
-    QualityControl,
-    SingleCell,
-    Regression,
-    Epigenetics,
-    FunctionalGenomics,
-    Transcriptomics,
-    Normalization,
-    Clustering,
-    DimensionReduction,
-    Preprocessing,
-    Software
-Depends:
-    R (>= 4.3.0),
-    ggplot2,
-    methods
-Imports:
-    Rdpack,
-    viridis,
-    tidytree,
-    variancePartition (>= 1.36.3),
-    SingleCellExperiment,
-    ggtree,
-    dplyr,
-    stats,
-    MASS,
-    Rfast
+Suggests: BiocStyle, knitr, rmarkdown, dreamlet, muscat, ExperimentHub,
+        scater, HMP, reshape2, glue, tidyverse, BiocGenerics
+biocViews: RNASeq, GeneExpression, DifferentialExpression, BatchEffect,
+        QualityControl, SingleCell, Regression, Epigenetics,
+        FunctionalGenomics, Transcriptomics, Normalization, Clustering,
+        DimensionReduction, Preprocessing, Software
+Depends: R (>= 4.3.0), ggplot2, methods
+Imports: Rdpack, viridis, tidytree, variancePartition (>= 1.36.3),
+        SingleCellExperiment, ggtree, dplyr, stats, MASS, Rfast
 RoxygenNote: 7.3.2
 RdMacros: Rdpack
 LazyData: false
+NeedsCompilation: no
+Packaged: 2025-01-21 14:42:30 UTC; gabrielhoffman
+Author: Gabriel Hoffman [aut, cre] (<https://orcid.org/0000-0002-0957-0224>)
+Maintainer: Gabriel Hoffman <gabriel.hoffman@mssm.edu>
