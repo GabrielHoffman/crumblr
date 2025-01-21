@@ -60,6 +60,10 @@
 
 </dl></div>
     <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>a comparison of the coefficient estimates at each node</p>
+    </div>
+    <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>When a fixed effect test is performed at each node using <code><a href="treeTest.html">treeTest()</a></code> with <code>method = "FE.empirical"</code> or <code>method = "FE"</code>, a coefficient estimate and standard error are estimated for each node based on the children.  This function performs a two-sample z-test to test if a given coefficient from <code>tree1</code> is significantly different from the corresponding coefficient in <code>tree2</code>.</p>
     </div>
@@ -67,6 +71,13 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://bioconductor.org/packages/variancePartition" class="external-link">variancePartition</a></span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: limma</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: BiocParallel</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘variancePartition’</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:limma’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     topTable</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Load cell counts, clustering and metadata</span></span></span>
 <span class="r-in"><span><span class="co"># from Kang, et al. (2018) https://doi.org/10.1038/nbt.4042</span></span></span>

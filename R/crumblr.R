@@ -9,7 +9,7 @@
 #' @param pseudocount added to counts to avoid issues with zeros
 #'
 #' @details The CLR of a vector \code{x} of counts in \code{D} categories is defined as
-#' \code{clr(x) = log(x) - mean(log(x))}. For details see van den Boogaart and  Tolosana-Delgado (2013) .
+#' \code{clr(x) = log(x) - mean(log(x))}. For details see van den Boogaart and Tolosana-Delgado (2013).
 #'
 #' @references
 #'  \insertCite{van2013analyzing}{crumblr}
@@ -24,22 +24,22 @@
 #' countsTotal <- 300
 #'
 #' # number of samples
-#' n_samples <- 100
+#' n_samples <- 5
 #'
 #' # simulate info for each sample
 #' info <- data.frame(Age = rgamma(n_samples, 50, 1))
 #' rownames(info) <- paste0("sample_", 1:n_samples)
 #'
 #' # simulate counts from multinomial
-#' counts <- t(rmultinom(n_samples, size = n_samples, prob = prob))
+#' counts <- t(rmultinom(n_samples, size = countsTotal, prob = prob))
 #' colnames(counts) <- paste0("cat_", 1:length(prob))
 #' rownames(counts) <- paste0("sample_", 1:n_samples)
 #'
 #' # centered log ratio
-#' clr(counts)[1:4, ]
+#' clr(counts)
 #'
 #' @importFrom Rdpack reprompt
-#' @seealso \code{compositions::clr}
+#' @seealso \code{compositions::clr()}
 #' @export
 clr <- function(counts, pseudocount = 0.5) {
   if (!is.data.frame(counts) & !is.matrix(counts)) {
@@ -48,6 +48,57 @@ clr <- function(counts, pseudocount = 0.5) {
 
   log(counts + pseudocount) - rowMeans(log(counts + pseudocount))
 }
+
+
+
+#' Inverse of Centered log ratio transform
+#'
+#' Compute the inverse centered log ratio (CLR) transform of a count matrix.
+#'
+#' @param x CLR transform values
+#'
+#' @details Given the CLR transformed values, compute the original fractions
+#'
+#' @references
+#'  \insertCite{van2013analyzing}{crumblr}
+#'
+#' @return matrix of fractions
+#'
+#' @examples
+#' # set probability of each category
+#' prob <- c(0.1, 0.2, 0.3, 0.5)
+#'
+#' # number of total counts
+#' countsTotal <- 300
+#'
+#' # number of samples
+#' n_samples <- 5
+#'
+#' # simulate info for each sample
+#' info <- data.frame(Age = rgamma(n_samples, 50, 1))
+#' rownames(info) <- paste0("sample_", 1:n_samples)
+#'
+#' # simulate counts from multinomial
+#' counts <- t(rmultinom(n_samples, size = countsTotal, prob = prob))
+#' colnames(counts) <- paste0("cat_", 1:length(prob))
+#' rownames(counts) <- paste0("sample_", 1:n_samples)
+#'
+#' # Fractions
+#' counts / rowSums(counts)
+#'
+#' # centered log ratio, with zero pseudocount
+#' clr(counts, 0)
+#'
+#' # recover fractions from CLR transformed values
+#'
+#' clrInv(clr(counts, 0))
+#'
+#' @seealso \code{compositions::clrInv()}
+#' @export
+clrInv = function( x ){
+  exp(x) / rowSums(exp(x))
+}
+
 
 
 #' Count ratio uncertainty modeling based linear regression

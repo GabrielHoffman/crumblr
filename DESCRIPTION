@@ -2,7 +2,7 @@ Package: crumblr
 Type: Package
 Title: Count ratio uncertainty modeling base linear regression
 Version: 0.99.14
-Date: 2025-01-17
+Date: 2025-01-21
 Authors@R: person("Gabriel", "Hoffman", role=c("aut", "cre"), email="gabriel.hoffman@mssm.edu", comment=c(ORCID="0000-0002-0957-0224"))
 Description: Crumblr enables analysis of count ratio data using precision weighted linear (mixed) models.  It uses an asymptotic normal approximation of the variance following the centered log ration transform (CLR) that is widely used in compositional data analysis.  Crumblr provides a fast, flexable alternative to GLMs and GLMM's while retaining high power and controlling the false positive rate.  
 VignetteBuilder: knitr

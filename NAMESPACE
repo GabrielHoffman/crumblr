@@ -2,6 +2,7 @@
 
 export(buildClusterTree)
 export(clr)
+export(clrInv)
 export(crumblr)
 export(diffTree)
 export(dmn.mle)
