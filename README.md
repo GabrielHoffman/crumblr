@@ -35,7 +35,8 @@ if (!require("BiocManager", quietly = TRUE)) {
 
 # 2) Install crumblr and dependencies:
 # From Bioconductor
-BiocManager::install("crumblr")
+# (pending)
+# BiocManager::install("crumblr")
 
 # or from GitHub
 devtools::install_github("DiseaseNeurogenomics/crumblr")
