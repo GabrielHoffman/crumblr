@@ -33,13 +33,8 @@ if (!require("BiocManager", quietly = TRUE)) {
   install.packages("BiocManager")
 }
 
-# 2) Install crumblr and dependencies:
-# From Bioconductor
-# (pending)
-# BiocManager::install("crumblr")
-
-# or from GitHub
-devtools::install_github("DiseaseNeurogenomics/crumblr")
+# 2) Install crumblr and dependencies
+BiocManager::install('DiseaseNeurogenomics/crumblr')
 ```
 
 ### Introduction to compositional data analysis
