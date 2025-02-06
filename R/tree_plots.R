@@ -31,7 +31,8 @@
 #'
 #' # Extract results for first 3 nodes
 #' res[1:3, ]
-#' @import ggtree ggplot2
+#' @importFrom ggtree ggtree geom_tiplab geom_point2 geom_text2 get_taxa_name
+#' @importFrom ggplot2 scale_size_area theme element_text scale_color_gradient2
 #' @export
 plotTreeTest <- function(tree, low = "grey90", mid = "red", high = "darkred", xmax.scale = 1.5) {
   # PASS R check
@@ -84,7 +85,6 @@ plotTreeTest <- function(tree, low = "grey90", mid = "red", high = "darkred", xm
 #'
 #' # Plot hierarchy, no tests are significant
 #' plotTreeTestBeta(res)
-#' @import ggtree ggplot2
 #' @export
 plotTreeTestBeta <- function(tree, low = "blue", mid = "white", high = "red", xmax.scale = 1.5) {
   # PASS R check
@@ -131,7 +131,7 @@ setGeneric("plotForest", function(x, ...) {
 
 
 
-
+#' @importFrom dplyr filter
 .plotForest <- function(tree, low = "blue", mid = "grey70", high = "red", hide = FALSE) {
   # PASS R check
   n_features <- label <- se <- NA
@@ -204,7 +204,7 @@ setGeneric("plotForest", function(x, ...) {
 #' plotForest(res)
 #'
 #' @rdname plotForest-methods
-#' @aliases plotForest,#' -method
+#' @aliases plotForest,treedata-method
 #' @export
 setMethod(
   "plotForest", signature(x = "treedata"),

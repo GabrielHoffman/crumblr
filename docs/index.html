@@ -17,8 +17,8 @@
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Count ratio uncertainty modeling base linear regression">
-<meta name="description" content="Crumblr enables analysis of count ratio data using precision weighted linear (mixed) models. It uses an asymptotic normal approximation of the variance following the centered log ration transform (CLR) that is widely used in compositional data analysis. Crumblr provides a fast, flexable alternative to GLMs and GLMM's while retaining high power and controlling the false positive rate.">
-<meta property="og:description" content="Crumblr enables analysis of count ratio data using precision weighted linear (mixed) models. It uses an asymptotic normal approximation of the variance following the centered log ration transform (CLR) that is widely used in compositional data analysis. Crumblr provides a fast, flexable alternative to GLMs and GLMM's while retaining high power and controlling the false positive rate.">
+<meta name="description" content="Crumblr enables analysis of count ratio data using precision weighted linear (mixed) models. It uses an asymptotic normal approximation of the variance following the centered log ration transform (CLR) that is widely used in compositional data analysis. Crumblr provides a fast, flexible alternative to GLMs and GLMM's while retaining high power and controlling the false positive rate.">
+<meta property="og:description" content="Crumblr enables analysis of count ratio data using precision weighted linear (mixed) models. It uses an asymptotic normal approximation of the variance following the centered log ration transform (CLR) that is widely used in compositional data analysis. Crumblr provides a fast, flexible alternative to GLMs and GLMM's while retaining high power and controlling the false positive rate.">
 <meta property="og:image" content="http://DiseaseNeurogenomics.github.io/crumblr/logo.png">
 </head>
 <body>
@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="index.html">crumblr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.16</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.17</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,8 +70,9 @@
 <img src="man/figures/logo.png" align="right" alt="" width="130" style="padding-left:20px; padding-top:0px;"/>
 --->
 <div style="text-align: justify;">
-<p>The <code>crumblr</code> package enables analysis of count ratio data using precision-weighted linear (mixed) models, PCA and clustering. <code>crumblr</code>’s fast, normal approximation of transformed count data from a Dirichlet-multinomial model allows use of standard workflows to analyize count ratio data while modeling heteroskedasticity.</p>
+<p>The <code>crumblr</code> package enables analysis of count ratio data using precision-weighted linear (mixed) models, PCA and clustering. <code>crumblr</code>’s fast, normal approximation of transformed count data from a Dirichlet-multinomial model allows use of standard workflows to analyze count ratio data while modeling heteroskedasticity.</p>
 <p><img src="reference/figures/Figure_crumblr_workflow.png"></p>
+<p><strong>Preprint:</strong> Hoffman and Roussos. 2025. Fast, flexible analysis of differences in cellular composition with crumblr. <a href="https://www.biorxiv.org/content/10.1101/2025.01.29.635498v1" class="external-link">biorxiv</a></p>
 <div class="section level3">
 <h3 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a>
 </h3>
@@ -91,7 +92,7 @@
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># 2) Install crumblr and dependencies</span></span>
-<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">'DiseaseNeurogenomics/crumblr'</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">'crumblr'</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="introduction-to-compositional-data-analysis">Introduction to compositional data analysis<a class="anchor" aria-label="anchor" href="#introduction-to-compositional-data-analysis"></a>

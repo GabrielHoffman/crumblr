@@ -15,7 +15,7 @@ diffTree(tree1, tree2)
 a comparison of the coefficient estimates at each node
 }
 \description{
-Compare difference in cofficient estimates between two trees.  For node \code{i}, the test evaluates \code{tree1[i] - tree2[i] = 0}.
+Compare difference in coefficient estimates between two trees.  For node \code{i}, the test evaluates \code{tree1[i] - tree2[i] = 0}.
 }
 \details{
 When a fixed effect test is performed at each node using \code{treeTest()} with \code{method = "FE.empirical"} or \code{method = "FE"}, a coefficient estimate and standard error are estimated for each node based on the children.  This function performs a two-sample z-test to test if a given coefficient from \code{tree1} is significantly different from the corresponding coefficient in \code{tree2}.

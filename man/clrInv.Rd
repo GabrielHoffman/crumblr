@@ -44,7 +44,6 @@ counts / rowSums(counts)
 clr(counts, 0)
 
 # recover fractions from CLR transformed values
-
 clrInv(clr(counts, 0))
 
 }

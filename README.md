@@ -10,10 +10,11 @@
 
 <div style="text-align: justify;">
 	
-The `crumblr` package enables analysis of count ratio data using precision-weighted linear (mixed) models, PCA and clustering.  `crumblr`'s fast, normal approximation of transformed count data from a Dirichlet-multinomial model allows use of standard workflows to analyize count ratio data while modeling heteroskedasticity.
-
+The `crumblr` package enables analysis of count ratio data using precision-weighted linear (mixed) models, PCA and clustering.  `crumblr`'s fast, normal approximation of transformed count data from a Dirichlet-multinomial model allows use of standard workflows to analyze count ratio data while modeling heteroskedasticity.
 
 ![](man/figures/Figure_crumblr_workflow.png)
+
+__Preprint:__ Hoffman and Roussos. 2025. Fast, flexible analysis of differences in cellular composition with crumblr. [biorxiv](https://www.biorxiv.org/content/10.1101/2025.01.29.635498v1)
 
 
 ### Details
@@ -34,7 +35,7 @@ if (!require("BiocManager", quietly = TRUE)) {
 }
 
 # 2) Install crumblr and dependencies
-BiocManager::install('DiseaseNeurogenomics/crumblr')
+BiocManager::install('crumblr')
 ```
 
 ### Introduction to compositional data analysis

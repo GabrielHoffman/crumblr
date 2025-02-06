@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">crumblr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.14</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.17</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,8 +67,8 @@
                         <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
-            <h4 data-toc-skip class="date">Run on 2025-01-17
-22:16:54.60236</h4>
+            <h4 data-toc-skip class="date">Run on 2025-02-06
+15:53:39.834589</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DiseaseNeurogenomics/crumblr/blob/HEAD/vignettes/crumblr.Rmd" class="external-link"><code>vignettes/crumblr.Rmd</code></a></small>
       <div class="d-none name"><code>crumblr.Rmd</code></div>
@@ -80,6 +80,9 @@
 body {
 text-align: justify}
 </style>
+<div class="section level3">
+<h3 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h3>
 <p>Changes in cell type composition play an important role in health and
 disease. Recent advances in single cell technology have enabled
 measurement of cell type composition at increasing cell lineage
@@ -94,6 +97,9 @@ hierarchy using multivariate regression to increase power over tests of
 a single cell component. In simulations, <code>crumblr</code> increases
 power compared to existing methods, while controlling the false positive
 rate.</p>
+<p>The <code>crumblr</code> package integrates with the <a href="https://www.bioconductor.org/packages/variancePartition/" class="external-link"><code>variancePartition</code></a>
+and <a href="https://www.bioconductor.org/packages/dreamlet/" class="external-link"><code>dreamlet</code></a>
+packages in the Bioconductor ecosystem.</p>
 <p>Here we consider counts for 8 cell types from quantified using single
 cell RNA-seq data from unstimulated and interferon β stimulated PBMCs
 from 8 subjects <a href="https://www.nature.com/articles/nbt.4042" class="external-link">(Kang, et al.,
@@ -104,6 +110,7 @@ from 8 subjects <a href="https://www.nature.com/articles/nbt.4042" class="extern
 <li><code><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/dream-method.html" class="external-link">variancePartition::dream()</a></code></li>
 <li><code><a href="https://rdrr.io/pkg/limma/man/lmFit.html" class="external-link">limma::lmFit()</a></code></li>
 </ul>
+</div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -116,10 +123,7 @@ from 8 subjects <a href="https://www.nature.com/articles/nbt.4042" class="extern
 <span></span>
 <span><span class="co"># 2) Install crumblr and dependencies:</span></span>
 <span><span class="co"># From Bioconductor</span></span>
-<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"crumblr"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># or from GitHub</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"DiseaseNeurogenomics/crumblr"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"crumblr"</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="process-data">Process data<a class="anchor" aria-label="anchor" href="#process-data"></a>
 </h3>
@@ -189,7 +193,7 @@ samples cluster based on subject rather than stimulation status.</p>
 <p><img src="crumblr_files/figure-html/pca-1.png" width="480"></p>
 </div>
 <div class="section level3">
-<h3 id="hierachical-clustering">Hierachical clustering<a class="anchor" aria-label="anchor" href="#hierachical-clustering"></a>
+<h3 id="hierarchical-clustering">Hierarchical clustering<a class="anchor" aria-label="anchor" href="#hierarchical-clustering"></a>
 </h3>
 <p>The samples from the same subject also cluster together.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">

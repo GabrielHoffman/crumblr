@@ -4,7 +4,7 @@
 \alias{crumblr}
 \alias{crumblr,matrix-method}
 \alias{crumblr,data.frame-method}
-\title{Count ratio uncertainty modeling based linear regression}
+\title{crumblr}
 \usage{
 crumblr(
   counts,
@@ -54,12 +54,14 @@ An \code{EList} object with the following components:
 }
 }
 \description{
+Crumblr enables analysis of count ratio data using precision weighted linear (mixed) models.  It uses an asymptotic normal approximation of the variance following the centered log ration transform (CLR) that is widely used in compositional data analysis.  Crumblr provides a fast, flexible alternative to GLMs and GLMM's while retaining high power and controlling the false positive rate.
+
 Count ratio uncertainty modeling based linear regression (crumblr) returns CLR-transformed counts and observation-level inverse-variance weights for use in weighted linear models.
 }
 \details{
-Evalute the centered log ratio (CLR) transform of the count matrix, and the asymptotic theoretical variances of each transformed observation.  The asymptotic normal approximation is increasingly accurate for small overdispersion \eqn{\tau}, large total counts \eqn{C}, and large proportions \eqn{p}, but shows good agreement with the empirical results in most situtations. In practice, it is often reasonable to assume a sufficient number of counts before a variable is included in an analysis anyway.  But the feasability of this assumption is up to the user to determine.
+Evaluate the centered log ratio (CLR) transform of the count matrix, and the asymptotic theoretical variances of each transformed observation.  The asymptotic normal approximation is increasingly accurate for small overdispersion \eqn{\tau}, large total counts \eqn{C}, and large proportions \eqn{p}, but shows good agreement with the empirical results in most situations.  In practice, it is often reasonable to assume a sufficient number of counts before a variable is included in an analysis anyway.  But the feasibility of this assumption is up to the user to determine.
 
-Given the array \code{p} storing proportions for one sample across all categories, the delta approximation uses the term \code{1/p}.  This can be unstable for small values of \code{p}, and the estimated variances can be sensitive to small changes in the proprtions.  To address this, the \code{"clr_2class"} method computes the \code{clr()} transform for category \code{i} using 2 classes: 1) counts in category i, and 2) counts _not_ in category i. Since class (2) now sums counts across all other categories, the small proportions are avoided and the variance estimates are more stable.
+Given the array \code{p} storing proportions for one sample across all categories, the delta approximation uses the term \code{1/p}.  This can be unstable for small values of \code{p}, and the estimated variances can be sensitive to small changes in the proportions.  To address this, the \code{"clr_2class"} method computes the \code{clr()} transform for category \code{i} using 2 classes: 1) counts in category i, and 2) counts _not_ in category i. Since class (2) now sums counts across all other categories, the small proportions are avoided and the variance estimates are more stable.
 
 For real data, the asymptotic variance formula can give weights that vary substantially across samples and give very high weights for a subset of samples.  In order to address this, we regularize the weights to reduce the variation in the weights to have a maximum ratio of \code{max.ratio} between the maximum and \code{quant} quantile value.
 }

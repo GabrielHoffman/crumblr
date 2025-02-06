@@ -7,7 +7,9 @@
 
 # For each node and tip return the set of offspring tips
 
-#' @import tidytree
+
+
+#' @importFrom tidytree offspring
 getTips <- function(hc) {
   # convert to table
   tb <- as_tibble(as.phylo(hc))
@@ -97,10 +99,10 @@ NameInternalNodes <- function(tb) {
 #'
 #' # Extract results for first 3 nodes
 #' res[1:3, ]
-#' @importFrom tidytree as_tibble left_join as.treedata
+#' @importFrom tidytree as_tibble left_join as.treedata as.phylo
 #' @importFrom variancePartition mvTest
 #' @importFrom stats p.adjust
-#' @importFrom dplyr bind_rows
+#' @importFrom dplyr bind_rows tibble `%>%` pull
 #' @export
 treeTest <- function(fit, obj, hc, coef, method = c("FE.empirical", "FE", "RE2C", "tstat", "sidak", "fisher"), shrink.cov = TRUE) {
   method <- match.arg(method)
@@ -196,7 +198,7 @@ buildClusterTree <- function(sce, reduction, labelCol, method.dist = c("cosine",
 
 #' Compare difference in estimates between two trees
 #'
-#' Compare difference in cofficient estimates between two trees.  For node \code{i}, the test evaluates \code{tree1[i] - tree2[i] = 0}.
+#' Compare difference in coefficient estimates between two trees.  For node \code{i}, the test evaluates \code{tree1[i] - tree2[i] = 0}.
 #'
 #' @param tree1 object of type \code{treedata} from \code{treeTest()}
 #' @param tree2 object of type \code{treedata} from \code{treeTest()}

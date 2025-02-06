@@ -5,9 +5,7 @@ author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
 date: "Run on `r Sys.time()`"
 documentclass: article
 output: 
-  html_document:
-  toc: true
-  smart: false
+    BiocStyle::html_document
 vignette: >
   %\VignetteIndexEntry{crumblr_theory}
   %\VignetteEngine{knitr::rmarkdown}
@@ -50,7 +48,7 @@ Let the vector ${\bf p}$ be the true fractions across $D$ categories.  Consider 
 \end{equation}
 
 ## Simulations
-The sampling variance is derived from asymototic theory, so we examine its behavior for finite total counts.  Here we evalute the emprical variance from $1,000$ draws from a Dirichlet-multinomial distribution while varying $D$, $\tau$, $C$.  A pseudocount of 0.5 is added to the observed counts since the asymptotic theory is not defined for counts of zero.  
+The sampling variance is derived from asymototic theory, so we examine its behavior for finite total counts.  Here we evaluate the empirical variance from $1,000$ draws from a Dirichlet-multinomial distribution while varying $D$, $\tau$, $C$.  A pseudocount of 0.5 is added to the observed counts since the asymptotic theory is not defined for counts of zero.  
 
 Here we plot the standard deviation after CLR transform from the empirical DMN and the asymptotic normal approximation under a range of conditions.  Results are shown for instances with at least 2 counts.
 </div>

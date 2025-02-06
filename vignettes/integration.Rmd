@@ -5,9 +5,7 @@ author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
 date: "Run on `r Sys.time()`"
 documentclass: article
 output: 
-  html_document:
-  toc: true
-  toc_float: true
+    BiocStyle::html_document
 vignette: >
   %\VignetteIndexEntry{crumblr_treeTest}
   %\VignetteEngine{knitr::rmarkdown}
@@ -116,7 +114,7 @@ fit <- eBayes(fit)
 topTable(fit, coef = "StimStatusstim", number = Inf)
 ```
 
-Given the results here, we see that CD8 T cells at others change relative abundance following treatment with iterferon-β.
+Given the results here, we see that CD8 T cells at others change relative abundance following treatment with interferon-β.
 
 
 # Session Info

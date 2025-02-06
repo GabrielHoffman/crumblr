@@ -30,7 +30,7 @@
 #' # Dirichlet.multinomial
 #' counts <- Dirichlet.multinomial(rep(n_counts, n_samples), alpha)
 #'
-#' fit <- dmn.mle(counts)
+#' fit <- dmn_mle(counts)
 #'
 #' fit
 #'
@@ -42,7 +42,7 @@
 #' # multinomial, so overdispersion is 1
 #' counts <- t(rmultinom(n_samples, n_counts, prob = alpha / sum(alpha)))
 #'
-#' dmn.mle(counts)
+#' dmn_mle(counts)
 #' #
 # # where n is number of counts
 # n = rowsums(counts)[1]
@@ -67,7 +67,7 @@
 #' @importFrom Rfast Lgamma Digamma colmeans rowsums
 #' @importFrom stats optim optimize
 #' @export
-dmn.mle <- function(counts, ...) {
+dmn_mle <- function(counts, ...) {
   # First round
   ##############
 

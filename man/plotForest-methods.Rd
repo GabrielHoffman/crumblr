@@ -3,8 +3,6 @@
 \name{plotForest}
 \alias{plotForest}
 \alias{plotForest,treedata-method}
-\alias{plotForest,#'}
-\alias{-method}
 \title{Forest plot}
 \usage{
 plotForest(x, ...)

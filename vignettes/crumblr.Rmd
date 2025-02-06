@@ -5,9 +5,7 @@ author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
 date: "Run on `r Sys.time()`"
 documentclass: article
 output: 
-  html_document:
-  toc: true
-  toc_float: true
+    BiocStyle::html_document
 vignette: >
   %\VignetteIndexEntry{crumblr}
   %\VignetteEngine{knitr::rmarkdown}
@@ -37,7 +35,10 @@ body {
 text-align: justify}
 </style>
 
+## Introduction
 Changes in cell type composition play an important role in health and disease.  Recent advances in single cell technology have enabled measurement of cell type composition at increasing cell lineage resolution across large cohorts of individuals.  Yet this raises new challenges for statistical analysis of these compositional data to identify changes associated with a phenotype.  We introduce `crumblr`, a scalable statistical method for analyzing count ratio data using precision-weighted linear models incorporating random effects for complex study designs.  Uniquely, `crumblr` performs tests of association at multiple levels of the cell lineage hierarchy using multivariate regression to increase power over tests of a single cell component.  In simulations, `crumblr` increases power compared to existing methods, while controlling the false positive rate.
+
+The `crumblr` package integrates with the [`variancePartition`](https://www.bioconductor.org/packages/variancePartition/) and [`dreamlet`](https://www.bioconductor.org/packages/dreamlet/) packages in the Bioconductor ecosystem.
 
 Here we consider counts for 8 cell types from quantified using single cell RNA-seq data from unstimulated and interferon β stimulated PBMCs from 8 subjects [(Kang, et al., 2018)](https://www.nature.com/articles/nbt.4042).    
 
@@ -60,9 +61,6 @@ if (!require("BiocManager", quietly = TRUE)) {
 # 2) Install crumblr and dependencies:
 # From Bioconductor
 BiocManager::install("crumblr")
-
-# or from GitHub
-devtools::install_github("DiseaseNeurogenomics/crumblr")
 ```
 
 
@@ -128,7 +126,7 @@ ggplot(df_pca, aes(PC1, PC2, color = as.character(ind), shape = StimStatus)) +
   ylab("PC2")
 ```
 
-## Hierachical clustering
+## Hierarchical clustering
 The samples from the same subject also cluster together.
 ```{r hclust}
 heatmap(cobj$E)
