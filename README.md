@@ -35,7 +35,7 @@ if (!require("BiocManager", quietly = TRUE)) {
 }
 
 # 2) Install crumblr and dependencies
-BiocManager::install('crumblr')
+BiocManager::install('DiseaseNeurogenomics/crumblr')
 ```
 
 ### Introduction to compositional data analysis
