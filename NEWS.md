@@ -1,3 +1,7 @@
+# crumblr 0.99.20
+ - March 10, 2025
+ - address Bioc comments
+
 # crumblr 0.99.19
  - Feb 12, 2025
  - address Bioc comments: https://github.com/Bioconductor/Contributions/issues/3699#issuecomment-2640806359

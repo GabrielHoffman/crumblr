@@ -30,11 +30,9 @@ df_cellCounts
 hcl
 }
 \description{
-Counts are from single cell RNA-seq data from treated and untreated samples from \insertCite{kang2018multiplexed}{crumblr}.
+Counts are from single cell RNA-seq data from treated and untreated samples from Kang, et al (2018).
 }
 \references{
-{
-  \insertRef{kang2018multiplexed}{crumblr}
-}
+Kang, Hyun Min, et al. "Multiplexed droplet single-cell RNA-sequencing using natural genetic variation." Nature Biotechnology 36.1 (2018): 89-94.
 }
 \keyword{datasets}

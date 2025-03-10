@@ -45,7 +45,7 @@ clr(counts)
 
 }
 \references{
-\insertCite{van2013analyzing}{crumblr}
+Van den Boogaart, K. Gerald, and Raimon Tolosana-Delgado. Analyzing compositional data with R. Vol. 122. Berlin: Springer, 2013.
 }
 \seealso{
 \code{compositions::clr()}

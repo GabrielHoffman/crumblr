@@ -22,7 +22,7 @@ NULL
 #' \code{clr(x) = log(x) - mean(log(x))}. For details see van den Boogaart and Tolosana-Delgado (2013).
 #'
 #' @references
-#'  \insertCite{van2013analyzing}{crumblr}
+#'  Van den Boogaart, K. Gerald, and Raimon Tolosana-Delgado. Analyzing compositional data with R. Vol. 122. Berlin: Springer, 2013.
 #'
 #' @return matrix of CLR transformed counts
 #'
@@ -70,7 +70,7 @@ clr <- function(counts, pseudocount = 0.5) {
 #' @details Given the CLR transformed values, compute the original fractions
 #'
 #' @references
-#'  \insertCite{van2013analyzing}{crumblr}
+#'  Van den Boogaart, K. Gerald, and Raimon Tolosana-Delgado. Analyzing compositional data with R. Vol. 122. Berlin: Springer, 2013.
 #'
 #' @return matrix of fractions
 #'
