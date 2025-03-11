@@ -30,3 +30,11 @@ hierarchical clustering computed by \code{hclust()}
 \description{
 Perform hierarchical clustering dimension reduction from single cell expression data
 }
+\examples{
+library(muscat)
+
+data(example_sce)
+
+hcl_test = buildClusterTree(example_sce, "TSNE", "cluster_id")
+
+}

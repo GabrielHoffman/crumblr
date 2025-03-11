@@ -152,6 +152,13 @@ treeTest <- function(fit, obj, hc, coef, method = c("FE.empirical", "FE", "RE2C"
 #' @param method.hclust method for \code{hclust(..,method=method.hclust)}
 #'
 #' @return hierarchical clustering computed by \code{hclust()}
+#' 
+#' @examples
+#' library(muscat)
+#'
+#' data(example_sce)
+#'
+#' hcl_test = buildClusterTree(example_sce, "TSNE", "cluster_id")
 #'
 #' @importFrom SingleCellExperiment reducedDim colData
 #' @importFrom stats dist hclust
