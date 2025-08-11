@@ -6,13 +6,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Normal approximation vs. empirical simulation • crumblr</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
+<!-- katex math --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script><script src="../katex-auto.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">crumblr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.19</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.22</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,8 +67,8 @@
                         <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
-            <h4 data-toc-skip class="date">Run on 2025-02-17
-21:01:24.858131</h4>
+            <h4 data-toc-skip class="date">Run on 2025-08-11
+14:19:26.062571</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DiseaseNeurogenomics/crumblr/blob/HEAD/vignettes/crumblr_theory.Rmd" class="external-link"><code>vignettes/crumblr_theory.Rmd</code></a></small>
       <div class="d-none name"><code>crumblr_theory.Rmd</code></div>
@@ -80,46 +80,30 @@
 <div class="section level3">
 <h3 id="asymptotic-normal-approximation">Asymptotic normal approximation<a class="anchor" aria-label="anchor" href="#asymptotic-normal-approximation"></a>
 </h3>
-<p>Let the vector <span class="math inline">${\bf p}$</span> be the true
-fractions across
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math>
-categories. Consider
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>C</mi><annotation encoding="application/x-tex">C</annotation></semantics></math>
-total counts sampled from a Dirichlet-multinomial (DMN) distribution
-with overdispersion
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>τ</mi><annotation encoding="application/x-tex">\tau</annotation></semantics></math>,
-where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>τ</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\tau=1</annotation></semantics></math>
-reduces to the multinomial distribution. The <a href="https://rdrr.io/cran/compositions/man/clr.html" class="external-link">centered log
-ratio</a> (CLR) of the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>i</mi><mrow><mi>t</mi><mi>h</mi></mrow></msup><annotation encoding="application/x-tex">i^{th}</annotation></semantics></math>
-estimated fraction in <span class="math inline">${\bf \hat p}$</span>
-is</p>
-<p><span class="math display">$$\begin{equation}
-\tag{1}
-\text{clr}_i({\bf \hat p}) = \log(\hat p_i) - \frac{1}{D}\sum_{j=1}^D
-\log(\hat p_j)
-\end{equation}$$</span> and we show that the sampling variance is</p>
-<p><span class="math display">$$\begin{equation}
-\tag{2}
-\text{var}[\text{clr}_i({\bf \hat p})] =  \frac{\tau}{C} \left[
-\frac{1}{\hat p_i} - \frac{2}{ D \hat p_i} + \frac{1}{D^2}\sum_{j=1}^D
-\frac{1}{\hat p_j}  \right]. \label{eqn2}
-\end{equation}$$</span></p>
+<p>Let the vector <span class="math inline">{\bf p}</span> be the true
+fractions across <span class="math inline">D</span> categories. Consider
+<span class="math inline">C</span> total counts sampled from a
+Dirichlet-multinomial (DMN) distribution with overdispersion <span class="math inline">\tau</span>, where <span class="math inline">\tau=1</span> reduces to the multinomial
+distribution. The <a href="https://rdrr.io/cran/compositions/man/clr.html" class="external-link">centered log
+ratio</a> (CLR) of the <span class="math inline">i^{th}</span> estimated
+fraction, <span class="math inline">\hat p_i</span> is</p>
+<p><span class="math display">\text{clr}(\hat p_i) = \log(\hat p_i) -
+\frac{1}{D}\sum_{j=1}^D \log(\hat p_j) ,</span> and we show that the
+sampling variance is well approximated by</p>
+<p><span class="math display">\text{var}[\text{clr}(\hat p_i)]
+=  \frac{\tau}{C} \left[ \frac{1}{\hat p_i} - \frac{2}{ D \hat p_i} +
+\frac{1}{D^2}\sum_{j=1}^D \frac{1}{\hat p_j}  \right] .</span></p>
 </div>
 <div class="section level3">
 <h3 id="simulations">Simulations<a class="anchor" aria-label="anchor" href="#simulations"></a>
 </h3>
 <p>The sampling variance is derived from asymototic theory, so we
 examine its behavior for finite total counts. Here we evaluate the
-empirical variance from
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>,</mo><mn>000</mn></mrow><annotation encoding="application/x-tex">1,000</annotation></semantics></math>
-draws from a Dirichlet-multinomial distribution while varying
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>τ</mi><annotation encoding="application/x-tex">\tau</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>C</mi><annotation encoding="application/x-tex">C</annotation></semantics></math>.
-A pseudocount of 0.5 is added to the observed counts since the
-asymptotic theory is not defined for counts of zero.</p>
+empirical variance from <span class="math inline">1,000</span> draws
+from a Dirichlet-multinomial distribution while varying <span class="math inline">D</span>, <span class="math inline">\tau</span>, and
+<span class="math inline">C</span>. A pseudocount of 0.5 is added to the
+observed counts since the asymptotic theory is not defined for counts of
+zero.</p>
 <p>Here we plot the standard deviation after CLR transform from the
 empirical DMN and the asymptotic normal approximation under a range of
 conditions. Results are shown for instances with at least 2 counts.</p>
@@ -139,52 +123,70 @@ conditions. Results are shown for instances with at least 2 counts.</p>
 <h4 id="interpretation">Interpretation<a class="anchor" aria-label="anchor" href="#interpretation"></a>
 </h4>
 <p>The asymptotic standard deviation shows good agreement with the
-empirical results even for small values of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>C</mi><annotation encoding="application/x-tex">C</annotation></semantics></math>,
-<em>when at least 2 counts are observed</em>. In practice, it is often
-reasonable to assume a sufficient number of counts before a variable is
-included in an analysis. Importantly, with less than 2 counts the
-asymptotic theory gives a <em>larger</em> standard deviation than the
-emprical results (results not shown). Therefore, this approach is
-conservative and should not underestimate the true amount of variation.
-The asymptotic normal approximation is most accurate for large total
-counts
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>C</mi><annotation encoding="application/x-tex">C</annotation></semantics></math>,
-large proportions
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>,
-and small overdispersion
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>τ</mi><annotation encoding="application/x-tex">\tau</annotation></semantics></math>.</p>
+empirical results even for small values of <span class="math inline">C</span>, <em>when at least 2 counts are
+observed</em>. In practice, it is often reasonable to assume a
+sufficient number of counts before a variable is included in an
+analysis. Importantly, with less than 2 counts the asymptotic theory
+gives a <em>larger</em> standard deviation than the emprical results
+(results not shown). Therefore, this approach is conservative and should
+not underestimate the true amount of variation. The asymptotic normal
+approximation is most accurate for large total counts <span class="math inline">C</span>, large proportions <span class="math inline">p</span>, and small overdispersion <span class="math inline">\tau</span>.</p>
 </div>
-<div class="section level5">
+<div class="section level5" style="text-align: justify;">
 <h5 id="consideration-of-overdispersion">Consideration of overdispersion<a class="anchor" aria-label="anchor" href="#consideration-of-overdispersion"></a>
 </h5>
 <p>Based on Equation (2), the variance of the CLR-transformed
-proportions is a <em>linear</em> function of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>τ</mi><annotation encoding="application/x-tex">\tau</annotation></semantics></math>.
-Importantly, downstream analysis of the CLR-transformed proportions with
-a precision-weighted linear (mixed) model or a variance stabilizing
-transform depends only on the <em>relative</em> variances. Since
-relative variances are invariant to the scale of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>τ</mi><annotation encoding="application/x-tex">\tau</annotation></semantics></math>,
-for these applications the value of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>τ</mi><annotation encoding="application/x-tex">\tau</annotation></semantics></math>
-can be set to 1 instead of being estimated from the data.</p>
-<p>For other applications, <code>crumblr</code> can estimate
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>τ</mi><annotation encoding="application/x-tex">\tau</annotation></semantics></math>
-from the data by using <code>crumblr(counts, tau=NULL)</code>. This
-calls <code>dmn.mle()</code> to estimate the parameters of the DMN
+proportions is a <em>linear</em> function of <span class="math inline">\tau</span>. Importantly, downstream analysis of the
+CLR-transformed proportions with a precision-weighted linear (mixed)
+model or a variance stabilizing transform depends only on the
+<em>relative</em> variances. Since relative variances are invariant to
+the scale of <span class="math inline">\tau</span>, for these
+applications the value of <span class="math inline">\tau</span> can be
+set to 1 instead of being estimated from the data.</p>
+<p>For other applications, <code>crumblr</code> can estimate <span class="math inline">\tau</span> from the data by using
+<code>crumblr(counts, tau=NULL)</code>. This calls
+<code>dmn.mle()</code> to estimate the parameters of the DMN
 distribution and is substantially faster than alternatives.</p>
+<p>But note that due the theoretical properties of the variance estimate
+of CLR-transformed proportions, the precision weights are invariant to
+the scale of <span class="math inline">\tau</span>. We can see this
+empirically:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://DiseaseNeurogenomics.github.io/crumblr" class="external-link">crumblr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">IFNCellCounts</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">counts</span> <span class="op">&lt;-</span> <span class="va">df_cellCounts</span></span>
+<span></span>
+<span><span class="co"># run crumblr with different tau values</span></span>
+<span><span class="co"># show part of the weights matrix</span></span>
+<span><span class="fu"><a href="../reference/crumblr.html">crumblr</a></span><span class="op">(</span><span class="va">counts</span>, tau<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">$</span><span class="va">weights</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">##                  ctrl101 ctrl1015 ctrl1016</span></span>
+<span><span class="co">## B cells         2.704599 5.000000 3.094438</span></span>
+<span><span class="co">## CD14+ Monocytes 1.822824 4.143929 2.716263</span></span>
+<span><span class="co">## CD4 T cells     2.044461 3.615231 2.433429</span></span></code></pre>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/crumblr.html">crumblr</a></span><span class="op">(</span><span class="va">counts</span>, tau<span class="op">=</span><span class="fl">5</span><span class="op">)</span><span class="op">$</span><span class="va">weights</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">##                  ctrl101 ctrl1015 ctrl1016</span></span>
+<span><span class="co">## B cells         2.704599 5.000000 3.094438</span></span>
+<span><span class="co">## CD14+ Monocytes 1.822824 4.143929 2.716263</span></span>
+<span><span class="co">## CD4 T cells     2.044461 3.615231 2.433429</span></span></code></pre>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/crumblr.html">crumblr</a></span><span class="op">(</span><span class="va">counts</span>, tau<span class="op">=</span><span class="cn">NULL</span><span class="op">)</span><span class="op">$</span><span class="va">weights</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">##                  ctrl101 ctrl1015 ctrl1016</span></span>
+<span><span class="co">## B cells         2.704599 5.000000 3.094438</span></span>
+<span><span class="co">## CD14+ Monocytes 1.822824 4.143929 2.716263</span></span>
+<span><span class="co">## CD4 T cells     2.044461 3.615231 2.433429</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="session-info">Session Info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<details><pre><code><span><span class="co">## R version 4.4.1 (2024-06-14)</span></span>
-<span><span class="co">## Platform: aarch64-apple-darwin23.5.0</span></span>
+<details><pre><code><span><span class="co">## R version 4.5.1 (2025-06-13)</span></span>
+<span><span class="co">## Platform: aarch64-apple-darwin23.6.0</span></span>
 <span><span class="co">## Running under: macOS Sonoma 14.7.1</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Matrix products: default</span></span>
-<span><span class="co">## BLAS:   /Users/gabrielhoffman/prog/R-4.4.1/lib/libRblas.dylib </span></span>
-<span><span class="co">## LAPACK: /opt/homebrew/Cellar/r/4.4.2_2/lib/R/lib/libRlapack.dylib;  LAPACK version 3.12.0</span></span>
+<span><span class="co">## BLAS/LAPACK: /opt/homebrew/Cellar/openblas/0.3.30/lib/libopenblasp-r0.3.30.dylib;  LAPACK version 3.12.0</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## locale:</span></span>
 <span><span class="co">## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span></span>
@@ -196,54 +198,69 @@ distribution and is substantially faster than alternatives.</p>
 <span><span class="co">## [1] parallel  stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">##  [1] lubridate_1.9.4  forcats_1.0.0    stringr_1.5.1    dplyr_1.1.4      purrr_1.0.4     </span></span>
-<span><span class="co">##  [6] readr_2.1.5      tidyr_1.3.1      tibble_3.2.1     tidyverse_2.0.0  glue_1.8.0      </span></span>
-<span><span class="co">## [11] HMP_2.0.1        dirmult_0.1.3-5  crumblr_0.99.19  ggplot2_3.5.1    BiocStyle_2.34.0</span></span>
+<span><span class="co">##  [1] muscat_1.22.0            variancePartition_1.37.4 BiocParallel_1.42.1     </span></span>
+<span><span class="co">##  [4] limma_3.64.3             lubridate_1.9.4          forcats_1.0.0           </span></span>
+<span><span class="co">##  [7] stringr_1.5.1            dplyr_1.1.4              purrr_1.1.0             </span></span>
+<span><span class="co">## [10] readr_2.1.5              tidyr_1.3.1              tibble_3.3.0            </span></span>
+<span><span class="co">## [13] tidyverse_2.0.0          glue_1.8.0               HMP_2.0.1               </span></span>
+<span><span class="co">## [16] dirmult_0.1.3-5          crumblr_0.99.22          ggplot2_3.5.2           </span></span>
+<span><span class="co">## [19] BiocStyle_2.36.0        </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
-<span><span class="co">##   [1] jsonlite_1.8.9              magrittr_2.0.3              farver_2.1.2               </span></span>
-<span><span class="co">##   [4] nloptr_2.1.1                rmarkdown_2.29              fs_1.6.5                   </span></span>
-<span><span class="co">##   [7] zlibbioc_1.52.0             ragg_1.3.3                  vctrs_0.6.5                </span></span>
-<span><span class="co">##  [10] minqa_1.2.8                 ggtree_3.14.0               htmltools_0.5.8.1          </span></span>
-<span><span class="co">##  [13] S4Arrays_1.6.0              broom_1.0.7                 SparseArray_1.6.1          </span></span>
-<span><span class="co">##  [16] gridGraphics_0.5-1          variancePartition_1.36.3    sass_0.4.9                 </span></span>
-<span><span class="co">##  [19] KernSmooth_2.23-26          bslib_0.9.0                 htmlwidgets_1.6.4          </span></span>
-<span><span class="co">##  [22] desc_1.4.3                  pbkrtest_0.5.3              plyr_1.8.9                 </span></span>
-<span><span class="co">##  [25] cachem_1.1.0                lifecycle_1.0.4             iterators_1.0.14           </span></span>
-<span><span class="co">##  [28] pkgconfig_2.0.3             Matrix_1.7-2                R6_2.6.1                   </span></span>
-<span><span class="co">##  [31] fastmap_1.2.0               GenomeInfoDbData_1.2.13     rbibutils_2.3              </span></span>
-<span><span class="co">##  [34] MatrixGenerics_1.18.1       digest_0.6.37               numDeriv_2016.8-1.1        </span></span>
-<span><span class="co">##  [37] aplot_0.2.4                 colorspace_2.1-1            patchwork_1.3.0            </span></span>
-<span><span class="co">##  [40] S4Vectors_0.44.0            textshaping_1.0.0           GenomicRanges_1.58.0       </span></span>
-<span><span class="co">##  [43] vegan_2.6-10                labeling_0.4.3              RcppZiggurat_0.1.6         </span></span>
-<span><span class="co">##  [46] timechange_0.3.0            mgcv_1.9-1                  httr_1.4.7                 </span></span>
-<span><span class="co">##  [49] abind_1.4-8                 compiler_4.4.1              aod_1.3.3                  </span></span>
-<span><span class="co">##  [52] withr_3.0.2                 backports_1.5.0             BiocParallel_1.40.0        </span></span>
-<span><span class="co">##  [55] viridis_0.6.5               gplots_3.2.0                MASS_7.3-64                </span></span>
-<span><span class="co">##  [58] DelayedArray_0.32.0         corpcor_1.6.10              permute_0.9-7              </span></span>
-<span><span class="co">##  [61] gtools_3.9.5                caTools_1.18.3              tools_4.4.1                </span></span>
-<span><span class="co">##  [64] ape_5.8-1                   remaCor_0.0.18              nlme_3.1-167               </span></span>
-<span><span class="co">##  [67] grid_4.4.1                  cluster_2.1.8               reshape2_1.4.4             </span></span>
-<span><span class="co">##  [70] generics_0.1.3              gtable_0.3.6                tzdb_0.4.0                 </span></span>
-<span><span class="co">##  [73] hms_1.1.3                   XVector_0.46.0              BiocGenerics_0.52.0        </span></span>
-<span><span class="co">##  [76] foreach_1.5.2               pillar_1.10.1               yulab.utils_0.2.0          </span></span>
-<span><span class="co">##  [79] limma_3.62.2                splines_4.4.1               treeio_1.30.0              </span></span>
-<span><span class="co">##  [82] lattice_0.22-6              tidyselect_1.2.1            SingleCellExperiment_1.28.1</span></span>
-<span><span class="co">##  [85] knitr_1.49                  reformulas_0.4.0            gridExtra_2.3              </span></span>
-<span><span class="co">##  [88] bookdown_0.42               IRanges_2.40.1              SummarizedExperiment_1.36.0</span></span>
-<span><span class="co">##  [91] RhpcBLASctl_0.23-42         stats4_4.4.1                xfun_0.50                  </span></span>
-<span><span class="co">##  [94] Biobase_2.66.0              statmod_1.5.0               matrixStats_1.5.0          </span></span>
-<span><span class="co">##  [97] stringi_1.8.4               UCSC.utils_1.2.0            lazyeval_0.2.2             </span></span>
-<span><span class="co">## [100] ggfun_0.1.8                 yaml_2.3.10                 boot_1.3-31                </span></span>
-<span><span class="co">## [103] evaluate_1.0.3              codetools_0.2-20            rpart.plot_3.1.2           </span></span>
-<span><span class="co">## [106] BiocManager_1.30.25         ggplotify_0.1.2             cli_3.6.4                  </span></span>
-<span><span class="co">## [109] rpart_4.1.24                RcppParallel_5.1.10         systemfonts_1.2.1          </span></span>
-<span><span class="co">## [112] Rdpack_2.6.2                munsell_0.5.1               jquerylib_0.1.4            </span></span>
-<span><span class="co">## [115] Rcpp_1.0.14                 GenomeInfoDb_1.42.3         EnvStats_3.0.0             </span></span>
-<span><span class="co">## [118] Rfast_2.1.4                 pkgdown_2.1.1               bitops_1.0-9               </span></span>
-<span><span class="co">## [121] lme4_1.1-36                 viridisLite_0.4.2           mvtnorm_1.3-3              </span></span>
-<span><span class="co">## [124] tidytree_0.4.6              lmerTest_3.1-3              scales_1.3.0               </span></span>
-<span><span class="co">## [127] crayon_1.5.3                fANCOVA_0.6-1               rlang_1.1.5</span></span></code></pre>
+<span><span class="co">##   [1] splines_4.5.1               bitops_1.0-9                ggplotify_0.1.2            </span></span>
+<span><span class="co">##   [4] rpart_4.1.24                lifecycle_1.0.4             Rdpack_2.6.4               </span></span>
+<span><span class="co">##   [7] edgeR_4.6.3                 doParallel_1.0.17           globals_0.18.0             </span></span>
+<span><span class="co">##  [10] lattice_0.22-7              MASS_7.3-65                 backports_1.5.0            </span></span>
+<span><span class="co">##  [13] magrittr_2.0.3              sass_0.4.10                 rmarkdown_2.29             </span></span>
+<span><span class="co">##  [16] jquerylib_0.1.4             yaml_2.3.10                 sctransform_0.4.2          </span></span>
+<span><span class="co">##  [19] minqa_1.2.8                 RColorBrewer_1.1-3          abind_1.4-8                </span></span>
+<span><span class="co">##  [22] EnvStats_3.1.0              glmmTMB_1.1.11              GenomicRanges_1.60.0       </span></span>
+<span><span class="co">##  [25] BiocGenerics_0.54.0         yulab.utils_0.2.0           circlize_0.4.16            </span></span>
+<span><span class="co">##  [28] GenomeInfoDbData_1.2.14     IRanges_2.42.0              S4Vectors_0.46.0           </span></span>
+<span><span class="co">##  [31] ggrepel_0.9.6               pbkrtest_0.5.5              irlba_2.3.5.1              </span></span>
+<span><span class="co">##  [34] listenv_0.9.1               tidytree_0.4.6              vegan_2.7-1                </span></span>
+<span><span class="co">##  [37] parallelly_1.45.1           pkgdown_2.1.3               permute_0.9-8              </span></span>
+<span><span class="co">##  [40] codetools_0.2-20            DelayedArray_0.34.1         scuttle_1.18.0             </span></span>
+<span><span class="co">##  [43] tidyselect_1.2.1            shape_1.4.6.1               aplot_0.2.8                </span></span>
+<span><span class="co">##  [46] UCSC.utils_1.4.0            farver_2.1.2                ScaledMatrix_1.16.0        </span></span>
+<span><span class="co">##  [49] lme4_1.1-37                 viridis_0.6.5               matrixStats_1.5.0          </span></span>
+<span><span class="co">##  [52] stats4_4.5.1                jsonlite_2.0.0              BiocNeighbors_2.2.0        </span></span>
+<span><span class="co">##  [55] GetoptLong_1.0.5            scater_1.36.0               iterators_1.0.14           </span></span>
+<span><span class="co">##  [58] systemfonts_1.2.3           foreach_1.5.2               tools_4.5.1                </span></span>
+<span><span class="co">##  [61] progress_1.2.3              treeio_1.32.0               ragg_1.4.0                 </span></span>
+<span><span class="co">##  [64] Rcpp_1.1.0                  blme_1.0-6                  gridExtra_2.3              </span></span>
+<span><span class="co">##  [67] SparseArray_1.8.1           xfun_0.52                   mgcv_1.9-3                 </span></span>
+<span><span class="co">##  [70] DESeq2_1.48.1               MatrixGenerics_1.20.0       GenomeInfoDb_1.44.1        </span></span>
+<span><span class="co">##  [73] withr_3.0.2                 numDeriv_2016.8-1.1         BiocManager_1.30.26        </span></span>
+<span><span class="co">##  [76] fastmap_1.2.0               boot_1.3-31                 rsvd_1.0.5                 </span></span>
+<span><span class="co">##  [79] caTools_1.18.3              digest_0.6.37               timechange_0.3.0           </span></span>
+<span><span class="co">##  [82] R6_2.6.1                    gridGraphics_0.5-1          textshaping_1.0.1          </span></span>
+<span><span class="co">##  [85] colorspace_2.1-1            gtools_3.9.5                RhpcBLASctl_0.23-42        </span></span>
+<span><span class="co">##  [88] generics_0.1.4              data.table_1.17.8           corpcor_1.6.10             </span></span>
+<span><span class="co">##  [91] prettyunits_1.2.0           httr_1.4.7                  htmlwidgets_1.6.4          </span></span>
+<span><span class="co">##  [94] S4Arrays_1.8.1              pkgconfig_2.0.3             gtable_0.3.6               </span></span>
+<span><span class="co">##  [97] rpart.plot_3.1.3            ComplexHeatmap_2.24.1       SingleCellExperiment_1.30.1</span></span>
+<span><span class="co">## [100] XVector_0.48.0              remaCor_0.0.18              htmltools_0.5.8.1          </span></span>
+<span><span class="co">## [103] bookdown_0.43               TMB_1.9.17                  zigg_0.0.2                 </span></span>
+<span><span class="co">## [106] clue_0.3-66                 scales_1.4.0                Biobase_2.68.0             </span></span>
+<span><span class="co">## [109] png_0.1-8                   fANCOVA_0.6-1               reformulas_0.4.1           </span></span>
+<span><span class="co">## [112] ggfun_0.2.0                 knitr_1.50                  tzdb_0.5.0                 </span></span>
+<span><span class="co">## [115] reshape2_1.4.4              rjson_0.2.23                nlme_3.1-168               </span></span>
+<span><span class="co">## [118] nloptr_2.2.1                cachem_1.1.0                GlobalOptions_0.1.2        </span></span>
+<span><span class="co">## [121] KernSmooth_2.23-26          vipor_0.4.7                 desc_1.4.3                 </span></span>
+<span><span class="co">## [124] pillar_1.11.0               grid_4.5.1                  vctrs_0.6.5                </span></span>
+<span><span class="co">## [127] gplots_3.2.0                BiocSingular_1.24.0         beachmat_2.24.0            </span></span>
+<span><span class="co">## [130] cluster_2.1.8.1             beeswarm_0.4.0              evaluate_1.0.4             </span></span>
+<span><span class="co">## [133] mvtnorm_1.3-3               cli_3.6.5                   locfit_1.5-9.12            </span></span>
+<span><span class="co">## [136] compiler_4.5.1              rlang_1.1.6                 crayon_1.5.3               </span></span>
+<span><span class="co">## [139] future.apply_1.20.0         labeling_0.4.3              ggbeeswarm_0.7.2           </span></span>
+<span><span class="co">## [142] plyr_1.8.9                  fs_1.6.6                    stringi_1.8.7              </span></span>
+<span><span class="co">## [145] viridisLite_0.4.2           lmerTest_3.1-3              lazyeval_0.2.2             </span></span>
+<span><span class="co">## [148] aod_1.3.3                   Matrix_1.7-3                hms_1.1.3                  </span></span>
+<span><span class="co">## [151] patchwork_1.3.1             future_1.67.0               statmod_1.5.0              </span></span>
+<span><span class="co">## [154] SummarizedExperiment_1.38.1 rbibutils_2.3               Rfast_2.1.5.1              </span></span>
+<span><span class="co">## [157] broom_1.0.9                 RcppParallel_5.1.10.9000    bslib_0.9.0                </span></span>
+<span><span class="co">## [160] ggtree_3.16.3               ape_5.8-1</span></span></code></pre>
 </details>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -257,7 +274,7 @@ distribution and is substantially faster than alternatives.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>

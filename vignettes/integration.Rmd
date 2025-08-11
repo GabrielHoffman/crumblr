@@ -4,13 +4,15 @@ subtitle: ''
 author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
 date: "Run on `r Sys.time()`"
 documentclass: article
-output: 
-    BiocStyle::html_document
 vignette: >
   %\VignetteIndexEntry{crumblr_treeTest}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
   %\usepackage[utf8]{inputenc}
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
 ---
 
 
@@ -48,7 +50,7 @@ library(muscat)
 library(ExperimentHub)
 library(scater)
 
-# Download data, specifying EH2259 for the Kang, et al study
+# Download data, specifying EH2259 for the Kang, et al. study
 eh <- ExperimentHub()
 sce <- eh[["EH2259"]]
 
@@ -115,6 +117,22 @@ topTable(fit, coef = "StimStatusstim", number = Inf)
 ```
 
 Given the results here, we see that CD8 T cells at others change relative abundance following treatment with interferon-β.
+
+
+## Multivariate testing along a tree
+ere we construct a hierarchical clustering between cell types based on gene expression from pseudobulk, and perform a multivariate test for each internal node of the tree based on its leaf nodes.  The results for the leaves are the same as from `topTable()` above. 
+
+
+```{r tree}
+# hierarchical cluster based on pseudobulked gene expression
+hcl <- buildClusterTreeFromPB(pb)
+
+# Perform multivariate test across the hierarchy
+res <- treeTest(fit, cobj, hcl, coef = "StimStatusstim")
+
+# Plot hierarchy and testing results
+plotTreeTest(res)
+```
 
 
 # Session Info

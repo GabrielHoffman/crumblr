@@ -4,13 +4,15 @@ subtitle: ''
 author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
 date: "Run on `r Sys.time()`"
 documentclass: article
-output: 
-    BiocStyle::html_document
 vignette: >
   %\VignetteIndexEntry{crumblr_theory}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
   %\usepackage[utf8]{inputenc}
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
 ---
 
 
@@ -34,21 +36,15 @@ options(width = 100)
 
 <div style="text-align: justify;">
 ## Asymptotic normal approximation
-Let the vector ${\bf p}$ be the true fractions across $D$ categories.  Consider $C$ total counts sampled from a Dirichlet-multinomial (DMN) distribution with overdispersion $\tau$, where $\tau=1$ reduces to the multinomial distribution.  The [centered log ratio](https://rdrr.io/cran/compositions/man/clr.html) (CLR) of the $i^{th}$ estimated fraction in ${\bf \hat p}$ is   
+Let the vector ${\bf p}$ be the true fractions across $D$ categories.  Consider $C$ total counts sampled from a Dirichlet-multinomial (DMN) distribution with overdispersion $\tau$, where $\tau=1$ reduces to the multinomial distribution.  The [centered log ratio](https://rdrr.io/cran/compositions/man/clr.html) (CLR) of the $i^{th}$ estimated fraction, $\hat p_i$ is   
 
-\begin{equation}
-\tag{1}
-\text{clr}_i({\bf \hat p}) = \log(\hat p_i) - \frac{1}{D}\sum_{j=1}^D \log(\hat p_j)
-\end{equation}
- and we show that the sampling variance is
+$$\text{clr}(\hat p_i) = \log(\hat p_i) - \frac{1}{D}\sum_{j=1}^D \log(\hat p_j) ,$$
+ and we show that the sampling variance is well approximated by 
 
-\begin{equation}
-\tag{2}
-\text{var}[\text{clr}_i({\bf \hat p})] =  \frac{\tau}{C} \left[ \frac{1}{\hat p_i} - \frac{2}{ D \hat p_i} + \frac{1}{D^2}\sum_{j=1}^D \frac{1}{\hat p_j}  \right]. \label{eqn2} 
-\end{equation}
+$$\text{var}[\text{clr}(\hat p_i)] =  \frac{\tau}{C} \left[ \frac{1}{\hat p_i} - \frac{2}{ D \hat p_i} + \frac{1}{D^2}\sum_{j=1}^D \frac{1}{\hat p_j}  \right] .$$
 
 ## Simulations
-The sampling variance is derived from asymototic theory, so we examine its behavior for finite total counts.  Here we evaluate the empirical variance from $1,000$ draws from a Dirichlet-multinomial distribution while varying $D$, $\tau$, $C$.  A pseudocount of 0.5 is added to the observed counts since the asymptotic theory is not defined for counts of zero.  
+The sampling variance is derived from asymototic theory, so we examine its behavior for finite total counts.  Here we evaluate the empirical variance from $1,000$ draws from a Dirichlet-multinomial distribution while varying $D$, $\tau$, and $C$.  A pseudocount of 0.5 is added to the observed counts since the asymptotic theory is not defined for counts of zero.  
 
 Here we plot the standard deviation after CLR transform from the empirical DMN and the asymptotic normal approximation under a range of conditions.  Results are shown for instances with at least 2 counts.
 </div>
@@ -244,12 +240,28 @@ ggsave("sim_figure.pdf", fig, height = 4, width = 4)
 
 
 
+<div style="text-align: justify;">
 #### Consideration of overdispersion
 Based on  Equation (2), the variance of the CLR-transformed proportions is a _linear_ function of $\tau$.  Importantly, downstream analysis of the CLR-transformed proportions with a precision-weighted linear (mixed) model or a variance stabilizing transform depends only on the _relative_ variances.  Since relative variances are invariant to the scale of $\tau$, for these applications the value of $\tau$ can be set to 1 instead of being estimated from the data.  
 
 For other applications, `crumblr` can estimate $\tau$ from the data by using `crumblr(counts, tau=NULL)`.  This calls `dmn.mle()` to estimate the parameters of the DMN distribution and is substantially faster than alternatives.     
 
+But note that due the theoretical properties of the variance estimate of CLR-transformed proportions, the precision weights are invariant to the scale of $\tau$.  We can see this empirically:
+```{r tau, echo=TRUE}
+library(crumblr)
 
+data(IFNCellCounts)
+
+counts <- df_cellCounts
+
+# run crumblr with different tau values
+# show part of the weights matrix
+crumblr(counts, tau=1)$weights[1:3, 1:3]
+crumblr(counts, tau=5)$weights[1:3, 1:3]
+crumblr(counts, tau=NULL)$weights[1:3, 1:3]
+```
+
+</div>
 
 
 # Session Info

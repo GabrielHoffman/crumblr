@@ -2,7 +2,7 @@ library(dreamlet)
 library(ExperimentHub)
 library(scater)
 
-# Download data, specifying EH2259 for the Kang, et al study
+# Download data, specifying EH2259 for the Kang, et al. study
 eh <- ExperimentHub()
 sce <- eh[["EH2259"]]
 

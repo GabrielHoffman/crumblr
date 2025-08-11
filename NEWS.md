@@ -1,3 +1,7 @@
+# crumblr 0.99.22
+ - August 11, 2025
+ - update docs
+
 # crumblr 0.99.21
  - March 10, 2025
  - address Bioc comments

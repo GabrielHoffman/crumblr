@@ -4,13 +4,15 @@ subtitle: ''
 author: "Developed by [Gabriel Hoffman](http://gabrielhoffman.github.io/)"
 date: "Run on `r Sys.time()`"
 documentclass: article
-output: 
-    BiocStyle::html_document
 vignette: >
   %\VignetteIndexEntry{crumblr}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
   %\usepackage[utf8]{inputenc}
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
 ---
 
 ```{r setup, echo=FALSE, results="hide"}
@@ -44,7 +46,7 @@ Here we consider counts for 8 cell types from quantified using single cell RNA-s
 
 The functions here incorporate the precision weights:
 
-- `variancePartition::fitExtractVarPartModel()` 
+- `variancePartition::fitExtractVarPartModel()`
 - `variancePartition::dream()`
 - `limma::lmFit()`
 
@@ -64,6 +66,7 @@ BiocManager::install("crumblr")
 ```
 
 
+# Analysis workflow
 ## Process data
 
 Here we evaluate whether the observed cell proportions change in response to interferon β.  Given the results here, we cannot reject the null hypothesis that interferon β does not affect the cell type proportions.
@@ -150,6 +153,7 @@ topTable(fit, coef = "StimStatusstim", number = Inf)
 ### Multivariate testing along a tree
 We can gain power by jointly testing multiple cell types using a multivariate statistical model, instead of testing one cell type at a time.  Here we construct a hierarchical clustering between cell types based on gene expression from pseudobulk, and perform a multivariate test for each internal node of the tree based on its leaf nodes.  The results for the leaves are the same as from `topTable()` above. At each internal node `treeTest()` performs a fixed effects meta-analysis of the coefficients of the leaves while modeling the covariance between coefficient estimates.  In the backend, this is implemented using `variancePartition::mvTest()` and [remaCor](https://cran.r-project.org/package=remaCor) package.
 
+Here the hierarchical clustering, `hcl`, is precomputed from pseudobulk gene expression using `buildClusterTreeFromPB()`.
 
 ```{r treeTest}
 # Perform multivariate test across the hierarchy
@@ -169,6 +173,73 @@ plotTreeTestBeta(res) +
   plotForest(res, hide = FALSE) |
   fig.vp
 ```
+
+<br>
+
+## Hierarchical clustering
+The hierarchical clustering used by `treeTest()` can be computed a number of ways, depending on the available data and biological question.  For example, see [Article](integration.html) for details about how hierarchical clustering was run in this dataset.
+
+In general, hierarchical clustering can be computed from 
+
+ - pseudobulked single cell  gene expression 
+
+```{r buildClusterTreeFromPB, eval=FALSE}
+hcl <- buildClusterTreeFromPB(pb)
+```
+
+ - cell type frequencies
+
+```{r dm, eval=FALSE}
+# correlation matrix between all cell types
+C <- cor(t(standardize(cobj)))
+
+# convert to distance
+dm <- as.dist(1 - abs(C))
+
+# eval hierarchical clustering
+hcl <- hclust(dm)
+```
+
+ 
+ - [Newick formated](https://en.wikipedia.org/wiki/Newick_format) tree computed from external data
+
+```{r extern, eval=FALSE}
+# Make sure packages are installed
+# BiocManager::install(c("ctc", "ape", "phylogram"))
+library(ape)
+library(ctc)
+library(phylogram)
+library(tidyverse)
+
+# Write tree to file, 
+# edit manually
+# then read back into R
+# 
+
+# Specify tree as text in Newick format
+txt = "((CD14+ Monocytes,(B cells,(Dendritic cells,Megakaryocytes))),(CD8 T cells,(NK cells,(CD4 T cells,FCGR3A+ Monocytes))));"
+
+# read from text
+hcl_from_txt <- read.tree(text = txt) %>%
+                  as.dendrogram.phylo %>%
+                  as.hclust
+
+# Alternatively, 
+# write existing tree to file
+# and edit manaully
+write(hc2Newick(hcl),file='hcl.nwk')
+
+hcl_from_txt2 <- read.tree(file = 'hcl.nwk') %>%
+                  as.dendrogram.phylo %>%
+                  as.hclust
+```
+
+
+
+
+
+
+
 
 
 # Session Info
