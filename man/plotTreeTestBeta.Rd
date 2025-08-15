@@ -49,6 +49,10 @@ fit <- eBayes(fit)
 # Perform multivariate test across the hierarchy
 res <- treeTest(fit, cobj, hcl, coef = "StimStatusstim")
 
-# Plot hierarchy, no tests are significant
+# Plot hierarchy, no tests are significant at FDR < 0.05
 plotTreeTestBeta(res)
+
+# Use FDR < 0.1 as signif cutoff
+plotTreeTestBeta(res, fdr.cutoff = 0.1)
+
 }

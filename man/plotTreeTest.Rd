@@ -52,6 +52,9 @@ res <- treeTest(fit, cobj, hcl, coef = "StimStatusstim")
 # Plot hierarchy and testing results
 plotTreeTest(res)
 
+# Use FDR < 0.1 as signif cutoff
+plotTreeTest(res, fdr.cutoff = 0.1)
+
 # Extract results for first 3 nodes
 res[1:3, ]
 }

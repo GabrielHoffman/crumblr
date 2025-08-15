@@ -67,6 +67,8 @@ plotTreeTest <- function(tree, low = "grey90", mid = "red", high = "darkred", xm
 #' @param xmax.scale expand the x-axis by this factor so leaf labels fit in the plot
 #' @param fdr.cutoff value used as the FDR cutoff for significance annotation. Defaults to 0.05.
 #'
+#' @inheritParams plotTreeTest
+#'
 #' @return ggplot2 object
 #' @examples
 #' library(variancePartition)
@@ -85,8 +87,9 @@ plotTreeTest <- function(tree, low = "grey90", mid = "red", high = "darkred", xm
 #' # Perform multivariate test across the hierarchy
 #' res <- treeTest(fit, cobj, hcl, coef = "StimStatusstim")
 #'
-#' # Plot hierarchy, no tests are significant
+#' # Plot hierarchy, no tests are significant at FDR < 0.05
 #' plotTreeTestBeta(res)
+#' 
 #' @export
 plotTreeTestBeta <- function(tree, low = "blue", mid = "white", high = "red", xmax.scale = 1.5, fdr.cutoff = 0.05) {
   # PASS R check
