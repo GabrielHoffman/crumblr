@@ -9,7 +9,8 @@ plotTreeTest(
   low = "grey90",
   mid = "red",
   high = "darkred",
-  xmax.scale = 1.5
+  xmax.scale = 1.5,
+  fdr.cutoff = 0.05
 )
 }
 \arguments{
@@ -22,6 +23,9 @@ plotTreeTest(
 \item{high}{high color on gradient}
 
 \item{xmax.scale}{expand the x-axis by this factor so leaf labels fit in the plot}
+
+\item{fdr.cutoff}{A `numeric(1)` value used as the FDR cutoff for significance
+annotation. Defaults to 0.05.}
 }
 \value{
 ggplot2 object
@@ -48,6 +52,9 @@ res <- treeTest(fit, cobj, hcl, coef = "StimStatusstim")
 
 # Plot hierarchy and testing results
 plotTreeTest(res)
+
+# Use FDR < 0.1 as signif cutoff
+plotTreeTest(res, fdr.cutoff = 0.1)
 
 # Extract results for first 3 nodes
 res[1:3, ]
