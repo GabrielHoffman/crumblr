@@ -234,16 +234,15 @@ hcl_from_txt2 <- read.tree(file = 'hcl.nwk') %>%
                   as.hclust
 ```
 
+# Considerations
 
 
-<br>
+## Computational scaling
+The `crumblr()` workflow is very fast, especially compared to more demanding differential expression analysies. Applying `crumblr()` requires <1 sec, even for very large datsets.  Differential testing with `dream()` takes < 10 seconds for fixed effects models and < 30 seconds for mixed models with typical sample sizes and number of cell types.  Running `treeTest()` can be a little more demanding, but should finish in < 30 seconds with 20 cell types.
 
-## Scaling
-Applying `crumblr()` requires <1 sec, even for very large datsets. 
+## Complex study designs
+The `crumblr()` workflow can handle complex study designs with repeated measures or multiple random effects.  `dream()` uses `lme4::lmer()` in the backend to fit weighted linear mixed models.  Considerations about defining the regression model are described in documentation to [`variancePartition`](https://diseaseneurogenomics.github.io/variancePartition) or this [book](https://people.math.ethz.ch/~maechler/MEMo-pages/lMMwR.pdf) by the author of `lme4`.
 
-
-
-<br>
 
 ## Tuning parameters
 `crumblr()` uses two tuning parameters accessable to the user.  These are fixed to default values in all simulations and data analysis.  <u>The user is strongly recommended to keep these dfault values</u>.

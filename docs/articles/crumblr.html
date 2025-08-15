@@ -68,7 +68,7 @@
 </h4>
             
             <h4 data-toc-skip class="date">Run on 2025-08-14
-20:18:58.942392</h4>
+20:44:44.222783</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DiseaseNeurogenomics/crumblr/blob/HEAD/vignettes/crumblr.Rmd" class="external-link"><code>vignettes/crumblr.Rmd</code></a></small>
       <div class="d-none name"><code>crumblr.Rmd</code></div>
@@ -331,14 +331,33 @@ formated</a> tree computed from external data</li>
 <span><span class="va">hcl_from_txt2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ape/man/read.tree.html" class="external-link">read.tree</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">'hcl.nwk'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>                  <span class="va">as.dendrogram.phylo</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>                  <span class="va">as.hclust</span></span></code></pre></div>
-<p><br></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="considerations">Considerations<a class="anchor" aria-label="anchor" href="#considerations"></a>
+</h2>
+<div class="section level3">
+<h3 id="computational-scaling">Computational scaling<a class="anchor" aria-label="anchor" href="#computational-scaling"></a>
+</h3>
+<p>The <code><a href="../reference/crumblr.html">crumblr()</a></code> workflow is very fast, especially compared
+to more demanding differential expression analysies. Applying
+<code><a href="../reference/crumblr.html">crumblr()</a></code> requires &lt;1 sec, even for very large datsets.
+Differential testing with <code><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/dream-method.html" class="external-link">dream()</a></code> takes &lt; 10 seconds for
+fixed effects models and &lt; 30 seconds for mixed models with typical
+sample sizes and number of cell types. Running <code><a href="../reference/treeTest.html">treeTest()</a></code>
+can be a little more demanding, but should finish in &lt; 30 seconds
+with 20 cell types.</p>
 </div>
 <div class="section level3">
-<h3 id="scaling">Scaling<a class="anchor" aria-label="anchor" href="#scaling"></a>
+<h3 id="complex-study-designs">Complex study designs<a class="anchor" aria-label="anchor" href="#complex-study-designs"></a>
 </h3>
-<p>Applying <code><a href="../reference/crumblr.html">crumblr()</a></code> requires &lt;1 sec, even for very
-large datsets.</p>
-<p><br></p>
+<p>The <code><a href="../reference/crumblr.html">crumblr()</a></code> workflow can handle complex study designs
+with repeated measures or multiple random effects. <code><a href="http://DiseaseNeurogenomics.github.io/variancePartition/reference/dream-method.html" class="external-link">dream()</a></code>
+uses <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lme4::lmer()</a></code> in the backend to fit weighted linear
+mixed models. Considerations about defining the regression model are
+described in documentation to <a href="https://diseaseneurogenomics.github.io/variancePartition" class="external-link"><code>variancePartition</code></a>
+or this <a href="https://people.math.ethz.ch/~maechler/MEMo-pages/lMMwR.pdf" class="external-link">book</a>
+by the author of <code>lme4</code>.</p>
 </div>
 <div class="section level3">
 <h3 id="tuning-parameters">Tuning parameters<a class="anchor" aria-label="anchor" href="#tuning-parameters"></a>
