@@ -24,8 +24,7 @@ plotTreeTest(
 
 \item{xmax.scale}{expand the x-axis by this factor so leaf labels fit in the plot}
 
-\item{fdr.cutoff}{A `numeric(1)` value used as the FDR cutoff for significance
-annotation. Defaults to 0.05.}
+\item{fdr.cutoff}{value used as the FDR cutoff for significance annotation. Defaults to 0.05.}
 }
 \value{
 ggplot2 object

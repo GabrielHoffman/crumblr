@@ -7,8 +7,7 @@
 #' @param mid mid color on gradient
 #' @param high high color on gradient
 #' @param xmax.scale expand the x-axis by this factor so leaf labels fit in the plot
-#' @param fdr.cutoff A `numeric(1)` value used as the FDR cutoff for significance
-#' annotation. Defaults to 0.05.
+#' @param fdr.cutoff value used as the FDR cutoff for significance annotation. Defaults to 0.05.
 #'
 #' @return ggplot2 object
 #' @examples
@@ -30,9 +29,6 @@
 #'
 #' # Plot hierarchy and testing results
 #' plotTreeTest(res)
-#' 
-#' # Use FDR < 0.1 as signif cutoff
-#' plotTreeTest(res, fdr.cutoff = 0.1)
 #'
 #' # Extract results for first 3 nodes
 #' res[1:3, ]
@@ -69,6 +65,7 @@ plotTreeTest <- function(tree, low = "grey90", mid = "red", high = "darkred", xm
 #' @param mid mid color on gradient
 #' @param high high color on gradient
 #' @param xmax.scale expand the x-axis by this factor so leaf labels fit in the plot
+#' @param fdr.cutoff value used as the FDR cutoff for significance annotation. Defaults to 0.05.
 #'
 #' @inheritParams plotTreeTest
 #'
@@ -92,9 +89,6 @@ plotTreeTest <- function(tree, low = "grey90", mid = "red", high = "darkred", xm
 #'
 #' # Plot hierarchy, no tests are significant at FDR < 0.05
 #' plotTreeTestBeta(res)
-#' 
-#' # Use FDR < 0.1 as signif cutoff
-#' plotTreeTestBeta(res, fdr.cutoff = 0.1)
 #' 
 #' @export
 plotTreeTestBeta <- function(tree, low = "blue", mid = "white", high = "red", xmax.scale = 1.5, fdr.cutoff = 0.05) {

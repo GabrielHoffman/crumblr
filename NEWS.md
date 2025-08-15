@@ -1,6 +1,7 @@
 # crumblr 0.99.22
  - August 11, 2025
  - update docs
+ - add `fdr.cutoff` argument to `plotTreeTest()` and `plotTreeTestBeta()
 
 # crumblr 0.99.21
  - March 10, 2025
