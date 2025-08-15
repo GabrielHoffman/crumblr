@@ -103,7 +103,7 @@ fig.vp
 
 
 ## PCA
-Performing PCA on the transformed cell counts indicates that the samples cluster based on subject rather than stimulation status.
+Performing PCA on the transformed cell counts indicates that the samples cluster based on subject rather than stimulation status.  Here, we use `standardize()` so that each observation has approximately equal variance (i.e. homoscedasticity) by dividing the CLR transformed frequencies by their estimated sampling standard deviation.  Transforming the data to be approximately homoscedastic has been [shown](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-014-0550-8) to improve performance of PCA.
 
 ```{r pca, fig.height=5, fig.width=5}
 library(ggplot2)
@@ -234,6 +234,23 @@ hcl_from_txt2 <- read.tree(file = 'hcl.nwk') %>%
                   as.hclust
 ```
 
+
+
+<br>
+
+## Scaling
+Applying `crumblr()` requires <1 sec, even for very large datsets. 
+
+
+
+<br>
+
+## Tuning parameters
+`crumblr()` uses two tuning parameters accessable to the user.  These are fixed to default values in all simulations and data analysis.  <u>The user is strongly recommended to keep these dfault values</u>.
+
+- In order to deal with zero counts, `crumblr()` uses a pseudocount (default: 0.5) added to all observed counts. 
+
+- For real data, the asymptotic variance formula can give weights that vary substantially across samples and give very high weights for a subset of samples.  In order to address this, we regularize the weights to reduce the variation in the weights to have a maximum ratio (default of 5) between the maximum and specified quantile value (default of 5%).
 
 
 
