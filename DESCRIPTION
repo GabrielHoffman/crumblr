@@ -19,7 +19,7 @@ biocViews: RNASeq, GeneExpression, DifferentialExpression, BatchEffect,
 Depends: R (>= 4.4.0), ggplot2, methods
 Imports: Rdpack, viridis, tidytree, variancePartition (>= 1.36.3),
         SingleCellExperiment, ggtree, dplyr, stats, MASS, Rfast
-RoxygenNote: 7.3.2
 RdMacros: Rdpack
 LazyData: false
 NeedsCompilation: no
+Config/roxygen2/version: 8.0.0

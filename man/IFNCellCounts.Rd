@@ -23,11 +23,11 @@ An object of class \code{hclust} of length 7.
 \usage{
 data(IFNCellCounts)
 
-info
+data(info)
 
-df_cellCounts
+data(df_cellCounts)
 
-hcl
+data(hcl)
 }
 \description{
 Counts are from single cell RNA-seq data from treated and untreated samples from Kang, et al (2018).
