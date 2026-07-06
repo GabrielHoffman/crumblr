@@ -19,8 +19,6 @@
 #' }
 #'
 #' @examples
-#' library(HMP)
-#'
 #' set.seed(1)
 #'
 #' n_samples <- 1000
@@ -151,3 +149,37 @@ dmn_mle <- function(counts, ...) {
     convergence = fit$convergence
   )
 }
+
+#' Generation of Dirichlet-Multinomial Random Samples
+#' 
+#' Random generation of Dirichlet-Multinomial samples.
+#'
+#' @param Nrs A vector specifying the number of reads or sequence depth for each sample.
+#' @param shape A vector of Dirichlet parameters for each taxa.
+#'
+#' @details Adapted from HMP::Dirichlet.multinomial(), since HMP was removed from CRAN
+#'
+#' @keywords internal
+#' @export
+Dirichlet.multinomial <- function (Nrs, shape) {
+  if (missing(Nrs) || missing(shape)){
+    stop("Nrs and/or shape missing.")
+  }
+
+  dmData <- matrix(0, length(Nrs), length(shape))
+  
+  for (i in 1:length(Nrs)){
+    dmData[i, ] <- stats::rmultinom(1, Nrs[i], dirmult::rdirichlet(1, shape))
+  }
+
+  colnames(dmData) <- paste("Taxa", 1:ncol(dmData))
+  rownames(dmData) <- paste("Sample", 1:nrow(dmData))
+
+  return(dmData)
+}
+
+
+
+
+
+

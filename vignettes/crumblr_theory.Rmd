@@ -53,7 +53,6 @@ Here we plot the standard deviation after CLR transform from the empirical DMN a
 ```{r define.fxn, cache=FALSE}
 library(ggplot2)
 library(crumblr)
-library(HMP)
 library(parallel)
 library(glue)
 library(tidyverse)
