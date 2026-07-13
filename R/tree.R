@@ -67,7 +67,7 @@ NameInternalNodes <- function(tb) {
 #' Perform multivariate testing using \code{mvTest()} along the nodes of tree
 #'
 #' @param fit \code{MArrayLM} object return by \code{lmFit()} or \code{dream()}
-#' @param obj \code{EList} object returned by \code{voom()}
+#' @param obj \code{EList} object returned by \code{crumblr()}
 #' @param hc hierarchical clustering as an \code{hclust} object
 #' @param coef name of coefficient to be extracted
 #' @param method statistical method used to perform multivariate test.  See details.  \code{'FE'} is a fixed effect test that models the covariance between coefficients. \code{'FE.empirical'} use compute empirical p-values by sampling from the null distribution and fitting with a gamma. \code{'RE2C'} is a random effect test of heterogeneity of the estimated coefficients that models the covariance between coefficients, and also incorporates a fixed effects test too. \code{'tstat'} combines the t-statistics and models the covariance between coefficients. \code{'sidak'} returns the smallest p-value and accounting for the number of tests. \code{'fisher'} combines the p-value using Fisher's method assuming independent tests.

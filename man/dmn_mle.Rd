@@ -33,8 +33,6 @@ The covariance between counts in each category from DMN distributed data is \eqn
 See \url{https://en.wikipedia.org/wiki/Dirichlet-multinomial_distribution#Matrix_notation}
 }
 \examples{
-library(HMP)
-
 set.seed(1)
 
 n_samples <- 1000

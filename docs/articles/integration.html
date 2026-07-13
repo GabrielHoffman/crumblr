@@ -11,8 +11,13 @@
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
-<!-- katex math --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script><script src="../katex-auto.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- mathjax math --><script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script><script>
+  window.MathJax = {
+    chtml: {
+      fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
+    }
+  };
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -26,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">crumblr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.22</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,8 +72,8 @@
                         <h4 data-toc-skip class="author">Developed by <a href="http://gabrielhoffman.github.io/" class="external-link">Gabriel Hoffman</a>
 </h4>
             
-            <h4 data-toc-skip class="date">Run on 2026-05-22
-15:34:53.474467</h4>
+            <h4 data-toc-skip class="date">Run on 2026-07-06
+12:37:39.638268</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DiseaseNeurogenomics/crumblr/blob/HEAD/vignettes/integration.Rmd" class="external-link"><code>vignettes/integration.Rmd</code></a></small>
       <div class="d-none name"><code>integration.Rmd</code></div>
@@ -213,15 +218,15 @@ the leaves are the same as from <code>topTable()</code> above.</p>
 <span><span class="co">## [1] stats4    stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">##  [1] crumblr_0.99.22             muscData_1.24.0             scater_1.38.1              </span></span>
+<span><span class="co">##  [1] crumblr_1.5.1               muscData_1.24.0             scater_1.38.1              </span></span>
 <span><span class="co">##  [4] scuttle_1.20.0              ExperimentHub_3.0.0         AnnotationHub_4.0.0        </span></span>
-<span><span class="co">##  [7] BiocFileCache_3.0.0         dbplyr_2.5.2                muscat_1.24.0              </span></span>
-<span><span class="co">## [10] dreamlet_1.9.1              SingleCellExperiment_1.32.0 SummarizedExperiment_1.40.0</span></span>
-<span><span class="co">## [13] Biobase_2.70.0              GenomicRanges_1.62.1        GenomeInfoDb_1.46.2        </span></span>
-<span><span class="co">## [16] Seqinfo_1.0.0               IRanges_2.44.0              S4Vectors_0.48.1           </span></span>
-<span><span class="co">## [19] BiocGenerics_0.56.0         generics_0.1.4              MatrixGenerics_1.22.0      </span></span>
-<span><span class="co">## [22] matrixStats_1.5.0           variancePartition_1.43.1    BiocParallel_1.44.0        </span></span>
-<span><span class="co">## [25] limma_3.66.0                ggplot2_4.0.3               BiocStyle_2.38.0           </span></span>
+<span><span class="co">##  [7] BiocFileCache_3.0.0         dbplyr_2.6.0                muscat_1.24.0              </span></span>
+<span><span class="co">## [10] dreamlet_1.9.3              SingleCellExperiment_1.32.0 SummarizedExperiment_1.40.0</span></span>
+<span><span class="co">## [13] Biobase_2.70.0              GenomicRanges_1.62.1        Seqinfo_1.0.0              </span></span>
+<span><span class="co">## [16] IRanges_2.44.0              S4Vectors_0.48.1            BiocGenerics_0.56.0        </span></span>
+<span><span class="co">## [19] generics_0.1.4              MatrixGenerics_1.22.0       matrixStats_1.5.0          </span></span>
+<span><span class="co">## [22] variancePartition_1.43.1    BiocParallel_1.44.0         limma_3.66.0               </span></span>
+<span><span class="co">## [25] ggplot2_4.0.3               BiocStyle_2.38.0           </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##   [1] fs_2.1.0                  bitops_1.0-9              httr_1.4.8               </span></span>
@@ -229,14 +234,14 @@ the leaves are the same as from <code>topTable()</code> above.</p>
 <span><span class="co">##   [7] numDeriv_2016.8-1.1       sctransform_0.4.3         tools_4.5.1              </span></span>
 <span><span class="co">##  [10] backports_1.5.1           R6_2.6.1                  metafor_5.0-1            </span></span>
 <span><span class="co">##  [13] lazyeval_0.2.3            mgcv_1.9-4                GetoptLong_1.1.1         </span></span>
-<span><span class="co">##  [16] withr_3.0.2               gridExtra_2.3             prettyunits_1.2.0        </span></span>
+<span><span class="co">##  [16] withr_3.0.3               gridExtra_2.3.1           prettyunits_1.2.0        </span></span>
 <span><span class="co">##  [19] fdrtool_1.2.18            cli_3.6.6                 textshaping_1.0.5        </span></span>
 <span><span class="co">##  [22] sandwich_3.1-1            labeling_0.4.3            slam_0.1-55              </span></span>
 <span><span class="co">##  [25] sass_0.4.10               KEGGgraph_1.70.0          SQUAREM_2026.1           </span></span>
-<span><span class="co">##  [28] mvtnorm_1.3-7             S7_0.2.2                  blme_1.0-7               </span></span>
+<span><span class="co">##  [28] mvtnorm_1.4-1             S7_0.2.2                  blme_1.0-7               </span></span>
 <span><span class="co">##  [31] pkgdown_2.2.0             mixsqp_0.3-54             yulab.utils_0.2.4        </span></span>
 <span><span class="co">##  [34] systemfonts_1.3.2         zenith_1.12.0             dichromat_2.0-0.1        </span></span>
-<span><span class="co">##  [37] parallelly_1.47.0         invgamma_1.2              RSQLite_3.52.0           </span></span>
+<span><span class="co">##  [37] parallelly_1.48.0         invgamma_1.2              RSQLite_3.53.3           </span></span>
 <span><span class="co">##  [40] gridGraphics_0.5-1        shape_1.4.6.1             gtools_3.9.5             </span></span>
 <span><span class="co">##  [43] dplyr_1.2.1               Matrix_1.7-5              metadat_1.6-0            </span></span>
 <span><span class="co">##  [46] ggbeeswarm_0.7.3          abind_1.4-8               lifecycle_1.0.5          </span></span>
@@ -246,13 +251,13 @@ the leaves are the same as from <code>topTable()</code> above.</p>
 <span><span class="co">##  [58] lattice_0.22-9            beachmat_2.26.0           msigdbr_26.1.0           </span></span>
 <span><span class="co">##  [61] annotate_1.88.0           KEGGREST_1.50.0           pillar_1.11.1            </span></span>
 <span><span class="co">##  [64] knitr_1.51                ComplexHeatmap_2.26.1     rjson_0.2.23             </span></span>
-<span><span class="co">##  [67] boot_1.3-32               estimability_1.5.1        corpcor_1.6.10           </span></span>
+<span><span class="co">##  [67] boot_1.3-32               estimability_2.0.0        corpcor_1.6.10           </span></span>
 <span><span class="co">##  [70] future.apply_1.20.2       codetools_0.2-20          glue_1.8.1               </span></span>
-<span><span class="co">##  [73] ggiraph_0.9.6             fontLiberation_0.1.0      ggfun_0.2.0              </span></span>
+<span><span class="co">##  [73] ggiraph_0.9.6             fontLiberation_0.1.0      ggfun_0.2.1              </span></span>
 <span><span class="co">##  [76] data.table_1.18.4         treeio_1.34.0             vctrs_0.7.3              </span></span>
 <span><span class="co">##  [79] png_0.1-9                 Rdpack_2.6.6              gtable_0.3.6             </span></span>
 <span><span class="co">##  [82] assertthat_0.2.1          cachem_1.1.0              zigg_0.0.2               </span></span>
-<span><span class="co">##  [85] xfun_0.57                 rbibutils_2.4.1           S4Arrays_1.10.1          </span></span>
+<span><span class="co">##  [85] xfun_0.59                 rbibutils_2.4.1           S4Arrays_1.10.1          </span></span>
 <span><span class="co">##  [88] Rfast_2.1.5.2             coda_0.19-4.1             reformulas_0.4.4         </span></span>
 <span><span class="co">##  [91] survival_3.8-6            iterators_1.0.14          statmod_1.5.2            </span></span>
 <span><span class="co">##  [94] TH.data_1.1-5             nlme_3.1-169              pbkrtest_0.5.5           </span></span>
@@ -263,36 +268,36 @@ the leaves are the same as from <code>topTable()</code> above.</p>
 <span><span class="co">## [109] colorspace_2.1-2          rmeta_3.0                 DBI_1.3.0                </span></span>
 <span><span class="co">## [112] DESeq2_1.50.2             tidyselect_1.2.1          emmeans_2.0.3            </span></span>
 <span><span class="co">## [115] bit_4.6.0                 compiler_4.5.1            curl_7.1.0               </span></span>
-<span><span class="co">## [118] httr2_1.2.2               graph_1.88.1              BiocNeighbors_2.4.0      </span></span>
+<span><span class="co">## [118] httr2_1.2.3               graph_1.88.1              BiocNeighbors_2.4.0      </span></span>
 <span><span class="co">## [121] fontBitstreamVera_0.1.1   desc_1.4.3                DelayedArray_0.36.1      </span></span>
-<span><span class="co">## [124] bookdown_0.46             scales_1.4.0              caTools_1.18.3           </span></span>
+<span><span class="co">## [124] bookdown_0.47             scales_1.4.0              caTools_1.18.3           </span></span>
 <span><span class="co">## [127] remaCor_0.0.20            rappdirs_0.3.4            stringr_1.6.0            </span></span>
 <span><span class="co">## [130] digest_0.6.39             minqa_1.2.8               rmarkdown_2.31           </span></span>
 <span><span class="co">## [133] aod_1.3.3                 XVector_0.50.0            RhpcBLASctl_0.23-42      </span></span>
 <span><span class="co">## [136] htmltools_0.5.9           pkgconfig_2.0.3           lme4_2.0-1               </span></span>
 <span><span class="co">## [139] sparseMatrixStats_1.22.0  lpsymphony_1.38.0         mashr_0.2.79             </span></span>
-<span><span class="co">## [142] fastmap_1.2.0             rlang_1.2.0               GlobalOptions_0.1.4      </span></span>
-<span><span class="co">## [145] htmlwidgets_1.6.4         UCSC.utils_1.6.1          DelayedMatrixStats_1.32.0</span></span>
-<span><span class="co">## [148] farver_2.1.2              jquerylib_0.1.4           IHW_1.38.0               </span></span>
-<span><span class="co">## [151] zoo_1.8-15                jsonlite_2.0.0            BiocSingular_1.26.1      </span></span>
-<span><span class="co">## [154] RCurl_1.98-1.18           magrittr_2.0.5            ggplotify_0.1.3          </span></span>
-<span><span class="co">## [157] patchwork_1.3.2           Rcpp_1.1.1-1.1            gdtools_0.5.0            </span></span>
-<span><span class="co">## [160] ape_5.8-1                 viridis_0.6.5             babelgene_22.9           </span></span>
-<span><span class="co">## [163] EnrichmentBrowser_2.40.0  stringi_1.8.7             MASS_7.3-65              </span></span>
-<span><span class="co">## [166] plyr_1.8.9                listenv_0.10.1            parallel_4.5.1           </span></span>
-<span><span class="co">## [169] ggrepel_0.9.8             Biostrings_2.78.0         splines_4.5.1            </span></span>
-<span><span class="co">## [172] hms_1.1.4                 circlize_0.4.18           locfit_1.5-9.12          </span></span>
-<span><span class="co">## [175] ScaledMatrix_1.18.0       reshape2_1.4.5            BiocVersion_3.22.0       </span></span>
-<span><span class="co">## [178] XML_3.99-0.23             evaluate_1.0.5            RcppParallel_5.1.11-2    </span></span>
-<span><span class="co">## [181] BiocManager_1.30.27       nloptr_2.2.1              foreach_1.5.2            </span></span>
-<span><span class="co">## [184] tidyr_1.3.2               purrr_1.2.2               future_1.70.0            </span></span>
-<span><span class="co">## [187] clue_0.3-68               scattermore_1.2           ashr_2.2-63              </span></span>
-<span><span class="co">## [190] rsvd_1.0.5                broom_1.0.13              xtable_1.8-8             </span></span>
-<span><span class="co">## [193] tidytree_0.4.7            fANCOVA_0.6-1             viridisLite_0.4.3        </span></span>
-<span><span class="co">## [196] ragg_1.5.2                truncnorm_1.0-9           tibble_3.3.1             </span></span>
-<span><span class="co">## [199] aplot_0.2.9               lmerTest_3.2-1            glmmTMB_1.1.14           </span></span>
-<span><span class="co">## [202] memoise_2.0.1             beeswarm_0.4.0            AnnotationDbi_1.72.0     </span></span>
-<span><span class="co">## [205] cluster_2.1.8.2           globals_0.19.1            GSEABase_1.72.0</span></span></code></pre>
+<span><span class="co">## [142] fastmap_1.2.0             rlang_1.3.0               GlobalOptions_0.1.4      </span></span>
+<span><span class="co">## [145] htmlwidgets_1.6.4         DelayedMatrixStats_1.32.0 farver_2.1.2             </span></span>
+<span><span class="co">## [148] jquerylib_0.1.4           IHW_1.38.0                zoo_1.8-15               </span></span>
+<span><span class="co">## [151] jsonlite_2.0.0            BiocSingular_1.26.1       RCurl_1.98-1.19          </span></span>
+<span><span class="co">## [154] magrittr_2.0.5            ggplotify_0.1.3           patchwork_1.3.2          </span></span>
+<span><span class="co">## [157] Rcpp_1.1.2                gdtools_0.5.1             ape_5.8-1                </span></span>
+<span><span class="co">## [160] viridis_0.6.5             babelgene_22.9            EnrichmentBrowser_2.40.0 </span></span>
+<span><span class="co">## [163] stringi_1.8.7             MASS_7.3-65               plyr_1.8.9               </span></span>
+<span><span class="co">## [166] listenv_1.0.0             parallel_4.5.1            ggrepel_0.9.8            </span></span>
+<span><span class="co">## [169] Biostrings_2.78.0         splines_4.5.1             hms_1.1.4                </span></span>
+<span><span class="co">## [172] circlize_0.4.18           locfit_1.5-9.12           ScaledMatrix_1.18.0      </span></span>
+<span><span class="co">## [175] reshape2_1.4.5            BiocVersion_3.22.0        XML_3.99-0.23            </span></span>
+<span><span class="co">## [178] evaluate_1.0.5            RcppParallel_5.1.11-2     BiocManager_1.30.27      </span></span>
+<span><span class="co">## [181] nloptr_2.2.1              foreach_1.5.2             tidyr_1.3.2              </span></span>
+<span><span class="co">## [184] purrr_1.2.2               future_1.70.0             clue_0.3-68              </span></span>
+<span><span class="co">## [187] scattermore_1.2           ashr_2.2-63               rsvd_1.0.5               </span></span>
+<span><span class="co">## [190] broom_1.0.13              xtable_1.8-8              tidytree_0.4.8           </span></span>
+<span><span class="co">## [193] fANCOVA_0.6-1             viridisLite_0.4.3         ragg_1.5.2               </span></span>
+<span><span class="co">## [196] truncnorm_1.0-9           tibble_3.3.1              aplot_0.3.0              </span></span>
+<span><span class="co">## [199] lmerTest_3.2-1            glmmTMB_1.1.14            memoise_2.0.1            </span></span>
+<span><span class="co">## [202] beeswarm_0.4.0            AnnotationDbi_1.72.0      cluster_2.1.8.2          </span></span>
+<span><span class="co">## [205] globals_0.19.1            GSEABase_1.72.0</span></span></code></pre>
 </details>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

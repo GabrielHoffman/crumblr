@@ -11,14 +11,14 @@ Encoding: UTF-8
 URL: https://DiseaseNeurogenomics.github.io/crumblr
 BugReports: https://github.com/DiseaseNeurogenomics/crumblr/issues
 Suggests: BiocStyle, RUnit, knitr, rmarkdown, dreamlet, muscat, ExperimentHub,
-        scater, HMP, reshape2, glue, tidyverse, BiocGenerics, compositions
+        scater, reshape2, glue, tidyverse, BiocGenerics, compositions
 biocViews: RNASeq, GeneExpression, DifferentialExpression, BatchEffect,
         QualityControl, SingleCell, Regression, Epigenetics,
         FunctionalGenomics, Transcriptomics, Normalization, Clustering,
         DimensionReduction, Preprocessing, Software
 Depends: R (>= 4.4.0), ggplot2, methods
 Imports: Rdpack, viridis, tidytree, variancePartition (>= 1.36.3),
-        SingleCellExperiment, ggtree, dplyr, stats, MASS, Rfast
+        SingleCellExperiment, ggtree, dplyr, stats, MASS, Rfast, dirmult
 RdMacros: Rdpack
 LazyData: false
 NeedsCompilation: no

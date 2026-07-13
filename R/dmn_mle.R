@@ -159,6 +159,7 @@ dmn_mle <- function(counts, ...) {
 #'
 #' @details Adapted from HMP::Dirichlet.multinomial(), since HMP was removed from CRAN
 #'
+#' @importFrom dirmult rdirichlet
 #' @keywords internal
 #' @export
 Dirichlet.multinomial <- function (Nrs, shape) {
@@ -169,7 +170,7 @@ Dirichlet.multinomial <- function (Nrs, shape) {
   dmData <- matrix(0, length(Nrs), length(shape))
   
   for (i in 1:length(Nrs)){
-    dmData[i, ] <- stats::rmultinom(1, Nrs[i], dirmult::rdirichlet(1, shape))
+    dmData[i, ] <- stats::rmultinom(1, Nrs[i], rdirichlet(1, shape))
   }
 
   colnames(dmData) <- paste("Taxa", 1:ncol(dmData))
@@ -177,9 +178,4 @@ Dirichlet.multinomial <- function (Nrs, shape) {
 
   return(dmData)
 }
-
-
-
-
-
 

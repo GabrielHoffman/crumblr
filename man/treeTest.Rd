@@ -16,7 +16,7 @@ treeTest(
 \arguments{
 \item{fit}{\code{MArrayLM} object return by \code{lmFit()} or \code{dream()}}
 
-\item{obj}{\code{EList} object returned by \code{voom()}}
+\item{obj}{\code{EList} object returned by \code{crumblr()}}
 
 \item{hc}{hierarchical clustering as an \code{hclust} object}
 

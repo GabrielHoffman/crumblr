@@ -38,8 +38,12 @@ options(width = 100)
 ## Asymptotic normal approximation
 Let the vector ${\bf p}$ be the true fractions across $D$ categories.  Consider $C$ total counts sampled from a Dirichlet-multinomial (DMN) distribution with overdispersion $\tau$, where $\tau=1$ reduces to the multinomial distribution.  The [centered log ratio](https://rdrr.io/cran/compositions/man/clr.html) (CLR) of the $i^{th}$ estimated fraction, $\hat p_i$ is   
 
-$$\text{clr}(\hat p_i) = \log(\hat p_i) - \frac{1}{D}\sum_{j=1}^D \log(\hat p_j) ,$$
- and we show that the sampling variance is well approximated by 
+\begin{equation}
+\tag{1}
+\text{clr}_i({\bf \hat p}) = \log(\hat p_i) - \frac{1}{D}\sum_{j=1}^D \log(\hat p_j)
+\end{equation}
+
+and we show that the sampling variance is
 
 $$\text{var}[\text{clr}(\hat p_i)] =  \frac{\tau}{C} \left[ \frac{1}{\hat p_i} - \frac{2}{ D \hat p_i} + \frac{1}{D^2}\sum_{j=1}^D \frac{1}{\hat p_j}  \right] .$$
 
@@ -241,14 +245,15 @@ ggsave("sim_figure.pdf", fig, height = 4, width = 4)
 
 <div style="text-align: justify;">
 #### Consideration of overdispersion
+<div style="text-align: justify;">
 Based on  Equation (2), the variance of the CLR-transformed proportions is a _linear_ function of $\tau$.  Importantly, downstream analysis of the CLR-transformed proportions with a precision-weighted linear (mixed) model or a variance stabilizing transform depends only on the _relative_ variances.  Since relative variances are invariant to the scale of $\tau$, for these applications the value of $\tau$ can be set to 1 instead of being estimated from the data.  
 
 For other applications, `crumblr` can estimate $\tau$ from the data by using `crumblr(counts, tau=NULL)`.  This calls `dmn.mle()` to estimate the parameters of the DMN distribution and is substantially faster than alternatives.     
+</div>
 
 But note that due the theoretical properties of the variance estimate of CLR-transformed proportions, the precision weights are invariant to the scale of $\tau$.  We can see this empirically:
 ```{r tau, echo=TRUE}
 library(crumblr)
-
 data(IFNCellCounts)
 
 counts <- df_cellCounts
