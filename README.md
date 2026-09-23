@@ -14,7 +14,7 @@ The `crumblr` package enables analysis of count ratio data using precision-weigh
 
 ![](man/figures/Figure_crumblr_workflow.png)
 
-__Preprint:__ Hoffman and Roussos. 2025. Fast, flexible analysis of differences in cellular composition with crumblr. [biorxiv](https://www.biorxiv.org/content/10.1101/2025.01.29.635498v1)
+Hoffman and Roussos. 2026. Fast, flexible analysis of differences in cellular composition with crumblr. <u>Nature Communications</u> [doi:10.1038/s41467-026-75681-7](https://doi.org/10.1038/s41467-026-75681-7)
 
 
 ### Details
@@ -29,13 +29,17 @@ Yet CLR-transformed data is still highly heteroskedastic: the precision of measu
 
 ### Install
 ```r
-# 1) Make sure Bioconductor is installed
+# Make sure Bioconductor is installed
 if (!require("BiocManager", quietly = TRUE)) {
   install.packages("BiocManager")
 }
 
-# 2) Install crumblr and dependencies
-BiocManager::install('DiseaseNeurogenomics/crumblr')
+# Install crumblr and dependencies
+# Release version
+BiocManager::install('crumblr')
+
+# Development version
+# BiocManager::install('DiseaseNeurogenomics/crumblr')
 ```
 
 ### Introduction to compositional data analysis

@@ -34,7 +34,7 @@
 
     <a class="navbar-brand me-2" href="index.html">crumblr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,7 +77,7 @@
 <div style="text-align: justify;">
 <p>The <code>crumblr</code> package enables analysis of count ratio data using precision-weighted linear (mixed) models, PCA and clustering. <code>crumblr</code>’s fast, normal approximation of transformed count data from a Dirichlet-multinomial model allows use of standard workflows to analyze count ratio data while modeling heteroskedasticity.</p>
 <p><img src="reference/figures/Figure_crumblr_workflow.png"></p>
-<p><strong>Preprint:</strong> Hoffman and Roussos. 2025. Fast, flexible analysis of differences in cellular composition with crumblr. <a href="https://www.biorxiv.org/content/10.1101/2025.01.29.635498v1" class="external-link">biorxiv</a></p>
+<p>Hoffman and Roussos. 2026. Fast, flexible analysis of differences in cellular composition with crumblr. <u>Nature Communications</u> <a href="https://doi.org/10.1038/s41467-026-75681-7" class="external-link">doi:10.1038/s41467-026-75681-7</a></p>
 <div class="section level3">
 <h3 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a>
 </h3>
@@ -91,13 +91,17 @@
 <h3 id="install">Install<a class="anchor" aria-label="anchor" href="#install"></a>
 </h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># 1) Make sure Bioconductor is installed</span></span>
+<code class="sourceCode R"><span><span class="co"># Make sure Bioconductor is installed</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://bioconductor.github.io/BiocManager/" class="external-link">"BiocManager"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co"># 2) Install crumblr and dependencies</span></span>
-<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">'DiseaseNeurogenomics/crumblr'</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># Install crumblr and dependencies</span></span>
+<span><span class="co"># Release version</span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">'crumblr'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Development version</span></span>
+<span><span class="co"># BiocManager::install('DiseaseNeurogenomics/crumblr')</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="introduction-to-compositional-data-analysis">Introduction to compositional data analysis<a class="anchor" aria-label="anchor" href="#introduction-to-compositional-data-analysis"></a>
