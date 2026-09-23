@@ -10,9 +10,9 @@ count ratio data while modeling heteroskedasticity.
 
 ![](reference/figures/Figure_crumblr_workflow.png)
 
-**Preprint:** Hoffman and Roussos. 2025. Fast, flexible analysis of
-differences in cellular composition with crumblr.
-[biorxiv](https://www.biorxiv.org/content/10.1101/2025.01.29.635498v1)
+Hoffman and Roussos. 2026. Fast, flexible analysis of differences in
+cellular composition with crumblr. *Nature Communications*
+[doi:10.1038/s41467-026-75681-7](https://doi.org/10.1038/s41467-026-75681-7)
 
 ### Details
 
@@ -42,16 +42,18 @@ weights to improve performance of PCA and clustering.
 
 ### Install
 
-``` r
-
-# 1) Make sure Bioconductor is installed
-if (!require("BiocManager", quietly = TRUE)) {
-  install.packages("BiocManager")
-}
-
-# 2) Install crumblr and dependencies
-BiocManager::install('DiseaseNeurogenomics/crumblr')
-```
+\
+`# Make sure Bioconductor is installed`\
+`if`` ``(``!`[`require`](https://rdrr.io/r/base/library.html)`(`[`"BiocManager"`](https://bioconductor.github.io/BiocManager/)`, quietly ``=`` ``TRUE``)``)`` ``{`\
+`  `[`install.packages`](https://rdrr.io/r/utils/install.packages.html)`(``"BiocManager"``)`\
+`}`\
+\
+`# Install crumblr and dependencies`\
+`# Release version`\
+`BiocManager``::`[`install`](https://bioconductor.github.io/BiocManager/reference/install.html)`(``'crumblr'``)`\
+\
+`# Development version`\
+`# BiocManager::install('DiseaseNeurogenomics/crumblr')`
 
 ### Introduction to compositional data analysis
 
@@ -65,9 +67,6 @@ BiocManager::install('DiseaseNeurogenomics/crumblr')
 ## All functions
 
 - [`IFNCellCounts`](http://DiseaseNeurogenomics.github.io/crumblr/reference/IFNCellCounts.md)
-  [`info`](http://DiseaseNeurogenomics.github.io/crumblr/reference/IFNCellCounts.md)
-  [`df_cellCounts`](http://DiseaseNeurogenomics.github.io/crumblr/reference/IFNCellCounts.md)
-  [`hcl`](http://DiseaseNeurogenomics.github.io/crumblr/reference/IFNCellCounts.md)
   : Cell counts following interferon treatment
 - [`buildClusterTree()`](http://DiseaseNeurogenomics.github.io/crumblr/reference/buildClusterTree.md)
   : Perform hierarchical clustering on reducedDim

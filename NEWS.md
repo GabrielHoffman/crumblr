@@ -1,6 +1,16 @@
+
 # crumblr 1.5.1
 - July 6, 2026
 - remove dependency on `HMP` package from CRAN
+
+# crumblr 1.4.4
+ - July 15, 2026
+ - fix vignette
+
+# crumblr 1.4.1
+ - July 6, 2026
+ - remove dependency on `HMP` package from CRAN
+
 
 # crumblr 0.99.21
  - March 10, 2025

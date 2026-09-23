@@ -3,9 +3,6 @@
 ## All functions
 
 - [`IFNCellCounts`](http://DiseaseNeurogenomics.github.io/crumblr/reference/IFNCellCounts.md)
-  [`info`](http://DiseaseNeurogenomics.github.io/crumblr/reference/IFNCellCounts.md)
-  [`df_cellCounts`](http://DiseaseNeurogenomics.github.io/crumblr/reference/IFNCellCounts.md)
-  [`hcl`](http://DiseaseNeurogenomics.github.io/crumblr/reference/IFNCellCounts.md)
   : Cell counts following interferon treatment
 - [`buildClusterTree()`](http://DiseaseNeurogenomics.github.io/crumblr/reference/buildClusterTree.md)
   : Perform hierarchical clustering on reducedDim

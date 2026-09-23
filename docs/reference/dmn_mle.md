@@ -78,14 +78,6 @@ often fails to converge
 ## Examples
 
 ``` r
-library(HMP)
-#> Loading required package: dirmult
-#> 
-#> Attaching package: ‘HMP’
-#> The following object is masked from ‘package:dirmult’:
-#> 
-#>     weirMoM
-
 set.seed(1)
 
 n_samples <- 1000

@@ -28,7 +28,7 @@ treeTest(
 - obj:
 
   `EList` object returned by
-  [`voom()`](https://rdrr.io/pkg/limma/man/voom.html)
+  [`crumblr()`](http://DiseaseNeurogenomics.github.io/crumblr/reference/crumblr.md)
 
 - hc:
 

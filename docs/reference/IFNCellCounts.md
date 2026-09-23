@@ -7,12 +7,6 @@ samples from Kang, et al (2018).
 
 ``` r
 data(IFNCellCounts)
-
-data(info)
-
-data(df_cellCounts)
-
-data(hcl)
 ```
 
 ## Format

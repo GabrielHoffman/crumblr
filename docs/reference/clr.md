@@ -35,7 +35,7 @@ compositional data with R. Vol. 122. Berlin: Springer, 2013.
 
 ## See also
 
-`compositions::clr()`
+[`compositions::clr()`](https://rdrr.io/pkg/compositions/man/clr.html)
 
 ## Examples
 

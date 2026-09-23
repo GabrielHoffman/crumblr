@@ -1,19 +1,11 @@
-<<<<<<< HEAD
-pandoc: '3.10'
-=======
-pandoc: 3.9.0.2
->>>>>>> f12ff51dba3c18990c359c6f21354413eec80bc6
-pkgdown: 2.2.0
+pandoc: '3.11'
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   crumblr_theory: crumblr_theory.html
   crumblr: crumblr.html
   integration: integration.html
-<<<<<<< HEAD
-last_built: 2026-07-06T16:15Z
-=======
-last_built: 2026-05-22T19:33Z
->>>>>>> f12ff51dba3c18990c359c6f21354413eec80bc6
+last_built: 2026-09-23T15:32Z
 urls:
   reference: http://DiseaseNeurogenomics.github.io/crumblr/reference
   article: http://DiseaseNeurogenomics.github.io/crumblr/articles
